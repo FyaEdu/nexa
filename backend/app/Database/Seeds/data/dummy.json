@@ -1,0 +1,3052 @@
+{
+ "_info": "Data dummy NEXA, dibuat oleh tools/generate_dummy.py. Password user ditulis polos dan di-hash oleh DummyDataSeeder.",
+ "order": [
+  "roles",
+  "users",
+  "cost_categories",
+  "motors",
+  "inspections",
+  "inspection_items",
+  "motor_costs",
+  "inventory_items",
+  "inventory_transactions",
+  "sparepart_usage",
+  "vehicle_documents",
+  "customers",
+  "sales",
+  "asset_activities"
+ ],
+ "tables": {
+  "roles": [
+   {
+    "id": 1,
+    "code": "admin",
+    "name": "Administrator"
+   },
+   {
+    "id": 2,
+    "code": "owner",
+    "name": "Pemilik Usaha"
+   },
+   {
+    "id": 3,
+    "code": "ops",
+    "name": "Staff Operasional"
+   },
+   {
+    "id": 4,
+    "code": "sales",
+    "name": "Staff Penjualan"
+   }
+  ],
+  "users": [
+   {
+    "id": 1,
+    "role_id": 1,
+    "name": "Alifya Putri Aisyka",
+    "username": "admin",
+    "email": "admin@nexa.local",
+    "password": "admin123",
+    "is_active": 1,
+    "created_at": "2026-08-01 08:00:00",
+    "updated_at": "2026-08-01 08:00:00"
+   },
+   {
+    "id": 2,
+    "role_id": 2,
+    "name": "Akmal Lutfan Hasibuan",
+    "username": "pemilik",
+    "email": "pemilik@nexa.local",
+    "password": "pemilik123",
+    "is_active": 1,
+    "created_at": "2026-08-01 08:00:00",
+    "updated_at": "2026-08-01 08:00:00"
+   },
+   {
+    "id": 3,
+    "role_id": 3,
+    "name": "Muhammad Kemal Pasha",
+    "username": "operasional",
+    "email": "ops@nexa.local",
+    "password": "ops123",
+    "is_active": 1,
+    "created_at": "2026-08-01 08:00:00",
+    "updated_at": "2026-08-01 08:00:00"
+   },
+   {
+    "id": 4,
+    "role_id": 4,
+    "name": "Mulyo Saputra",
+    "username": "penjualan",
+    "email": "sales@nexa.local",
+    "password": "sales123",
+    "is_active": 1,
+    "created_at": "2026-08-01 08:00:00",
+    "updated_at": "2026-08-01 08:00:00"
+   },
+   {
+    "id": 5,
+    "role_id": 3,
+    "name": "Firmansyah",
+    "username": "mekanik",
+    "email": "mekanik@nexa.local",
+    "password": "mekanik123",
+    "is_active": 1,
+    "created_at": "2026-08-01 08:00:00",
+    "updated_at": "2026-08-01 08:00:00"
+   }
+  ],
+  "cost_categories": [
+   {
+    "id": 1,
+    "name": "Operasional",
+    "description": "Pengambilan, pengiriman, bahan bakar, transportasi"
+   },
+   {
+    "id": 2,
+    "name": "Perbaikan",
+    "description": "Aksesori, sparepart dari luar gudang, bahan pendukung, jasa bengkel"
+   },
+   {
+    "id": 3,
+    "name": "Surat-surat",
+    "description": "Pajak, STNK, BPKB, balik nama"
+   },
+   {
+    "id": 4,
+    "name": "Penyimpanan",
+    "description": "Sewa gudang atau tempat penyimpanan"
+   },
+   {
+    "id": 5,
+    "name": "Lainnya",
+    "description": "Biaya lain yang terkait motor"
+   }
+  ],
+  "motors": [
+   {
+    "id": 1,
+    "code": "NX-001",
+    "brand": "Suzuki",
+    "model": "Satria F150",
+    "year": 2016,
+    "plate_number": "D 3301 XY",
+    "color": "Hitam merah",
+    "frame_number": "MH8BG41CAGJ402211",
+    "engine_number": "G427ID402266",
+    "purchase_date": "2026-08-20",
+    "purchase_price": 10500000,
+    "purchase_source": "Perorangan, Bandung",
+    "target_price": 13000000,
+    "condition_note": "Mesin halus, ban belakang tipis",
+    "status": "terjual",
+    "health_score": 89,
+    "created_at": "2026-08-20 08:15:00",
+    "updated_at": "2026-09-01 08:42:00"
+   },
+   {
+    "id": 2,
+    "code": "NX-002",
+    "brand": "Yamaha",
+    "model": "RX-King",
+    "year": 2002,
+    "plate_number": "B 2287 SFA",
+    "color": "Hitam",
+    "frame_number": "MH33KA00X2K118823",
+    "engine_number": "3KA-118823",
+    "purchase_date": "2026-08-28",
+    "purchase_price": 18500000,
+    "purchase_source": "Komunitas RX-King, Tangerang",
+    "target_price": 24000000,
+    "condition_note": "Original, perlu restorasi lampu dan knalpot",
+    "status": "booking",
+    "health_score": 87,
+    "created_at": "2026-08-28 08:49:00",
+    "updated_at": "2026-09-25 09:20:00"
+   },
+   {
+    "id": 3,
+    "code": "NX-003",
+    "brand": "Honda",
+    "model": "Beat Street",
+    "year": 2019,
+    "plate_number": "B 3412 KLM",
+    "color": "Hitam doff",
+    "frame_number": "MH1JM8118KK441902",
+    "engine_number": "JM81E1441960",
+    "purchase_date": "2026-09-03",
+    "purchase_price": 9500000,
+    "purchase_source": "Perorangan, Bekasi",
+    "target_price": 13800000,
+    "condition_note": "Spion kiri hilang",
+    "status": "terjual",
+    "health_score": 90,
+    "created_at": "2026-09-03 09:25:00",
+    "updated_at": "2026-09-12 09:59:00"
+   },
+   {
+    "id": 4,
+    "code": "NX-004",
+    "brand": "Yamaha",
+    "model": "NMAX 155",
+    "year": 2020,
+    "plate_number": "B 6120 TJR",
+    "color": "Abu-abu",
+    "frame_number": "MH3SG3190LJ220871",
+    "engine_number": "G3E4E1220905",
+    "purchase_date": "2026-09-10",
+    "purchase_price": 21000000,
+    "purchase_source": "Dealer motor bekas, Depok",
+    "target_price": 25500000,
+    "condition_note": "Body baret di sisi kanan",
+    "status": "siap",
+    "health_score": 95,
+    "created_at": "2026-09-10 10:10:00",
+    "updated_at": "2026-09-20 10:44:00"
+   },
+   {
+    "id": 5,
+    "code": "NX-005",
+    "brand": "Honda",
+    "model": "Vario 150",
+    "year": 2018,
+    "plate_number": "F 4471 AB",
+    "color": "Putih",
+    "frame_number": "MH1KF4114JK301877",
+    "engine_number": "KF41E1301902",
+    "purchase_date": "2026-09-25",
+    "purchase_price": 11000000,
+    "purchase_source": "Perorangan, Bogor",
+    "target_price": 14500000,
+    "condition_note": "Tarikan berat, rem depan bunyi",
+    "status": "perbaikan",
+    "health_score": 73,
+    "created_at": "2026-09-25 10:48:00",
+    "updated_at": "2026-09-27 11:07:00"
+   },
+   {
+    "id": 6,
+    "code": "NX-006",
+    "brand": "Kawasaki",
+    "model": "Ninja 250 FI",
+    "year": 2017,
+    "plate_number": "B 5530 PQR",
+    "color": "Hijau",
+    "frame_number": "MH4EX250HHT118274",
+    "engine_number": "EX250LEA18301",
+    "purchase_date": "2026-10-15",
+    "purchase_price": 28000000,
+    "purchase_source": "Perorangan, Surabaya",
+    "target_price": 33000000,
+    "condition_note": "Dikirim via travel, belum dicek",
+    "status": "inspeksi",
+    "health_score": null,
+    "created_at": "2026-10-15 11:20:00",
+    "updated_at": "2026-10-16 11:25:00"
+   },
+   {
+    "id": 7,
+    "code": "NX-007",
+    "brand": "Honda",
+    "model": "Scoopy",
+    "year": 2021,
+    "plate_number": "B 4019 UVW",
+    "color": "Krem",
+    "frame_number": "MH1JM3115MK770021",
+    "engine_number": "JM31E1770051",
+    "purchase_date": "2026-10-18",
+    "purchase_price": 14200000,
+    "purchase_source": "Perorangan, Jakarta Timur",
+    "target_price": 17000000,
+    "condition_note": "",
+    "status": "masuk",
+    "health_score": null,
+    "created_at": "2026-10-18 11:27:00",
+    "updated_at": "2026-10-18 11:28:00"
+   }
+  ],
+  "inspections": [
+   {
+    "id": 1,
+    "motor_id": 1,
+    "inspection_date": "2026-08-21",
+    "inspector": "Firmansyah",
+    "notes": "Ban belakang harus diganti, rantai kendor.",
+    "score": 89,
+    "created_by": 5,
+    "created_at": "2026-08-21 08:24:00"
+   },
+   {
+    "id": 2,
+    "motor_id": 2,
+    "inspection_date": "2026-08-29",
+    "inspector": "Firmansyah",
+    "notes": "Headlamp mati, rembes oli ringan, BPKB masih proses.",
+    "score": 87,
+    "created_by": 5,
+    "created_at": "2026-08-29 08:58:00"
+   },
+   {
+    "id": 3,
+    "motor_id": 3,
+    "inspection_date": "2026-09-04",
+    "inspector": "Firmansyah",
+    "notes": "Spion kiri tidak ada, ada rembesan di gasket.",
+    "score": 90,
+    "created_by": 5,
+    "created_at": "2026-09-04 09:36:00"
+   },
+   {
+    "id": 4,
+    "motor_id": 4,
+    "inspection_date": "2026-09-11",
+    "inspector": "Firmansyah",
+    "notes": "Lampu belakang redup, baret body kanan.",
+    "score": 95,
+    "created_by": 5,
+    "created_at": "2026-09-11 10:19:00"
+   },
+   {
+    "id": 5,
+    "motor_id": 5,
+    "inspection_date": "2026-09-26",
+    "inspector": "Firmansyah",
+    "notes": "CVT aus, kampas rem depan habis, aki lemah.",
+    "score": 73,
+    "created_by": 5,
+    "created_at": "2026-09-26 10:59:00"
+   }
+  ],
+  "inspection_items": [
+   {
+    "id": 1,
+    "inspection_id": 1,
+    "group_key": "mesin",
+    "item_key": "m1",
+    "item_label": "Suara mesin",
+    "result": "baik"
+   },
+   {
+    "id": 2,
+    "inspection_id": 1,
+    "group_key": "mesin",
+    "item_key": "m2",
+    "item_label": "Kebocoran oli",
+    "result": "baik"
+   },
+   {
+    "id": 3,
+    "inspection_id": 1,
+    "group_key": "mesin",
+    "item_key": "m3",
+    "item_label": "Sistem pengapian",
+    "result": "baik"
+   },
+   {
+    "id": 4,
+    "inspection_id": 1,
+    "group_key": "mesin",
+    "item_key": "m4",
+    "item_label": "Performa tarikan",
+    "result": "baik"
+   },
+   {
+    "id": 5,
+    "inspection_id": 1,
+    "group_key": "listrik",
+    "item_key": "l1",
+    "item_label": "Aki",
+    "result": "baik"
+   },
+   {
+    "id": 6,
+    "inspection_id": 1,
+    "group_key": "listrik",
+    "item_key": "l2",
+    "item_label": "Lampu depan/belakang",
+    "result": "baik"
+   },
+   {
+    "id": 7,
+    "inspection_id": 1,
+    "group_key": "listrik",
+    "item_key": "l3",
+    "item_label": "Lampu sein",
+    "result": "perlu"
+   },
+   {
+    "id": 8,
+    "inspection_id": 1,
+    "group_key": "listrik",
+    "item_key": "l4",
+    "item_label": "Klakson",
+    "result": "baik"
+   },
+   {
+    "id": 9,
+    "inspection_id": 1,
+    "group_key": "listrik",
+    "item_key": "l5",
+    "item_label": "Starter",
+    "result": "baik"
+   },
+   {
+    "id": 10,
+    "inspection_id": 1,
+    "group_key": "rem",
+    "item_key": "r1",
+    "item_label": "Ketebalan kampas rem",
+    "result": "perlu"
+   },
+   {
+    "id": 11,
+    "inspection_id": 1,
+    "group_key": "rem",
+    "item_key": "r2",
+    "item_label": "Fungsi rem depan/belakang",
+    "result": "baik"
+   },
+   {
+    "id": 12,
+    "inspection_id": 1,
+    "group_key": "rem",
+    "item_key": "r3",
+    "item_label": "Kondisi fisik body",
+    "result": "baik"
+   },
+   {
+    "id": 13,
+    "inspection_id": 1,
+    "group_key": "rem",
+    "item_key": "r4",
+    "item_label": "Ketersediaan spion",
+    "result": "baik"
+   },
+   {
+    "id": 14,
+    "inspection_id": 1,
+    "group_key": "rem",
+    "item_key": "r5",
+    "item_label": "Keausan ban",
+    "result": "rusak"
+   },
+   {
+    "id": 15,
+    "inspection_id": 1,
+    "group_key": "dok",
+    "item_key": "d1",
+    "item_label": "Nomor rangka sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 16,
+    "inspection_id": 1,
+    "group_key": "dok",
+    "item_key": "d2",
+    "item_label": "Nomor mesin sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 17,
+    "inspection_id": 1,
+    "group_key": "dok",
+    "item_key": "d3",
+    "item_label": "STNK",
+    "result": "baik"
+   },
+   {
+    "id": 18,
+    "inspection_id": 1,
+    "group_key": "dok",
+    "item_key": "d4",
+    "item_label": "BPKB",
+    "result": "baik"
+   },
+   {
+    "id": 19,
+    "inspection_id": 2,
+    "group_key": "mesin",
+    "item_key": "m1",
+    "item_label": "Suara mesin",
+    "result": "baik"
+   },
+   {
+    "id": 20,
+    "inspection_id": 2,
+    "group_key": "mesin",
+    "item_key": "m2",
+    "item_label": "Kebocoran oli",
+    "result": "perlu"
+   },
+   {
+    "id": 21,
+    "inspection_id": 2,
+    "group_key": "mesin",
+    "item_key": "m3",
+    "item_label": "Sistem pengapian",
+    "result": "baik"
+   },
+   {
+    "id": 22,
+    "inspection_id": 2,
+    "group_key": "mesin",
+    "item_key": "m4",
+    "item_label": "Performa tarikan",
+    "result": "baik"
+   },
+   {
+    "id": 23,
+    "inspection_id": 2,
+    "group_key": "listrik",
+    "item_key": "l1",
+    "item_label": "Aki",
+    "result": "baik"
+   },
+   {
+    "id": 24,
+    "inspection_id": 2,
+    "group_key": "listrik",
+    "item_key": "l2",
+    "item_label": "Lampu depan/belakang",
+    "result": "rusak"
+   },
+   {
+    "id": 25,
+    "inspection_id": 2,
+    "group_key": "listrik",
+    "item_key": "l3",
+    "item_label": "Lampu sein",
+    "result": "baik"
+   },
+   {
+    "id": 26,
+    "inspection_id": 2,
+    "group_key": "listrik",
+    "item_key": "l4",
+    "item_label": "Klakson",
+    "result": "baik"
+   },
+   {
+    "id": 27,
+    "inspection_id": 2,
+    "group_key": "listrik",
+    "item_key": "l5",
+    "item_label": "Starter",
+    "result": "baik"
+   },
+   {
+    "id": 28,
+    "inspection_id": 2,
+    "group_key": "rem",
+    "item_key": "r1",
+    "item_label": "Ketebalan kampas rem",
+    "result": "baik"
+   },
+   {
+    "id": 29,
+    "inspection_id": 2,
+    "group_key": "rem",
+    "item_key": "r2",
+    "item_label": "Fungsi rem depan/belakang",
+    "result": "baik"
+   },
+   {
+    "id": 30,
+    "inspection_id": 2,
+    "group_key": "rem",
+    "item_key": "r3",
+    "item_label": "Kondisi fisik body",
+    "result": "perlu"
+   },
+   {
+    "id": 31,
+    "inspection_id": 2,
+    "group_key": "rem",
+    "item_key": "r4",
+    "item_label": "Ketersediaan spion",
+    "result": "baik"
+   },
+   {
+    "id": 32,
+    "inspection_id": 2,
+    "group_key": "rem",
+    "item_key": "r5",
+    "item_label": "Keausan ban",
+    "result": "baik"
+   },
+   {
+    "id": 33,
+    "inspection_id": 2,
+    "group_key": "dok",
+    "item_key": "d1",
+    "item_label": "Nomor rangka sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 34,
+    "inspection_id": 2,
+    "group_key": "dok",
+    "item_key": "d2",
+    "item_label": "Nomor mesin sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 35,
+    "inspection_id": 2,
+    "group_key": "dok",
+    "item_key": "d3",
+    "item_label": "STNK",
+    "result": "baik"
+   },
+   {
+    "id": 36,
+    "inspection_id": 2,
+    "group_key": "dok",
+    "item_key": "d4",
+    "item_label": "BPKB",
+    "result": "perlu"
+   },
+   {
+    "id": 37,
+    "inspection_id": 3,
+    "group_key": "mesin",
+    "item_key": "m1",
+    "item_label": "Suara mesin",
+    "result": "baik"
+   },
+   {
+    "id": 38,
+    "inspection_id": 3,
+    "group_key": "mesin",
+    "item_key": "m2",
+    "item_label": "Kebocoran oli",
+    "result": "perlu"
+   },
+   {
+    "id": 39,
+    "inspection_id": 3,
+    "group_key": "mesin",
+    "item_key": "m3",
+    "item_label": "Sistem pengapian",
+    "result": "baik"
+   },
+   {
+    "id": 40,
+    "inspection_id": 3,
+    "group_key": "mesin",
+    "item_key": "m4",
+    "item_label": "Performa tarikan",
+    "result": "baik"
+   },
+   {
+    "id": 41,
+    "inspection_id": 3,
+    "group_key": "listrik",
+    "item_key": "l1",
+    "item_label": "Aki",
+    "result": "baik"
+   },
+   {
+    "id": 42,
+    "inspection_id": 3,
+    "group_key": "listrik",
+    "item_key": "l2",
+    "item_label": "Lampu depan/belakang",
+    "result": "baik"
+   },
+   {
+    "id": 43,
+    "inspection_id": 3,
+    "group_key": "listrik",
+    "item_key": "l3",
+    "item_label": "Lampu sein",
+    "result": "baik"
+   },
+   {
+    "id": 44,
+    "inspection_id": 3,
+    "group_key": "listrik",
+    "item_key": "l4",
+    "item_label": "Klakson",
+    "result": "baik"
+   },
+   {
+    "id": 45,
+    "inspection_id": 3,
+    "group_key": "listrik",
+    "item_key": "l5",
+    "item_label": "Starter",
+    "result": "baik"
+   },
+   {
+    "id": 46,
+    "inspection_id": 3,
+    "group_key": "rem",
+    "item_key": "r1",
+    "item_label": "Ketebalan kampas rem",
+    "result": "baik"
+   },
+   {
+    "id": 47,
+    "inspection_id": 3,
+    "group_key": "rem",
+    "item_key": "r2",
+    "item_label": "Fungsi rem depan/belakang",
+    "result": "baik"
+   },
+   {
+    "id": 48,
+    "inspection_id": 3,
+    "group_key": "rem",
+    "item_key": "r3",
+    "item_label": "Kondisi fisik body",
+    "result": "baik"
+   },
+   {
+    "id": 49,
+    "inspection_id": 3,
+    "group_key": "rem",
+    "item_key": "r4",
+    "item_label": "Ketersediaan spion",
+    "result": "rusak"
+   },
+   {
+    "id": 50,
+    "inspection_id": 3,
+    "group_key": "rem",
+    "item_key": "r5",
+    "item_label": "Keausan ban",
+    "result": "baik"
+   },
+   {
+    "id": 51,
+    "inspection_id": 3,
+    "group_key": "dok",
+    "item_key": "d1",
+    "item_label": "Nomor rangka sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 52,
+    "inspection_id": 3,
+    "group_key": "dok",
+    "item_key": "d2",
+    "item_label": "Nomor mesin sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 53,
+    "inspection_id": 3,
+    "group_key": "dok",
+    "item_key": "d3",
+    "item_label": "STNK",
+    "result": "baik"
+   },
+   {
+    "id": 54,
+    "inspection_id": 3,
+    "group_key": "dok",
+    "item_key": "d4",
+    "item_label": "BPKB",
+    "result": "baik"
+   },
+   {
+    "id": 55,
+    "inspection_id": 4,
+    "group_key": "mesin",
+    "item_key": "m1",
+    "item_label": "Suara mesin",
+    "result": "baik"
+   },
+   {
+    "id": 56,
+    "inspection_id": 4,
+    "group_key": "mesin",
+    "item_key": "m2",
+    "item_label": "Kebocoran oli",
+    "result": "baik"
+   },
+   {
+    "id": 57,
+    "inspection_id": 4,
+    "group_key": "mesin",
+    "item_key": "m3",
+    "item_label": "Sistem pengapian",
+    "result": "baik"
+   },
+   {
+    "id": 58,
+    "inspection_id": 4,
+    "group_key": "mesin",
+    "item_key": "m4",
+    "item_label": "Performa tarikan",
+    "result": "baik"
+   },
+   {
+    "id": 59,
+    "inspection_id": 4,
+    "group_key": "listrik",
+    "item_key": "l1",
+    "item_label": "Aki",
+    "result": "baik"
+   },
+   {
+    "id": 60,
+    "inspection_id": 4,
+    "group_key": "listrik",
+    "item_key": "l2",
+    "item_label": "Lampu depan/belakang",
+    "result": "perlu"
+   },
+   {
+    "id": 61,
+    "inspection_id": 4,
+    "group_key": "listrik",
+    "item_key": "l3",
+    "item_label": "Lampu sein",
+    "result": "baik"
+   },
+   {
+    "id": 62,
+    "inspection_id": 4,
+    "group_key": "listrik",
+    "item_key": "l4",
+    "item_label": "Klakson",
+    "result": "baik"
+   },
+   {
+    "id": 63,
+    "inspection_id": 4,
+    "group_key": "listrik",
+    "item_key": "l5",
+    "item_label": "Starter",
+    "result": "baik"
+   },
+   {
+    "id": 64,
+    "inspection_id": 4,
+    "group_key": "rem",
+    "item_key": "r1",
+    "item_label": "Ketebalan kampas rem",
+    "result": "baik"
+   },
+   {
+    "id": 65,
+    "inspection_id": 4,
+    "group_key": "rem",
+    "item_key": "r2",
+    "item_label": "Fungsi rem depan/belakang",
+    "result": "baik"
+   },
+   {
+    "id": 66,
+    "inspection_id": 4,
+    "group_key": "rem",
+    "item_key": "r3",
+    "item_label": "Kondisi fisik body",
+    "result": "perlu"
+   },
+   {
+    "id": 67,
+    "inspection_id": 4,
+    "group_key": "rem",
+    "item_key": "r4",
+    "item_label": "Ketersediaan spion",
+    "result": "baik"
+   },
+   {
+    "id": 68,
+    "inspection_id": 4,
+    "group_key": "rem",
+    "item_key": "r5",
+    "item_label": "Keausan ban",
+    "result": "baik"
+   },
+   {
+    "id": 69,
+    "inspection_id": 4,
+    "group_key": "dok",
+    "item_key": "d1",
+    "item_label": "Nomor rangka sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 70,
+    "inspection_id": 4,
+    "group_key": "dok",
+    "item_key": "d2",
+    "item_label": "Nomor mesin sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 71,
+    "inspection_id": 4,
+    "group_key": "dok",
+    "item_key": "d3",
+    "item_label": "STNK",
+    "result": "baik"
+   },
+   {
+    "id": 72,
+    "inspection_id": 4,
+    "group_key": "dok",
+    "item_key": "d4",
+    "item_label": "BPKB",
+    "result": "baik"
+   },
+   {
+    "id": 73,
+    "inspection_id": 5,
+    "group_key": "mesin",
+    "item_key": "m1",
+    "item_label": "Suara mesin",
+    "result": "perlu"
+   },
+   {
+    "id": 74,
+    "inspection_id": 5,
+    "group_key": "mesin",
+    "item_key": "m2",
+    "item_label": "Kebocoran oli",
+    "result": "baik"
+   },
+   {
+    "id": 75,
+    "inspection_id": 5,
+    "group_key": "mesin",
+    "item_key": "m3",
+    "item_label": "Sistem pengapian",
+    "result": "baik"
+   },
+   {
+    "id": 76,
+    "inspection_id": 5,
+    "group_key": "mesin",
+    "item_key": "m4",
+    "item_label": "Performa tarikan",
+    "result": "rusak"
+   },
+   {
+    "id": 77,
+    "inspection_id": 5,
+    "group_key": "listrik",
+    "item_key": "l1",
+    "item_label": "Aki",
+    "result": "perlu"
+   },
+   {
+    "id": 78,
+    "inspection_id": 5,
+    "group_key": "listrik",
+    "item_key": "l2",
+    "item_label": "Lampu depan/belakang",
+    "result": "baik"
+   },
+   {
+    "id": 79,
+    "inspection_id": 5,
+    "group_key": "listrik",
+    "item_key": "l3",
+    "item_label": "Lampu sein",
+    "result": "baik"
+   },
+   {
+    "id": 80,
+    "inspection_id": 5,
+    "group_key": "listrik",
+    "item_key": "l4",
+    "item_label": "Klakson",
+    "result": "baik"
+   },
+   {
+    "id": 81,
+    "inspection_id": 5,
+    "group_key": "listrik",
+    "item_key": "l5",
+    "item_label": "Starter",
+    "result": "baik"
+   },
+   {
+    "id": 82,
+    "inspection_id": 5,
+    "group_key": "rem",
+    "item_key": "r1",
+    "item_label": "Ketebalan kampas rem",
+    "result": "rusak"
+   },
+   {
+    "id": 83,
+    "inspection_id": 5,
+    "group_key": "rem",
+    "item_key": "r2",
+    "item_label": "Fungsi rem depan/belakang",
+    "result": "perlu"
+   },
+   {
+    "id": 84,
+    "inspection_id": 5,
+    "group_key": "rem",
+    "item_key": "r3",
+    "item_label": "Kondisi fisik body",
+    "result": "perlu"
+   },
+   {
+    "id": 85,
+    "inspection_id": 5,
+    "group_key": "rem",
+    "item_key": "r4",
+    "item_label": "Ketersediaan spion",
+    "result": "baik"
+   },
+   {
+    "id": 86,
+    "inspection_id": 5,
+    "group_key": "rem",
+    "item_key": "r5",
+    "item_label": "Keausan ban",
+    "result": "baik"
+   },
+   {
+    "id": 87,
+    "inspection_id": 5,
+    "group_key": "dok",
+    "item_key": "d1",
+    "item_label": "Nomor rangka sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 88,
+    "inspection_id": 5,
+    "group_key": "dok",
+    "item_key": "d2",
+    "item_label": "Nomor mesin sesuai",
+    "result": "baik"
+   },
+   {
+    "id": 89,
+    "inspection_id": 5,
+    "group_key": "dok",
+    "item_key": "d3",
+    "item_label": "STNK",
+    "result": "baik"
+   },
+   {
+    "id": 90,
+    "inspection_id": 5,
+    "group_key": "dok",
+    "item_key": "d4",
+    "item_label": "BPKB",
+    "result": "baik"
+   }
+  ],
+  "motor_costs": [
+   {
+    "id": 1,
+    "motor_id": 1,
+    "category_id": 1,
+    "item": "Travel pengambilan luar kota",
+    "amount": 300000,
+    "cost_date": "2026-08-20",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-20 08:18:00"
+   },
+   {
+    "id": 2,
+    "motor_id": 1,
+    "category_id": 1,
+    "item": "Uang makan pengambilan",
+    "amount": 70000,
+    "cost_date": "2026-08-20",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-20 08:20:00"
+   },
+   {
+    "id": 3,
+    "motor_id": 1,
+    "category_id": 2,
+    "item": "Sparepart",
+    "amount": 320000,
+    "cost_date": "2026-08-23",
+    "note": "Rantai dan gir",
+    "created_by": 3,
+    "created_at": "2026-08-23 08:40:00"
+   },
+   {
+    "id": 4,
+    "motor_id": 2,
+    "category_id": 1,
+    "item": "Jasa pengambilan kendaraan",
+    "amount": 300000,
+    "cost_date": "2026-08-28",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-28 08:52:00"
+   },
+   {
+    "id": 5,
+    "motor_id": 2,
+    "category_id": 1,
+    "item": "Bensin pengambilan",
+    "amount": 100000,
+    "cost_date": "2026-08-28",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-28 08:54:00"
+   },
+   {
+    "id": 6,
+    "motor_id": 2,
+    "category_id": 2,
+    "item": "Aksesori",
+    "amount": 2500000,
+    "cost_date": "2026-09-03",
+    "note": "Knalpot dan velg",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:14:00"
+   },
+   {
+    "id": 7,
+    "motor_id": 2,
+    "category_id": 3,
+    "item": "STNK",
+    "amount": 1000000,
+    "cost_date": "2026-09-10",
+    "note": "Perpanjangan dan ganti plat",
+    "created_by": 1,
+    "created_at": "2026-09-10 09:16:00"
+   },
+   {
+    "id": 8,
+    "motor_id": 2,
+    "category_id": 4,
+    "item": "Sewa gudang",
+    "amount": 150000,
+    "cost_date": "2026-09-30",
+    "note": "Porsi bulan September",
+    "created_by": 1,
+    "created_at": "2026-09-30 09:18:00"
+   },
+   {
+    "id": 9,
+    "motor_id": 3,
+    "category_id": 1,
+    "item": "Jasa pengambilan kendaraan",
+    "amount": 300000,
+    "cost_date": "2026-09-03",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:28:00"
+   },
+   {
+    "id": 10,
+    "motor_id": 3,
+    "category_id": 1,
+    "item": "Uang makan pengambilan",
+    "amount": 70000,
+    "cost_date": "2026-09-03",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:30:00"
+   },
+   {
+    "id": 11,
+    "motor_id": 3,
+    "category_id": 1,
+    "item": "Bensin pengambilan",
+    "amount": 100000,
+    "cost_date": "2026-09-03",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:32:00"
+   },
+   {
+    "id": 12,
+    "motor_id": 3,
+    "category_id": 2,
+    "item": "Jasa servis bengkel",
+    "amount": 150000,
+    "cost_date": "2026-09-06",
+    "note": "Ganti gasket",
+    "created_by": 3,
+    "created_at": "2026-09-06 09:55:00"
+   },
+   {
+    "id": 13,
+    "motor_id": 3,
+    "category_id": 3,
+    "item": "Pajak tahunan",
+    "amount": 380000,
+    "cost_date": "2026-09-08",
+    "note": "",
+    "created_by": 1,
+    "created_at": "2026-09-08 09:57:00"
+   },
+   {
+    "id": 14,
+    "motor_id": 3,
+    "category_id": 1,
+    "item": "Bahan bakar pengiriman Jabodetabek",
+    "amount": 100000,
+    "cost_date": "2026-10-05",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-10-05 10:06:00"
+   },
+   {
+    "id": 15,
+    "motor_id": 3,
+    "category_id": 1,
+    "item": "Uang makan pengiriman",
+    "amount": 70000,
+    "cost_date": "2026-10-05",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-10-05 10:08:00"
+   },
+   {
+    "id": 16,
+    "motor_id": 4,
+    "category_id": 1,
+    "item": "Jasa pengambilan kendaraan",
+    "amount": 300000,
+    "cost_date": "2026-09-10",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-10 10:13:00"
+   },
+   {
+    "id": 17,
+    "motor_id": 4,
+    "category_id": 1,
+    "item": "Bensin pengambilan",
+    "amount": 100000,
+    "cost_date": "2026-09-10",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-10 10:15:00"
+   },
+   {
+    "id": 18,
+    "motor_id": 4,
+    "category_id": 2,
+    "item": "Cat dan perbaikan body",
+    "amount": 650000,
+    "cost_date": "2026-09-15",
+    "note": "Cat ulang panel kanan",
+    "created_by": 3,
+    "created_at": "2026-09-15 10:32:00"
+   },
+   {
+    "id": 19,
+    "motor_id": 4,
+    "category_id": 2,
+    "item": "Aksesori",
+    "amount": 350000,
+    "cost_date": "2026-09-16",
+    "note": "Lampu belakang LED",
+    "created_by": 3,
+    "created_at": "2026-09-16 10:34:00"
+   },
+   {
+    "id": 20,
+    "motor_id": 4,
+    "category_id": 3,
+    "item": "STNK",
+    "amount": 1000000,
+    "cost_date": "2026-09-19",
+    "note": "",
+    "created_by": 1,
+    "created_at": "2026-09-19 10:42:00"
+   },
+   {
+    "id": 21,
+    "motor_id": 4,
+    "category_id": 4,
+    "item": "Sewa gudang",
+    "amount": 150000,
+    "cost_date": "2026-10-01",
+    "note": "Porsi bulan Oktober",
+    "created_by": 1,
+    "created_at": "2026-10-01 10:46:00"
+   },
+   {
+    "id": 22,
+    "motor_id": 5,
+    "category_id": 1,
+    "item": "Jasa pengambilan kendaraan",
+    "amount": 300000,
+    "cost_date": "2026-09-25",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-25 10:51:00"
+   },
+   {
+    "id": 23,
+    "motor_id": 5,
+    "category_id": 1,
+    "item": "Uang makan pengambilan",
+    "amount": 70000,
+    "cost_date": "2026-09-25",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-25 10:53:00"
+   },
+   {
+    "id": 24,
+    "motor_id": 5,
+    "category_id": 1,
+    "item": "Bensin pengambilan",
+    "amount": 100000,
+    "cost_date": "2026-09-25",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-09-25 10:55:00"
+   },
+   {
+    "id": 25,
+    "motor_id": 5,
+    "category_id": 2,
+    "item": "Turun mesin",
+    "amount": 850000,
+    "cost_date": "2026-10-03",
+    "note": "Ganti seal dan roller CVT",
+    "created_by": 3,
+    "created_at": "2026-10-03 11:18:00"
+   },
+   {
+    "id": 26,
+    "motor_id": 6,
+    "category_id": 1,
+    "item": "Travel pengambilan luar kota",
+    "amount": 300000,
+    "cost_date": "2026-10-15",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-10-15 11:23:00"
+   },
+   {
+    "id": 27,
+    "motor_id": 7,
+    "category_id": 1,
+    "item": "Bensin pengambilan",
+    "amount": 100000,
+    "cost_date": "2026-10-18",
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-10-18 11:30:00"
+   }
+  ],
+  "inventory_items": [
+   {
+    "id": 1,
+    "code": "SP-001",
+    "name": "Headlamp LED",
+    "unit": "pcs",
+    "unit_price": 500000,
+    "stock": 4,
+    "min_stock": 2,
+    "location": "Rak A1",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 2,
+    "code": "SP-002",
+    "name": "Shockbreaker belakang",
+    "unit": "pcs",
+    "unit_price": 400000,
+    "stock": 1,
+    "min_stock": 2,
+    "location": "Rak A2",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 3,
+    "code": "SP-003",
+    "name": "Velg racing 17 inci",
+    "unit": "set",
+    "unit_price": 1300000,
+    "stock": 2,
+    "min_stock": 1,
+    "location": "Rak B1",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 4,
+    "code": "SP-004",
+    "name": "Oli mesin 1 liter",
+    "unit": "botol",
+    "unit_price": 60000,
+    "stock": 18,
+    "min_stock": 10,
+    "location": "Rak C1",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 5,
+    "code": "SP-005",
+    "name": "Oli samping 1 liter",
+    "unit": "botol",
+    "unit_price": 45000,
+    "stock": 3,
+    "min_stock": 5,
+    "location": "Rak C1",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 6,
+    "code": "SP-006",
+    "name": "Busi",
+    "unit": "pcs",
+    "unit_price": 25000,
+    "stock": 22,
+    "min_stock": 10,
+    "location": "Rak C2",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 7,
+    "code": "SP-007",
+    "name": "Kampas rem depan",
+    "unit": "set",
+    "unit_price": 55000,
+    "stock": 6,
+    "min_stock": 4,
+    "location": "Rak C2",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 8,
+    "code": "SP-008",
+    "name": "Ban luar 80/90-14",
+    "unit": "pcs",
+    "unit_price": 210000,
+    "stock": 5,
+    "min_stock": 4,
+    "location": "Rak D1",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 9,
+    "code": "SP-009",
+    "name": "Spion standar",
+    "unit": "set",
+    "unit_price": 85000,
+    "stock": 2,
+    "min_stock": 3,
+    "location": "Rak A3",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 10,
+    "code": "SP-010",
+    "name": "Aki kering 12V",
+    "unit": "pcs",
+    "unit_price": 230000,
+    "stock": 4,
+    "min_stock": 2,
+    "location": "Rak D2",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 11,
+    "code": "SP-011",
+    "name": "Sabun cuci motor",
+    "unit": "botol",
+    "unit_price": 25000,
+    "stock": 8,
+    "min_stock": 3,
+    "location": "Rak E1",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 12,
+    "code": "SP-012",
+    "name": "Wax poles motor",
+    "unit": "botol",
+    "unit_price": 65000,
+    "stock": 4,
+    "min_stock": 2,
+    "location": "Rak E1",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   },
+   {
+    "id": 13,
+    "code": "SP-013",
+    "name": "Knalpot standar",
+    "unit": "pcs",
+    "unit_price": 450000,
+    "stock": 1,
+    "min_stock": 1,
+    "location": "Rak B2",
+    "created_at": "2026-08-15 08:00:00",
+    "updated_at": "2026-08-15 08:00:00"
+   }
+  ],
+  "inventory_transactions": [
+   {
+    "id": 1,
+    "item_id": 1,
+    "type": "in",
+    "qty": 5,
+    "unit_price": 500000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:01:00"
+   },
+   {
+    "id": 2,
+    "item_id": 2,
+    "type": "in",
+    "qty": 2,
+    "unit_price": 400000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:02:00"
+   },
+   {
+    "id": 3,
+    "item_id": 3,
+    "type": "in",
+    "qty": 2,
+    "unit_price": 1300000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:03:00"
+   },
+   {
+    "id": 4,
+    "item_id": 4,
+    "type": "in",
+    "qty": 20,
+    "unit_price": 60000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:04:00"
+   },
+   {
+    "id": 5,
+    "item_id": 5,
+    "type": "in",
+    "qty": 5,
+    "unit_price": 45000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:05:00"
+   },
+   {
+    "id": 6,
+    "item_id": 6,
+    "type": "in",
+    "qty": 23,
+    "unit_price": 25000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:06:00"
+   },
+   {
+    "id": 7,
+    "item_id": 7,
+    "type": "in",
+    "qty": 7,
+    "unit_price": 55000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:07:00"
+   },
+   {
+    "id": 8,
+    "item_id": 8,
+    "type": "in",
+    "qty": 6,
+    "unit_price": 210000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:08:00"
+   },
+   {
+    "id": 9,
+    "item_id": 9,
+    "type": "in",
+    "qty": 3,
+    "unit_price": 85000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:09:00"
+   },
+   {
+    "id": 10,
+    "item_id": 10,
+    "type": "in",
+    "qty": 2,
+    "unit_price": 230000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:10:00"
+   },
+   {
+    "id": 11,
+    "item_id": 11,
+    "type": "in",
+    "qty": 9,
+    "unit_price": 25000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:11:00"
+   },
+   {
+    "id": 12,
+    "item_id": 12,
+    "type": "in",
+    "qty": 5,
+    "unit_price": 65000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:12:00"
+   },
+   {
+    "id": 13,
+    "item_id": 13,
+    "type": "in",
+    "qty": 1,
+    "unit_price": 450000,
+    "trx_date": "2026-08-15",
+    "supplier": "Stok awal",
+    "motor_id": null,
+    "note": "",
+    "created_by": 3,
+    "created_at": "2026-08-15 08:13:00"
+   },
+   {
+    "id": 14,
+    "item_id": 10,
+    "type": "in",
+    "qty": 2,
+    "unit_price": 230000,
+    "trx_date": "2026-10-10",
+    "supplier": "CV Mitra Motor",
+    "motor_id": null,
+    "note": "Pembelian rutin",
+    "created_by": 3,
+    "created_at": "2026-10-10 08:14:00"
+   },
+   {
+    "id": 15,
+    "item_id": 8,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 210000,
+    "trx_date": "2026-08-22",
+    "supplier": null,
+    "motor_id": 1,
+    "note": "Ban belakang",
+    "created_by": 5,
+    "created_at": "2026-08-22 08:34:00"
+   },
+   {
+    "id": 16,
+    "item_id": 4,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 60000,
+    "trx_date": "2026-08-22",
+    "supplier": null,
+    "motor_id": 1,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-08-22 08:37:00"
+   },
+   {
+    "id": 17,
+    "item_id": 1,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 500000,
+    "trx_date": "2026-08-31",
+    "supplier": null,
+    "motor_id": 2,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-08-31 09:08:00"
+   },
+   {
+    "id": 18,
+    "item_id": 5,
+    "type": "out",
+    "qty": 2,
+    "unit_price": 45000,
+    "trx_date": "2026-08-31",
+    "supplier": null,
+    "motor_id": 2,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-08-31 09:11:00"
+   },
+   {
+    "id": 19,
+    "item_id": 9,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 85000,
+    "trx_date": "2026-09-05",
+    "supplier": null,
+    "motor_id": 3,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-09-05 09:49:00"
+   },
+   {
+    "id": 20,
+    "item_id": 4,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 60000,
+    "trx_date": "2026-09-05",
+    "supplier": null,
+    "motor_id": 3,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-09-05 09:52:00"
+   },
+   {
+    "id": 21,
+    "item_id": 11,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 25000,
+    "trx_date": "2026-09-19",
+    "supplier": null,
+    "motor_id": 4,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-09-19 10:36:00"
+   },
+   {
+    "id": 22,
+    "item_id": 12,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 65000,
+    "trx_date": "2026-09-19",
+    "supplier": null,
+    "motor_id": 4,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-09-19 10:39:00"
+   },
+   {
+    "id": 23,
+    "item_id": 2,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 400000,
+    "trx_date": "2026-09-28",
+    "supplier": null,
+    "motor_id": 5,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-09-28 11:09:00"
+   },
+   {
+    "id": 24,
+    "item_id": 6,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 25000,
+    "trx_date": "2026-09-28",
+    "supplier": null,
+    "motor_id": 5,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-09-28 11:12:00"
+   },
+   {
+    "id": 25,
+    "item_id": 7,
+    "type": "out",
+    "qty": 1,
+    "unit_price": 55000,
+    "trx_date": "2026-09-28",
+    "supplier": null,
+    "motor_id": 5,
+    "note": "",
+    "created_by": 5,
+    "created_at": "2026-09-28 11:15:00"
+   }
+  ],
+  "sparepart_usage": [
+   {
+    "id": 1,
+    "motor_id": 1,
+    "item_id": 8,
+    "transaction_id": 15,
+    "qty": 1,
+    "unit_price": 210000,
+    "total": 210000,
+    "usage_date": "2026-08-22",
+    "created_at": "2026-08-22 08:35:00"
+   },
+   {
+    "id": 2,
+    "motor_id": 1,
+    "item_id": 4,
+    "transaction_id": 16,
+    "qty": 1,
+    "unit_price": 60000,
+    "total": 60000,
+    "usage_date": "2026-08-22",
+    "created_at": "2026-08-22 08:38:00"
+   },
+   {
+    "id": 3,
+    "motor_id": 2,
+    "item_id": 1,
+    "transaction_id": 17,
+    "qty": 1,
+    "unit_price": 500000,
+    "total": 500000,
+    "usage_date": "2026-08-31",
+    "created_at": "2026-08-31 09:09:00"
+   },
+   {
+    "id": 4,
+    "motor_id": 2,
+    "item_id": 5,
+    "transaction_id": 18,
+    "qty": 2,
+    "unit_price": 45000,
+    "total": 90000,
+    "usage_date": "2026-08-31",
+    "created_at": "2026-08-31 09:12:00"
+   },
+   {
+    "id": 5,
+    "motor_id": 3,
+    "item_id": 9,
+    "transaction_id": 19,
+    "qty": 1,
+    "unit_price": 85000,
+    "total": 85000,
+    "usage_date": "2026-09-05",
+    "created_at": "2026-09-05 09:50:00"
+   },
+   {
+    "id": 6,
+    "motor_id": 3,
+    "item_id": 4,
+    "transaction_id": 20,
+    "qty": 1,
+    "unit_price": 60000,
+    "total": 60000,
+    "usage_date": "2026-09-05",
+    "created_at": "2026-09-05 09:53:00"
+   },
+   {
+    "id": 7,
+    "motor_id": 4,
+    "item_id": 11,
+    "transaction_id": 21,
+    "qty": 1,
+    "unit_price": 25000,
+    "total": 25000,
+    "usage_date": "2026-09-19",
+    "created_at": "2026-09-19 10:37:00"
+   },
+   {
+    "id": 8,
+    "motor_id": 4,
+    "item_id": 12,
+    "transaction_id": 22,
+    "qty": 1,
+    "unit_price": 65000,
+    "total": 65000,
+    "usage_date": "2026-09-19",
+    "created_at": "2026-09-19 10:40:00"
+   },
+   {
+    "id": 9,
+    "motor_id": 5,
+    "item_id": 2,
+    "transaction_id": 23,
+    "qty": 1,
+    "unit_price": 400000,
+    "total": 400000,
+    "usage_date": "2026-09-28",
+    "created_at": "2026-09-28 11:10:00"
+   },
+   {
+    "id": 10,
+    "motor_id": 5,
+    "item_id": 6,
+    "transaction_id": 24,
+    "qty": 1,
+    "unit_price": 25000,
+    "total": 25000,
+    "usage_date": "2026-09-28",
+    "created_at": "2026-09-28 11:13:00"
+   },
+   {
+    "id": 11,
+    "motor_id": 5,
+    "item_id": 7,
+    "transaction_id": 25,
+    "qty": 1,
+    "unit_price": 55000,
+    "total": 55000,
+    "usage_date": "2026-09-28",
+    "created_at": "2026-09-28 11:16:00"
+   }
+  ],
+  "vehicle_documents": [
+   {
+    "id": 1,
+    "motor_id": 1,
+    "doc_type": "STNK",
+    "doc_number": "11223344",
+    "status": "Lengkap",
+    "expiry_date": "2027-03-12",
+    "note": "",
+    "created_at": "2026-08-21 08:26:00",
+    "updated_at": "2026-08-21 08:27:00"
+   },
+   {
+    "id": 2,
+    "motor_id": 1,
+    "doc_type": "BPKB",
+    "doc_number": "N-0098812",
+    "status": "Lengkap",
+    "expiry_date": null,
+    "note": "",
+    "created_at": "2026-08-21 08:29:00",
+    "updated_at": "2026-08-21 08:30:00"
+   },
+   {
+    "id": 3,
+    "motor_id": 2,
+    "doc_type": "STNK",
+    "doc_number": "55102291",
+    "status": "Lengkap",
+    "expiry_date": "2026-12-02",
+    "note": "",
+    "created_at": "2026-08-29 09:00:00",
+    "updated_at": "2026-08-29 09:01:00"
+   },
+   {
+    "id": 4,
+    "motor_id": 2,
+    "doc_type": "BPKB",
+    "doc_number": "",
+    "status": "Dalam proses",
+    "expiry_date": null,
+    "note": "",
+    "created_at": "2026-08-29 09:03:00",
+    "updated_at": "2026-08-29 09:04:00"
+   },
+   {
+    "id": 5,
+    "motor_id": 3,
+    "doc_type": "STNK",
+    "doc_number": "88231190",
+    "status": "Lengkap",
+    "expiry_date": "2027-01-18",
+    "note": "",
+    "created_at": "2026-09-04 09:38:00",
+    "updated_at": "2026-09-04 09:39:00"
+   },
+   {
+    "id": 6,
+    "motor_id": 3,
+    "doc_type": "BPKB",
+    "doc_number": "P-1187720",
+    "status": "Lengkap",
+    "expiry_date": null,
+    "note": "",
+    "created_at": "2026-09-04 09:41:00",
+    "updated_at": "2026-09-04 09:42:00"
+   },
+   {
+    "id": 7,
+    "motor_id": 3,
+    "doc_type": "Faktur",
+    "doc_number": "",
+    "status": "Tidak ada",
+    "expiry_date": null,
+    "note": "",
+    "created_at": "2026-09-04 09:44:00",
+    "updated_at": "2026-09-04 09:45:00"
+   },
+   {
+    "id": 8,
+    "motor_id": 4,
+    "doc_type": "STNK",
+    "doc_number": "70921183",
+    "status": "Lengkap",
+    "expiry_date": "2027-06-30",
+    "note": "",
+    "created_at": "2026-09-11 10:21:00",
+    "updated_at": "2026-09-11 10:22:00"
+   },
+   {
+    "id": 9,
+    "motor_id": 4,
+    "doc_type": "BPKB",
+    "doc_number": "Q-2201991",
+    "status": "Lengkap",
+    "expiry_date": null,
+    "note": "",
+    "created_at": "2026-09-11 10:24:00",
+    "updated_at": "2026-09-11 10:25:00"
+   },
+   {
+    "id": 10,
+    "motor_id": 4,
+    "doc_type": "Faktur",
+    "doc_number": "",
+    "status": "Lengkap",
+    "expiry_date": null,
+    "note": "",
+    "created_at": "2026-09-11 10:27:00",
+    "updated_at": "2026-09-11 10:28:00"
+   },
+   {
+    "id": 11,
+    "motor_id": 5,
+    "doc_type": "STNK",
+    "doc_number": "30219987",
+    "status": "Lengkap",
+    "expiry_date": "2026-11-20",
+    "note": "",
+    "created_at": "2026-09-26 11:01:00",
+    "updated_at": "2026-09-26 11:02:00"
+   },
+   {
+    "id": 12,
+    "motor_id": 5,
+    "doc_type": "BPKB",
+    "doc_number": "R-0081123",
+    "status": "Lengkap",
+    "expiry_date": null,
+    "note": "",
+    "created_at": "2026-09-26 11:04:00",
+    "updated_at": "2026-09-26 11:05:00"
+   }
+  ],
+  "customers": [
+   {
+    "id": 1,
+    "name": "Rizky Pratama",
+    "phone": "0812-8841-2290",
+    "address": "Bekasi Timur",
+    "created_at": "2026-09-01 08:00:00"
+   },
+   {
+    "id": 2,
+    "name": "Dewi Anggraini",
+    "phone": "0857-1120-4418",
+    "address": "Ciputat, Tangerang Selatan",
+    "created_at": "2026-09-01 08:00:00"
+   },
+   {
+    "id": 3,
+    "name": "Bagus Santoso",
+    "phone": "0813-9902-1187",
+    "address": "Cimahi, Bandung",
+    "created_at": "2026-09-01 08:00:00"
+   }
+  ],
+  "sales": [
+   {
+    "id": 1,
+    "motor_id": 1,
+    "customer_id": 3,
+    "booking_date": "2026-09-25",
+    "sale_date": "2026-09-28",
+    "price": 13000000,
+    "dp": 1500000,
+    "payment_status": "Lunas",
+    "created_by": 4,
+    "created_at": "2026-09-25 08:44:00",
+    "updated_at": "2026-09-28 08:47:00"
+   },
+   {
+    "id": 2,
+    "motor_id": 2,
+    "customer_id": 2,
+    "booking_date": "2026-10-14",
+    "sale_date": null,
+    "price": 24000000,
+    "dp": 2000000,
+    "payment_status": "Booking",
+    "created_by": 4,
+    "created_at": "2026-10-14 09:22:00",
+    "updated_at": "2026-10-14 09:23:00"
+   },
+   {
+    "id": 3,
+    "motor_id": 3,
+    "customer_id": 1,
+    "booking_date": "2026-10-02",
+    "sale_date": "2026-10-05",
+    "price": 13800000,
+    "dp": 1000000,
+    "payment_status": "Lunas",
+    "created_by": 4,
+    "created_at": "2026-10-02 10:01:00",
+    "updated_at": "2026-10-05 10:04:00"
+   }
+  ],
+  "asset_activities": [
+   {
+    "id": 1,
+    "motor_id": 1,
+    "activity_date": "2026-08-20",
+    "type": "masuk",
+    "status": "masuk",
+    "title": "Motor masuk",
+    "detail": "Dibeli Rp 10.500.000 dari Perorangan, Bandung",
+    "created_by": 1,
+    "created_at": "2026-08-20 08:17:00"
+   },
+   {
+    "id": 2,
+    "motor_id": 1,
+    "activity_date": "2026-08-20",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Travel pengambilan luar kota",
+    "detail": "Rp 300.000",
+    "created_by": 3,
+    "created_at": "2026-08-20 08:19:00"
+   },
+   {
+    "id": 3,
+    "motor_id": 1,
+    "activity_date": "2026-08-20",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Uang makan pengambilan",
+    "detail": "Rp 70.000",
+    "created_by": 3,
+    "created_at": "2026-08-20 08:21:00"
+   },
+   {
+    "id": 4,
+    "motor_id": 1,
+    "activity_date": "2026-08-21",
+    "type": "status",
+    "status": "inspeksi",
+    "title": "Status: Sedang diperiksa",
+    "detail": "",
+    "created_by": 5,
+    "created_at": "2026-08-21 08:23:00"
+   },
+   {
+    "id": 5,
+    "motor_id": 1,
+    "activity_date": "2026-08-21",
+    "type": "inspeksi",
+    "status": null,
+    "title": "Inspeksi selesai, Health Score 89",
+    "detail": "Perlu perbaikan: Lampu sein, Ketebalan kampas rem. Rusak/tidak ada: Keausan ban",
+    "created_by": 5,
+    "created_at": "2026-08-21 08:25:00"
+   },
+   {
+    "id": 6,
+    "motor_id": 1,
+    "activity_date": "2026-08-21",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: STNK",
+    "detail": "Lengkap, no. 11223344",
+    "created_by": 3,
+    "created_at": "2026-08-21 08:28:00"
+   },
+   {
+    "id": 7,
+    "motor_id": 1,
+    "activity_date": "2026-08-21",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: BPKB",
+    "detail": "Lengkap, no. N-0098812",
+    "created_by": 3,
+    "created_at": "2026-08-21 08:31:00"
+   },
+   {
+    "id": 8,
+    "motor_id": 1,
+    "activity_date": "2026-08-22",
+    "type": "status",
+    "status": "perbaikan",
+    "title": "Status: Dalam perbaikan",
+    "detail": "Ganti ban dan servis rantai",
+    "created_by": 3,
+    "created_at": "2026-08-22 08:33:00"
+   },
+   {
+    "id": 9,
+    "motor_id": 1,
+    "activity_date": "2026-08-22",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Ban luar 80/90-14 x 1 pcs",
+    "detail": "Rp 210.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-08-22 08:36:00"
+   },
+   {
+    "id": 10,
+    "motor_id": 1,
+    "activity_date": "2026-08-22",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Oli mesin 1 liter x 1 botol",
+    "detail": "Rp 60.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-08-22 08:39:00"
+   },
+   {
+    "id": 11,
+    "motor_id": 1,
+    "activity_date": "2026-08-23",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya perbaikan: Sparepart",
+    "detail": "Rp 320.000, Rantai dan gir",
+    "created_by": 3,
+    "created_at": "2026-08-23 08:41:00"
+   },
+   {
+    "id": 12,
+    "motor_id": 1,
+    "activity_date": "2026-09-01",
+    "type": "status",
+    "status": "siap",
+    "title": "Status: Siap dijual",
+    "detail": "",
+    "created_by": 3,
+    "created_at": "2026-09-01 08:43:00"
+   },
+   {
+    "id": 13,
+    "motor_id": 1,
+    "activity_date": "2026-09-25",
+    "type": "booking",
+    "status": "booking",
+    "title": "Booking oleh Bagus Santoso",
+    "detail": "DP Rp 1.500.000, harga disepakati Rp 13.000.000",
+    "created_by": 4,
+    "created_at": "2026-09-25 08:46:00"
+   },
+   {
+    "id": 14,
+    "motor_id": 1,
+    "activity_date": "2026-09-28",
+    "type": "terjual",
+    "status": "terjual",
+    "title": "Terjual ke Bagus Santoso",
+    "detail": "Rp 13.000.000, pembayaran lunas",
+    "created_by": 4,
+    "created_at": "2026-09-28 08:48:00"
+   },
+   {
+    "id": 15,
+    "motor_id": 2,
+    "activity_date": "2026-08-28",
+    "type": "masuk",
+    "status": "masuk",
+    "title": "Motor masuk",
+    "detail": "Dibeli Rp 18.500.000 dari Komunitas RX-King, Tangerang",
+    "created_by": 1,
+    "created_at": "2026-08-28 08:51:00"
+   },
+   {
+    "id": 16,
+    "motor_id": 2,
+    "activity_date": "2026-08-28",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Jasa pengambilan kendaraan",
+    "detail": "Rp 300.000",
+    "created_by": 3,
+    "created_at": "2026-08-28 08:53:00"
+   },
+   {
+    "id": 17,
+    "motor_id": 2,
+    "activity_date": "2026-08-28",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Bensin pengambilan",
+    "detail": "Rp 100.000",
+    "created_by": 3,
+    "created_at": "2026-08-28 08:55:00"
+   },
+   {
+    "id": 18,
+    "motor_id": 2,
+    "activity_date": "2026-08-29",
+    "type": "status",
+    "status": "inspeksi",
+    "title": "Status: Sedang diperiksa",
+    "detail": "",
+    "created_by": 5,
+    "created_at": "2026-08-29 08:57:00"
+   },
+   {
+    "id": 19,
+    "motor_id": 2,
+    "activity_date": "2026-08-29",
+    "type": "inspeksi",
+    "status": null,
+    "title": "Inspeksi selesai, Health Score 87",
+    "detail": "Perlu perbaikan: Kebocoran oli, Kondisi fisik body, BPKB. Rusak/tidak ada: Lampu depan/belakang",
+    "created_by": 5,
+    "created_at": "2026-08-29 08:59:00"
+   },
+   {
+    "id": 20,
+    "motor_id": 2,
+    "activity_date": "2026-08-29",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: STNK",
+    "detail": "Lengkap, no. 55102291",
+    "created_by": 3,
+    "created_at": "2026-08-29 09:02:00"
+   },
+   {
+    "id": 21,
+    "motor_id": 2,
+    "activity_date": "2026-08-29",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: BPKB",
+    "detail": "Dalam proses",
+    "created_by": 3,
+    "created_at": "2026-08-29 09:05:00"
+   },
+   {
+    "id": 22,
+    "motor_id": 2,
+    "activity_date": "2026-08-30",
+    "type": "status",
+    "status": "perbaikan",
+    "title": "Status: Dalam perbaikan",
+    "detail": "Restorasi lampu, knalpot, velg",
+    "created_by": 3,
+    "created_at": "2026-08-30 09:07:00"
+   },
+   {
+    "id": 23,
+    "motor_id": 2,
+    "activity_date": "2026-08-31",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Headlamp LED x 1 pcs",
+    "detail": "Rp 500.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-08-31 09:10:00"
+   },
+   {
+    "id": 24,
+    "motor_id": 2,
+    "activity_date": "2026-08-31",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Oli samping 1 liter x 2 botol",
+    "detail": "Rp 90.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-08-31 09:13:00"
+   },
+   {
+    "id": 25,
+    "motor_id": 2,
+    "activity_date": "2026-09-03",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya perbaikan: Aksesori",
+    "detail": "Rp 2.500.000, Knalpot dan velg",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:15:00"
+   },
+   {
+    "id": 26,
+    "motor_id": 2,
+    "activity_date": "2026-09-10",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya surat-surat: STNK",
+    "detail": "Rp 1.000.000, Perpanjangan dan ganti plat",
+    "created_by": 1,
+    "created_at": "2026-09-10 09:17:00"
+   },
+   {
+    "id": 27,
+    "motor_id": 2,
+    "activity_date": "2026-09-30",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya penyimpanan: Sewa gudang",
+    "detail": "Rp 150.000, Porsi bulan September",
+    "created_by": 1,
+    "created_at": "2026-09-30 09:19:00"
+   },
+   {
+    "id": 28,
+    "motor_id": 2,
+    "activity_date": "2026-09-25",
+    "type": "status",
+    "status": "siap",
+    "title": "Status: Siap dijual",
+    "detail": "",
+    "created_by": 3,
+    "created_at": "2026-09-25 09:21:00"
+   },
+   {
+    "id": 29,
+    "motor_id": 2,
+    "activity_date": "2026-10-14",
+    "type": "booking",
+    "status": "booking",
+    "title": "Booking oleh Dewi Anggraini",
+    "detail": "DP Rp 2.000.000, harga disepakati Rp 24.000.000",
+    "created_by": 4,
+    "created_at": "2026-10-14 09:24:00"
+   },
+   {
+    "id": 30,
+    "motor_id": 3,
+    "activity_date": "2026-09-03",
+    "type": "masuk",
+    "status": "masuk",
+    "title": "Motor masuk",
+    "detail": "Dibeli Rp 9.500.000 dari Perorangan, Bekasi",
+    "created_by": 1,
+    "created_at": "2026-09-03 09:27:00"
+   },
+   {
+    "id": 31,
+    "motor_id": 3,
+    "activity_date": "2026-09-03",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Jasa pengambilan kendaraan",
+    "detail": "Rp 300.000",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:29:00"
+   },
+   {
+    "id": 32,
+    "motor_id": 3,
+    "activity_date": "2026-09-03",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Uang makan pengambilan",
+    "detail": "Rp 70.000",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:31:00"
+   },
+   {
+    "id": 33,
+    "motor_id": 3,
+    "activity_date": "2026-09-03",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Bensin pengambilan",
+    "detail": "Rp 100.000",
+    "created_by": 3,
+    "created_at": "2026-09-03 09:33:00"
+   },
+   {
+    "id": 34,
+    "motor_id": 3,
+    "activity_date": "2026-09-04",
+    "type": "status",
+    "status": "inspeksi",
+    "title": "Status: Sedang diperiksa",
+    "detail": "",
+    "created_by": 5,
+    "created_at": "2026-09-04 09:35:00"
+   },
+   {
+    "id": 35,
+    "motor_id": 3,
+    "activity_date": "2026-09-04",
+    "type": "inspeksi",
+    "status": null,
+    "title": "Inspeksi selesai, Health Score 90",
+    "detail": "Perlu perbaikan: Kebocoran oli. Rusak/tidak ada: Ketersediaan spion",
+    "created_by": 5,
+    "created_at": "2026-09-04 09:37:00"
+   },
+   {
+    "id": 36,
+    "motor_id": 3,
+    "activity_date": "2026-09-04",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: STNK",
+    "detail": "Lengkap, no. 88231190",
+    "created_by": 3,
+    "created_at": "2026-09-04 09:40:00"
+   },
+   {
+    "id": 37,
+    "motor_id": 3,
+    "activity_date": "2026-09-04",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: BPKB",
+    "detail": "Lengkap, no. P-1187720",
+    "created_by": 3,
+    "created_at": "2026-09-04 09:43:00"
+   },
+   {
+    "id": 38,
+    "motor_id": 3,
+    "activity_date": "2026-09-04",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: Faktur",
+    "detail": "Tidak ada",
+    "created_by": 3,
+    "created_at": "2026-09-04 09:46:00"
+   },
+   {
+    "id": 39,
+    "motor_id": 3,
+    "activity_date": "2026-09-05",
+    "type": "status",
+    "status": "perbaikan",
+    "title": "Status: Dalam perbaikan",
+    "detail": "",
+    "created_by": 3,
+    "created_at": "2026-09-05 09:48:00"
+   },
+   {
+    "id": 40,
+    "motor_id": 3,
+    "activity_date": "2026-09-05",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Spion standar x 1 set",
+    "detail": "Rp 85.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-09-05 09:51:00"
+   },
+   {
+    "id": 41,
+    "motor_id": 3,
+    "activity_date": "2026-09-05",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Oli mesin 1 liter x 1 botol",
+    "detail": "Rp 60.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-09-05 09:54:00"
+   },
+   {
+    "id": 42,
+    "motor_id": 3,
+    "activity_date": "2026-09-06",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya perbaikan: Jasa servis bengkel",
+    "detail": "Rp 150.000, Ganti gasket",
+    "created_by": 3,
+    "created_at": "2026-09-06 09:56:00"
+   },
+   {
+    "id": 43,
+    "motor_id": 3,
+    "activity_date": "2026-09-08",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya surat-surat: Pajak tahunan",
+    "detail": "Rp 380.000",
+    "created_by": 1,
+    "created_at": "2026-09-08 09:58:00"
+   },
+   {
+    "id": 44,
+    "motor_id": 3,
+    "activity_date": "2026-09-12",
+    "type": "status",
+    "status": "siap",
+    "title": "Status: Siap dijual",
+    "detail": "",
+    "created_by": 3,
+    "created_at": "2026-09-12 10:00:00"
+   },
+   {
+    "id": 45,
+    "motor_id": 3,
+    "activity_date": "2026-10-02",
+    "type": "booking",
+    "status": "booking",
+    "title": "Booking oleh Rizky Pratama",
+    "detail": "DP Rp 1.000.000, harga disepakati Rp 13.800.000",
+    "created_by": 4,
+    "created_at": "2026-10-02 10:03:00"
+   },
+   {
+    "id": 46,
+    "motor_id": 3,
+    "activity_date": "2026-10-05",
+    "type": "terjual",
+    "status": "terjual",
+    "title": "Terjual ke Rizky Pratama",
+    "detail": "Rp 13.800.000, pembayaran lunas",
+    "created_by": 4,
+    "created_at": "2026-10-05 10:05:00"
+   },
+   {
+    "id": 47,
+    "motor_id": 3,
+    "activity_date": "2026-10-05",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Bahan bakar pengiriman Jabodetabek",
+    "detail": "Rp 100.000",
+    "created_by": 3,
+    "created_at": "2026-10-05 10:07:00"
+   },
+   {
+    "id": 48,
+    "motor_id": 3,
+    "activity_date": "2026-10-05",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Uang makan pengiriman",
+    "detail": "Rp 70.000",
+    "created_by": 3,
+    "created_at": "2026-10-05 10:09:00"
+   },
+   {
+    "id": 49,
+    "motor_id": 4,
+    "activity_date": "2026-09-10",
+    "type": "masuk",
+    "status": "masuk",
+    "title": "Motor masuk",
+    "detail": "Dibeli Rp 21.000.000 dari Dealer motor bekas, Depok",
+    "created_by": 1,
+    "created_at": "2026-09-10 10:12:00"
+   },
+   {
+    "id": 50,
+    "motor_id": 4,
+    "activity_date": "2026-09-10",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Jasa pengambilan kendaraan",
+    "detail": "Rp 300.000",
+    "created_by": 3,
+    "created_at": "2026-09-10 10:14:00"
+   },
+   {
+    "id": 51,
+    "motor_id": 4,
+    "activity_date": "2026-09-10",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Bensin pengambilan",
+    "detail": "Rp 100.000",
+    "created_by": 3,
+    "created_at": "2026-09-10 10:16:00"
+   },
+   {
+    "id": 52,
+    "motor_id": 4,
+    "activity_date": "2026-09-11",
+    "type": "status",
+    "status": "inspeksi",
+    "title": "Status: Sedang diperiksa",
+    "detail": "",
+    "created_by": 5,
+    "created_at": "2026-09-11 10:18:00"
+   },
+   {
+    "id": 53,
+    "motor_id": 4,
+    "activity_date": "2026-09-11",
+    "type": "inspeksi",
+    "status": null,
+    "title": "Inspeksi selesai, Health Score 95",
+    "detail": "Perlu perbaikan: Lampu depan/belakang, Kondisi fisik body",
+    "created_by": 5,
+    "created_at": "2026-09-11 10:20:00"
+   },
+   {
+    "id": 54,
+    "motor_id": 4,
+    "activity_date": "2026-09-11",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: STNK",
+    "detail": "Lengkap, no. 70921183",
+    "created_by": 3,
+    "created_at": "2026-09-11 10:23:00"
+   },
+   {
+    "id": 55,
+    "motor_id": 4,
+    "activity_date": "2026-09-11",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: BPKB",
+    "detail": "Lengkap, no. Q-2201991",
+    "created_by": 3,
+    "created_at": "2026-09-11 10:26:00"
+   },
+   {
+    "id": 56,
+    "motor_id": 4,
+    "activity_date": "2026-09-11",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: Faktur",
+    "detail": "Lengkap",
+    "created_by": 3,
+    "created_at": "2026-09-11 10:29:00"
+   },
+   {
+    "id": 57,
+    "motor_id": 4,
+    "activity_date": "2026-09-12",
+    "type": "status",
+    "status": "perbaikan",
+    "title": "Status: Dalam perbaikan",
+    "detail": "",
+    "created_by": 3,
+    "created_at": "2026-09-12 10:31:00"
+   },
+   {
+    "id": 58,
+    "motor_id": 4,
+    "activity_date": "2026-09-15",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya perbaikan: Cat dan perbaikan body",
+    "detail": "Rp 650.000, Cat ulang panel kanan",
+    "created_by": 3,
+    "created_at": "2026-09-15 10:33:00"
+   },
+   {
+    "id": 59,
+    "motor_id": 4,
+    "activity_date": "2026-09-16",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya perbaikan: Aksesori",
+    "detail": "Rp 350.000, Lampu belakang LED",
+    "created_by": 3,
+    "created_at": "2026-09-16 10:35:00"
+   },
+   {
+    "id": 60,
+    "motor_id": 4,
+    "activity_date": "2026-09-19",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Sabun cuci motor x 1 botol",
+    "detail": "Rp 25.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-09-19 10:38:00"
+   },
+   {
+    "id": 61,
+    "motor_id": 4,
+    "activity_date": "2026-09-19",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Wax poles motor x 1 botol",
+    "detail": "Rp 65.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-09-19 10:41:00"
+   },
+   {
+    "id": 62,
+    "motor_id": 4,
+    "activity_date": "2026-09-19",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya surat-surat: STNK",
+    "detail": "Rp 1.000.000",
+    "created_by": 1,
+    "created_at": "2026-09-19 10:43:00"
+   },
+   {
+    "id": 63,
+    "motor_id": 4,
+    "activity_date": "2026-09-20",
+    "type": "status",
+    "status": "siap",
+    "title": "Status: Siap dijual",
+    "detail": "",
+    "created_by": 3,
+    "created_at": "2026-09-20 10:45:00"
+   },
+   {
+    "id": 64,
+    "motor_id": 4,
+    "activity_date": "2026-10-01",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya penyimpanan: Sewa gudang",
+    "detail": "Rp 150.000, Porsi bulan Oktober",
+    "created_by": 1,
+    "created_at": "2026-10-01 10:47:00"
+   },
+   {
+    "id": 65,
+    "motor_id": 5,
+    "activity_date": "2026-09-25",
+    "type": "masuk",
+    "status": "masuk",
+    "title": "Motor masuk",
+    "detail": "Dibeli Rp 11.000.000 dari Perorangan, Bogor",
+    "created_by": 1,
+    "created_at": "2026-09-25 10:50:00"
+   },
+   {
+    "id": 66,
+    "motor_id": 5,
+    "activity_date": "2026-09-25",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Jasa pengambilan kendaraan",
+    "detail": "Rp 300.000",
+    "created_by": 3,
+    "created_at": "2026-09-25 10:52:00"
+   },
+   {
+    "id": 67,
+    "motor_id": 5,
+    "activity_date": "2026-09-25",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Uang makan pengambilan",
+    "detail": "Rp 70.000",
+    "created_by": 3,
+    "created_at": "2026-09-25 10:54:00"
+   },
+   {
+    "id": 68,
+    "motor_id": 5,
+    "activity_date": "2026-09-25",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Bensin pengambilan",
+    "detail": "Rp 100.000",
+    "created_by": 3,
+    "created_at": "2026-09-25 10:56:00"
+   },
+   {
+    "id": 69,
+    "motor_id": 5,
+    "activity_date": "2026-09-26",
+    "type": "status",
+    "status": "inspeksi",
+    "title": "Status: Sedang diperiksa",
+    "detail": "",
+    "created_by": 5,
+    "created_at": "2026-09-26 10:58:00"
+   },
+   {
+    "id": 70,
+    "motor_id": 5,
+    "activity_date": "2026-09-26",
+    "type": "inspeksi",
+    "status": null,
+    "title": "Inspeksi selesai, Health Score 73",
+    "detail": "Perlu perbaikan: Suara mesin, Aki, Fungsi rem depan/belakang, Kondisi fisik body. Rusak/tidak ada: Performa tarikan, Ketebalan kampas rem",
+    "created_by": 5,
+    "created_at": "2026-09-26 11:00:00"
+   },
+   {
+    "id": 71,
+    "motor_id": 5,
+    "activity_date": "2026-09-26",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: STNK",
+    "detail": "Lengkap, no. 30219987",
+    "created_by": 3,
+    "created_at": "2026-09-26 11:03:00"
+   },
+   {
+    "id": 72,
+    "motor_id": 5,
+    "activity_date": "2026-09-26",
+    "type": "dokumen",
+    "status": null,
+    "title": "Dokumen dicatat: BPKB",
+    "detail": "Lengkap, no. R-0081123",
+    "created_by": 3,
+    "created_at": "2026-09-26 11:06:00"
+   },
+   {
+    "id": 73,
+    "motor_id": 5,
+    "activity_date": "2026-09-27",
+    "type": "status",
+    "status": "perbaikan",
+    "title": "Status: Dalam perbaikan",
+    "detail": "Servis CVT, rem, dan kaki-kaki",
+    "created_by": 3,
+    "created_at": "2026-09-27 11:08:00"
+   },
+   {
+    "id": 74,
+    "motor_id": 5,
+    "activity_date": "2026-09-28",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Shockbreaker belakang x 1 pcs",
+    "detail": "Rp 400.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-09-28 11:11:00"
+   },
+   {
+    "id": 75,
+    "motor_id": 5,
+    "activity_date": "2026-09-28",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Busi x 1 pcs",
+    "detail": "Rp 25.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-09-28 11:14:00"
+   },
+   {
+    "id": 76,
+    "motor_id": 5,
+    "activity_date": "2026-09-28",
+    "type": "sparepart",
+    "status": null,
+    "title": "Pakai Kampas rem depan x 1 set",
+    "detail": "Rp 55.000 diambil dari stok gudang",
+    "created_by": 5,
+    "created_at": "2026-09-28 11:17:00"
+   },
+   {
+    "id": 77,
+    "motor_id": 5,
+    "activity_date": "2026-10-03",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya perbaikan: Turun mesin",
+    "detail": "Rp 850.000, Ganti seal dan roller CVT",
+    "created_by": 3,
+    "created_at": "2026-10-03 11:19:00"
+   },
+   {
+    "id": 78,
+    "motor_id": 6,
+    "activity_date": "2026-10-15",
+    "type": "masuk",
+    "status": "masuk",
+    "title": "Motor masuk",
+    "detail": "Dibeli Rp 28.000.000 dari Perorangan, Surabaya",
+    "created_by": 1,
+    "created_at": "2026-10-15 11:22:00"
+   },
+   {
+    "id": 79,
+    "motor_id": 6,
+    "activity_date": "2026-10-15",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Travel pengambilan luar kota",
+    "detail": "Rp 300.000",
+    "created_by": 3,
+    "created_at": "2026-10-15 11:24:00"
+   },
+   {
+    "id": 80,
+    "motor_id": 6,
+    "activity_date": "2026-10-16",
+    "type": "status",
+    "status": "inspeksi",
+    "title": "Status: Sedang diperiksa",
+    "detail": "Menunggu mekanik",
+    "created_by": 3,
+    "created_at": "2026-10-16 11:26:00"
+   },
+   {
+    "id": 81,
+    "motor_id": 7,
+    "activity_date": "2026-10-18",
+    "type": "masuk",
+    "status": "masuk",
+    "title": "Motor masuk",
+    "detail": "Dibeli Rp 14.200.000 dari Perorangan, Jakarta Timur",
+    "created_by": 1,
+    "created_at": "2026-10-18 11:29:00"
+   },
+   {
+    "id": 82,
+    "motor_id": 7,
+    "activity_date": "2026-10-18",
+    "type": "biaya",
+    "status": null,
+    "title": "Biaya operasional: Bensin pengambilan",
+    "detail": "Rp 100.000",
+    "created_by": 3,
+    "created_at": "2026-10-18 11:31:00"
+   }
+  ]
+ }
+}

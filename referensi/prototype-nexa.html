@@ -1,0 +1,1408 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEXA – Next-generation Asset Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8ECF0; --surface:#FFFFFF; --surface-2:#F2F4F7; --ink:#17202C; --muted:#586374; --line:#D2D9E1;
+  --primary:#1C4DB3; --primary-ink:#FFFFFF; --primary-soft:#E0E8F8;
+  --good:#17784A; --good-soft:#DBF0E3; --warn:#9A6200; --warn-soft:#FAEAC6; --bad:#B3302A; --bad-soft:#F7DFDC;
+  --violet:#6A3FA6; --violet-soft:#ECE3F8;
+  --side:#152030; --side-ink:#B9C5D3; --side-hi:#FFFFFF; --side-act:#23324A;
+  --font:"Barlow", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --cond:"Barlow Condensed", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E141C; --surface:#17202B; --surface-2:#1F2935; --ink:#E5EAF0; --muted:#97A3B4; --line:#2B3745;
+    --primary:#7AA2FF; --primary-ink:#0A1222; --primary-soft:#1D2C49;
+    --good:#55C68A; --good-soft:#15331F; --warn:#E8B04B; --warn-soft:#3A2D12; --bad:#F27A6E; --bad-soft:#3D1D1A;
+    --violet:#B898F0; --violet-soft:#2C2142;
+    --side:#0A0F16; --side-ink:#9AA7B8; --side-hi:#FFFFFF; --side-act:#1A2534;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E141C; --surface:#17202B; --surface-2:#1F2935; --ink:#E5EAF0; --muted:#97A3B4; --line:#2B3745;
+  --primary:#7AA2FF; --primary-ink:#0A1222; --primary-soft:#1D2C49;
+  --good:#55C68A; --good-soft:#15331F; --warn:#E8B04B; --warn-soft:#3A2D12; --bad:#F27A6E; --bad-soft:#3D1D1A;
+  --violet:#B898F0; --violet-soft:#2C2142;
+  --side:#0A0F16; --side-ink:#9AA7B8; --side-hi:#FFFFFF; --side-act:#1A2534;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--font);font-variant-numeric:tabular-nums;min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+h1,h2,h3{font-family:var(--cond);font-weight:600;line-height:1.15;margin:0;letter-spacing:.005em}
+h1{font-size:28px} h2{font-size:21px} h3{font-size:17px}
+p{margin:0}
+a{color:var(--primary)}
+button{font:inherit;color:inherit}
+img,svg{max-width:100%}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.ic{flex:none;display:block}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.num{text-align:right;white-space:nowrap}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;font:600 14px/1.2 var(--font);padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.block{width:100%;justify-content:center}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.icon-btn{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:8px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--ink);position:relative}
+.icon-btn:hover{background:var(--surface-2)}
+.badge-dot{position:absolute;top:3px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--bad);color:#fff;font:700 11px/18px var(--font)}
+
+/* shell */
+.shell{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100vh}
+.side{background:var(--side);color:var(--side-ink);position:sticky;top:env(safe-area-inset-top,0px);height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;padding:22px 12px 16px;overflow-y:auto;z-index:30}
+.brand{display:flex;align-items:baseline;gap:8px;padding:0 10px 22px;color:var(--side-hi)}
+.brand b{font:800 30px/1 var(--cond);letter-spacing:.04em}
+.brand span{font-size:12px;line-height:1.25;color:var(--side-ink)}
+.nav{display:grid;gap:2px;list-style:none;margin:0;padding:0}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;color:var(--side-ink);text-decoration:none;font-weight:500}
+.nav a:hover{color:var(--side-hi);background:var(--side-act)}
+.nav a[aria-current="page"]{color:var(--side-hi);background:var(--side-act);box-shadow:inset 3px 0 0 #6E9BFF}
+.side-foot{margin-top:auto;padding:16px 10px 0;font-size:12px;line-height:1.45;border-top:1px solid rgba(255,255,255,.08)}
+.side-foot button{background:none;border:0;padding:0;color:var(--side-ink);text-decoration:underline;cursor:pointer;font-size:12px;margin-top:8px}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);display:flex;align-items:center;gap:10px;padding:14px 28px;border-bottom:1px solid var(--line)}
+.topbar h1{font-size:24px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who{display:flex;align-items:center;gap:10px}
+.who .av{width:34px;height:34px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font:700 14px var(--cond)}
+.who .nm{line-height:1.2;font-size:14px;font-weight:600}
+.who .nm small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.content{padding:24px 28px 48px;display:grid;gap:20px;align-content:start;max-width:1320px;width:100%}
+.only-m{display:none}
+.scrim{display:none}
+@media (max-width:920px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;left:0;top:0;bottom:0;height:auto;width:264px;transform:translateX(-102%);transition:transform .2s ease;padding-top:calc(22px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .nav-open .side{transform:none}
+  .nav-open .scrim{display:block;position:fixed;inset:0;background:rgba(10,15,22,.45);z-index:25}
+  .only-m{display:inline-grid}
+  .topbar{padding:10px 14px}
+  .topbar h1{font-size:21px}
+  .who .nm{display:none}
+  .content{padding:16px 14px 40px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* panels */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;min-width:0}
+.panel-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.panel-b{padding:16px 18px}
+.panel-b.flush{padding:0}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.grid-3{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:20px}
+.grid-dash{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px}
+@media (max-width:1100px){.grid-3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} .grid-3>:first-child{grid-column:1/-1}}
+@media (max-width:820px){.grid-2,.grid-3,.grid-dash{grid-template-columns:minmax(0,1fr)}}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.toolbar .grow{flex:1}
+.hello{font-size:17px;color:var(--muted)}
+.hello b{color:var(--ink);font-weight:600}
+
+/* stat strip */
+.strip{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.strip>div{padding:16px 18px;border-left:1px solid var(--line);min-width:0}
+.strip>div:first-child{border-left:0}
+.strip .v{font:700 30px/1.1 var(--cond);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip .v.money{font-size:22px;white-space:normal;overflow-wrap:anywhere}
+.strip .l{font-size:13px;color:var(--muted);margin-top:4px}
+@media (max-width:820px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))} .strip>div{border-left:0;border-top:1px solid var(--line)} .strip>div:nth-child(-n+2){border-top:0} .strip>div:nth-child(even){border-left:1px solid var(--line)}}
+
+/* pipeline bar */
+.pipe{display:flex;gap:3px;border-radius:10px;overflow:hidden;min-height:64px}
+.seg-bar{border:0;cursor:pointer;text-align:left;padding:10px 12px;min-width:84px;display:flex;flex-direction:column;justify-content:center}
+.seg-bar b{font:700 24px/1 var(--cond)}
+.seg-bar span{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg-bar:hover{filter:brightness(.96)}
+@media (max-width:640px){.pipe{flex-wrap:wrap}.seg-bar{flex:1 1 30%!important}}
+
+/* status pills */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap;line-height:1.35}
+.st-masuk{background:var(--surface-2);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
+.st-inspeksi{background:var(--primary-soft);color:var(--primary)}
+.st-perbaikan{background:var(--warn-soft);color:var(--warn)}
+.st-siap{background:var(--good-soft);color:var(--good)}
+.st-booking{background:var(--violet-soft);color:var(--violet)}
+.st-terjual{background:var(--ink);color:var(--surface)}
+.tone-good{background:var(--good-soft);color:var(--good)}
+.tone-warn{background:var(--warn-soft);color:var(--warn)}
+.tone-bad{background:var(--bad-soft);color:var(--bad)}
+.tone-mute{background:var(--surface-2);color:var(--muted)}
+.hs{display:inline-flex;align-items:center;gap:7px;font-weight:600;white-space:nowrap}
+.hs i{width:9px;height:9px;border-radius:50%;background:currentColor}
+.hs small{font-weight:500;color:var(--muted);font-size:12.5px}
+.hs.good{color:var(--good)} .hs.warn{color:var(--warn)} .hs.bad{color:var(--bad)} .hs.none{color:var(--muted);font-weight:500}
+
+/* tables */
+.table-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th{font-weight:600;color:var(--muted);text-align:left;font-size:13px;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tfoot td{font-weight:700;border-top:2px solid var(--line);border-bottom:0}
+.tbl.nowrap td{white-space:nowrap}
+.tbl tr.click{cursor:pointer}
+.tbl tr.click:hover td{background:var(--surface-2)}
+.tbl .t-main{font-weight:600}
+.tbl .t-sub{font-size:12.5px;color:var(--muted)}
+.tbl th.num,.tbl td.num{text-align:right}
+.row-acts{display:flex;gap:4px;justify-content:flex-end}
+.stock-ind{display:inline-flex;align-items:center;gap:8px}
+.stock-ind i{width:10px;height:10px;border-radius:3px}
+.stock-ind.bad i{background:var(--bad)} .stock-ind.warn i{background:var(--warn)} .stock-ind.good i{background:var(--good)}
+tr.low-bad td:first-child{box-shadow:inset 4px 0 0 var(--bad)}
+tr.low-warn td:first-child{box-shadow:inset 4px 0 0 var(--warn)}
+
+/* chips & tabs */
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}
+.chip span{color:var(--muted);font-weight:500;margin-left:4px}
+.chip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip.on span{color:inherit;opacity:.75}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto;padding:0 10px}
+.tabs a{padding:12px 12px 10px;text-decoration:none;color:var(--muted);font-weight:600;border-bottom:3px solid transparent;white-space:nowrap}
+.tabs a:hover{color:var(--ink)}
+.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--primary)}
+
+/* forms */
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px}
+.fgrid .full{grid-column:1/-1}
+@media (max-width:560px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+.field{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--muted)}
+.field small{font-weight:400}
+input,select,textarea{font:400 15px/1.35 var(--font);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--primary-soft);border-color:var(--primary)}
+textarea{min-height:76px;resize:vertical}
+.search{position:relative;min-width:220px}
+.search .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search input{padding-left:34px}
+.form-acts{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
+.err{color:var(--bad);font-size:14px;font-weight:600}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+.check{display:flex;align-items:center;gap:8px;font-weight:500;color:var(--ink);font-size:14px}
+.check input{width:auto}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,15,22,.5);z-index:50;display:grid;place-items:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));overflow-y:auto}
+.modal{background:var(--surface);border-radius:14px;width:100%;max-width:580px;box-shadow:0 20px 60px rgba(0,0,0,.25);border:1px solid var(--line)}
+.modal.wide{max-width:760px}
+.modal-h{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+.modal-b{padding:18px 20px 20px}
+
+/* road (lifecycle stepper) */
+.road-wrap{overflow-x:auto;padding:6px 4px 2px}
+.road{display:grid;grid-template-columns:repeat(6,minmax(100px,1fr));list-style:none;margin:0;padding:0;min-width:620px}
+.road li{position:relative;text-align:center;padding-top:36px}
+.road li::before{content:"";position:absolute;top:13px;left:0;right:0;height:5px;background:var(--line)}
+.road li:first-child::before{left:50%}
+.road li:last-child::before{right:50%}
+.road li.done::before{background:var(--primary)}
+.road li.cur::before{background:linear-gradient(90deg,var(--primary) 50%,var(--line) 50%)}
+.road li.cur:last-child::before{background:var(--primary)}
+.road .dot{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:21px;height:21px;border-radius:50%;background:var(--surface);border:3px solid var(--line)}
+.road .done .dot{background:var(--primary);border-color:var(--primary)}
+.road .cur .dot{width:29px;height:29px;top:1px;border:4px solid var(--primary);box-shadow:0 0 0 6px var(--primary-soft)}
+.road b{display:block;font:600 16px/1.2 var(--cond)}
+.road .cur b{color:var(--primary)}
+.road small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.road .todo b{color:var(--muted);font-weight:500}
+
+/* detail */
+.d-head{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.d-head .t{flex:1;min-width:240px}
+.d-head h2{font-size:32px;font-weight:700}
+.d-head .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px;color:var(--muted);font-size:14px}
+.plate{font:700 14px/1 var(--cond);letter-spacing:.06em;padding:5px 8px;border-radius:5px;background:var(--ink);color:var(--surface)}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;margin:0;font-size:14.5px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:500;text-align:right;overflow-wrap:anywhere}
+.kv .tot{border-top:1px solid var(--line);padding-top:8px;font-weight:700;color:var(--ink)}
+.kv dd.tot{font-size:17px}
+.gauge-box{display:grid;justify-items:center;text-align:center;gap:6px}
+.gauge{width:100%;max-width:220px}
+.g-track{fill:none;stroke:var(--surface-2);stroke-width:11;stroke-linecap:round}
+.g-val{fill:none;stroke:currentColor;stroke-width:11;stroke-linecap:round}
+.gauge.good{color:var(--good)} .gauge.warn{color:var(--warn)} .gauge.bad{color:var(--bad)} .gauge.none{color:var(--muted)}
+.g-num{font:700 30px var(--cond);fill:var(--ink)}
+.g-lbl{font-weight:700;font-size:15px}
+.g-bars{width:100%;display:grid;gap:7px;margin-top:6px;text-align:left}
+.g-bar{display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:4px 8px;font-size:12.5px;color:var(--muted)}
+.g-bar .tr{grid-column:1/-1;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.g-bar .tr i{display:block;height:100%;background:currentColor}
+.g-bar.good{color:var(--good)} .g-bar.warn{color:var(--warn)} .g-bar.bad{color:var(--bad)}
+.g-bar span{color:var(--muted)} .g-bar b{text-align:right;color:var(--ink)}
+
+/* timeline */
+.tl{list-style:none;margin:0;padding:6px 0 0}
+.tl li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;position:relative;padding-bottom:18px}
+.tl li::before{content:"";position:absolute;left:16px;top:34px;bottom:0;width:2px;background:var(--line)}
+.tl li:last-child::before{display:none}
+.tl .ti{width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
+.tl .tt{font-weight:600}
+.tl .td{font-size:14px;color:var(--muted)}
+.tl .tm{font-size:12.5px;color:var(--muted);margin-top:2px}
+.tl .tm a{color:inherit}
+.ty-masuk{background:var(--surface-2);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
+.ty-status{background:var(--primary-soft);color:var(--primary)}
+.ty-inspeksi{background:var(--primary-soft);color:var(--primary)}
+.ty-biaya{background:var(--warn-soft);color:var(--warn)}
+.ty-sparepart{background:var(--warn-soft);color:var(--warn)}
+.ty-dokumen{background:var(--surface-2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.ty-booking{background:var(--violet-soft);color:var(--violet)}
+.ty-terjual{background:var(--good-soft);color:var(--good)}
+.ty-batal{background:var(--bad-soft);color:var(--bad)}
+
+/* inspection form */
+.insp{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+@media (max-width:980px){.insp{grid-template-columns:minmax(0,1fr)}}
+.insp-side{position:sticky;top:calc(80px + env(safe-area-inset-top,0px))}
+.cl-group{border-top:1px solid var(--line)}
+.cl-group:first-child{border-top:0}
+.cl-group h3{display:flex;justify-content:space-between;align-items:baseline;padding:14px 18px 6px}
+.cl-group h3 small{font:500 13px var(--font);color:var(--muted)}
+.cl-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 18px;flex-wrap:wrap}
+.cl-item>span{font-weight:500}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg label{position:relative;cursor:pointer}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg span{display:block;padding:6px 11px;font-size:13px;font-weight:600;color:var(--muted);border-left:1px solid var(--line)}
+.seg label:first-child span{border-left:0}
+.seg input:focus-visible+span{outline:2px solid var(--primary);outline-offset:-2px}
+.seg input:checked+span[data-v="baik"]{background:var(--good-soft);color:var(--good)}
+.seg input:checked+span[data-v="perlu"]{background:var(--warn-soft);color:var(--warn)}
+.seg input:checked+span[data-v="rusak"]{background:var(--bad-soft);color:var(--bad)}
+
+/* bars & charts */
+.hbars{display:grid;gap:12px}
+.hbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;font-size:14px}
+.hbar .tr{grid-column:1/-1;height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.hbar .tr i{display:block;height:100%;background:var(--primary);border-radius:5px}
+.chart text{fill:var(--muted);font:500 11px var(--font)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .b1{fill:var(--ink)}
+.chart .b2{fill:var(--primary)}
+.chart .b2.est{fill:var(--primary);opacity:.4}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* lists */
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:11px 18px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}
+.list li:first-child{border-top:0}
+.list .lv{width:8px;height:8px;border-radius:50%;margin-top:7px;flex:none}
+.lv.bad{background:var(--bad)} .lv.warn{background:var(--warn)} .lv.info{background:var(--primary)}
+.list a{color:var(--ink);text-decoration:none}
+.list a:hover{text-decoration:underline}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+.empty p+.btn{margin-top:12px}
+
+/* notification popover */
+.pop{position:absolute;right:0;top:46px;width:min(380px,calc(100vw - 24px));background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.18);z-index:40;max-height:70vh;overflow:auto}
+.pop h3{padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+
+/* login */
+.login{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);min-height:100vh}
+.login-brand{background:var(--side);color:var(--side-ink);padding:56px clamp(28px,6vw,80px);display:flex;flex-direction:column;justify-content:center;gap:22px}
+.wordmark{font:800 clamp(84px,13vw,168px)/.82 var(--cond);color:var(--side-hi);letter-spacing:-.01em}
+.login-brand .tag{font:600 22px/1.2 var(--cond);color:#8FB0FF}
+.login-brand .lede{max-width:44ch;font-size:16.5px;line-height:1.55}
+.mini-road{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:0;max-width:340px}
+.mini-road li{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:center;position:relative;padding:5px 0;font-weight:500;color:var(--side-hi)}
+.mini-road li::before{content:"";width:12px;height:12px;border-radius:50%;border:3px solid #6E9BFF;justify-self:center;background:var(--side);position:relative;z-index:1}
+.mini-road li::after{content:"";position:absolute;left:10px;top:50%;height:100%;width:2px;background:#33476A}
+.mini-road li:last-child::after{display:none}
+.mini-road li:last-child::before{background:#6E9BFF}
+.login-form{display:flex;flex-direction:column;justify-content:center;padding:40px clamp(20px,5vw,72px);gap:22px;max-width:560px;width:100%;margin:0 auto}
+.login-form form{display:grid;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px}
+.login-form h1{font-size:30px}
+.demo p{font-size:13.5px;color:var(--muted);margin-bottom:8px}
+.demo-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.demo-acc{text-align:left;border:1px dashed var(--line);background:transparent;border-radius:10px;padding:9px 12px;cursor:pointer}
+.demo-acc:hover{border-color:var(--primary);border-style:solid}
+.demo-acc b{display:block;font-size:14px}
+.demo-acc span{font-size:12.5px;color:var(--muted)}
+.credit{font-size:12.5px;color:var(--muted)}
+@media (max-width:860px){.login{grid-template-columns:minmax(0,1fr)}.login-brand{padding:40px 22px 30px}.mini-road{display:none}}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;pointer-events:none}
+#toast div{background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:90vw}
+.report-acts{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<datalist id="dl-all"></datalist>
+<script>
+(function(){
+'use strict';
+
+/* ---------- storage ---------- */
+const STORE='nexa-data-v1', SESS='nexa-session-v1';
+const memStore={};
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return memStore[k]??null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){memStore[k]=v}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){delete memStore[k]}}
+
+/* ---------- helpers ---------- */
+const app=document.getElementById('app');
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rp=n=>(n<0?'−':'')+'Rp '+Math.abs(Math.round(+n||0)).toLocaleString('id-ID');
+const juta=n=>{const v=(+n||0)/1e6;return (Math.abs(v)>=10?v.toFixed(1):v.toFixed(2)).replace('.',',')+' jt'};
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const fmtDate=d=>{if(!d)return '–';const t=new Date(d+'T00:00:00');return isNaN(t)?esc(d):t.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})};
+const monthLabel=ym=>{const [y,m]=ym.split('-');return new Date(+y,+m-1,1).toLocaleDateString('id-ID',{month:'long',year:'numeric'})};
+const sum=(a,f)=>a.reduce((s,x)=>s+(+f(x)||0),0);
+const opts=(list,sel)=>list.map(o=>{const [v,l]=Array.isArray(o)?o:[o,o];return `<option value="${esc(v)}"${String(v)===String(sel)?' selected':''}>${esc(l)}</option>`}).join('');
+
+/* ---------- constants ---------- */
+const ROLES={admin:'Administrator',owner:'Pemilik Usaha',ops:'Staff Operasional',sales:'Staff Penjualan'};
+const ALL=['admin','owner','ops','sales'];
+const PERM={
+  'motor.edit':['admin','ops'],'motor.status':['admin','ops'],inspect:['admin','ops'],cost:['admin','ops'],
+  inv:['admin','ops'],doc:['admin','ops'],sale:['admin','sales'],users:['admin']
+};
+const MENU=[
+  {key:'dashboard',label:'Dashboard',icon:'grid',roles:ALL},
+  {key:'motor',label:'Kendaraan',icon:'motor',roles:ALL},
+  {key:'inspeksi',label:'Inspeksi',icon:'clip',roles:['admin','ops']},
+  {key:'biaya',label:'Biaya',icon:'wallet',roles:['admin','owner','ops']},
+  {key:'inventaris',label:'Inventaris',icon:'box',roles:['admin','owner','ops']},
+  {key:'penjualan',label:'Penjualan',icon:'tag',roles:['admin','owner','sales']},
+  {key:'laporan',label:'Laporan',icon:'chart',roles:['admin','owner','sales']},
+  {key:'pengguna',label:'Pengguna',icon:'users',roles:['admin']}
+];
+const STATUSES=[
+  {key:'masuk',label:'Baru masuk'},{key:'inspeksi',label:'Sedang diperiksa'},{key:'perbaikan',label:'Dalam perbaikan'},
+  {key:'siap',label:'Siap dijual'},{key:'booking',label:'Booking'},{key:'terjual',label:'Terjual'}
+];
+const stLabel=k=>(STATUSES.find(s=>s.key===k)||{label:k}).label;
+const stIdx=k=>STATUSES.findIndex(s=>s.key===k);
+const COST_CATS=['Operasional','Perbaikan','Surat-surat','Penyimpanan','Lainnya'];
+const COST_ITEMS={
+  'Operasional':['Jasa pengambilan kendaraan','Uang makan pengambilan','Bensin pengambilan','Travel pengambilan luar kota','Bahan bakar pengiriman Jabodetabek','Uang makan pengiriman','Travel pengiriman luar kota','Jasa pengiriman'],
+  'Perbaikan':['Aksesori','Sparepart','Bahan pendukung','Jasa servis bengkel','Turun mesin','Cat dan perbaikan body'],
+  'Surat-surat':['Pajak tahunan','STNK','BPKB','Balik nama','Cek fisik'],
+  'Penyimpanan':['Sewa gudang','Sewa tempat parkir'],
+  'Lainnya':['Biaya lain-lain']
+};
+const DOC_TYPES=['STNK','BPKB','Faktur','Kuitansi pembelian','KTP pemilik lama','Lainnya'];
+const DOC_STATUS=['Lengkap','Dalam proses','Tidak ada'];
+const UNITS=['pcs','set','botol','liter','meter','pasang'];
+const CHECK=[
+  {key:'mesin',label:'Kondisi mesin',weight:35,items:[['m1','Suara mesin'],['m2','Kebocoran oli'],['m3','Sistem pengapian'],['m4','Performa tarikan']]},
+  {key:'listrik',label:'Sistem kelistrikan',weight:20,items:[['l1','Aki'],['l2','Lampu depan/belakang'],['l3','Lampu sein'],['l4','Klakson'],['l5','Starter']]},
+  {key:'rem',label:'Pengereman & body',weight:30,items:[['r1','Ketebalan kampas rem'],['r2','Fungsi rem depan/belakang'],['r3','Kondisi fisik body'],['r4','Ketersediaan spion'],['r5','Keausan ban']]},
+  {key:'dok',label:'Kelengkapan dokumen',weight:15,items:[['d1','Nomor rangka sesuai'],['d2','Nomor mesin sesuai'],['d3','STNK'],['d4','BPKB']],labels:{baik:'Sesuai',perlu:'Bermasalah',rusak:'Tidak ada'}}
+];
+const VAL={baik:1,perlu:.5,rusak:0};
+const VLABEL={baik:'Baik',perlu:'Perlu perbaikan',rusak:'Rusak'};
+const itemLabel=k=>{for(const g of CHECK)for(const [ik,l] of g.items)if(ik===k)return l;return k};
+const vLabel=(g,v)=>(g.labels||VLABEL)[v];
+
+const ICON={
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  motor:'<circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5h6.5l3.2-6.5H9.5M14.5 5.5h2.6l1.4 11M8 10l-1.5-2.5H4"/>',
+  clip:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM9 12.5l2 2 4-4.5"/>',
+  wallet:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/>',
+  box:'<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>',
+  tag:'<path d="M3 12.5V4h8.5L21 13.5 13.5 21z"/><circle cx="7.5" cy="8.5" r="1.4"/>',
+  chart:'<path d="M5 20V11M11 20V5M17 20v-7M3 20h18"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.6a3.5 3.5 0 0 1 0 6.8M18.6 14.8c1.6.8 2.6 2.6 2.9 5.2"/>',
+  logout:'<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"/>',
+  back:'<path d="M15 5l-7 7 7 7"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18"/>',
+  down:'<path d="M12 4v11M7 10l5 5 5-5M4 20h16"/>',
+  doc:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/>',
+  wrench:'<path d="M14.7 6.3a4 4 0 0 0 5 5L11.5 19.5a2.1 2.1 0 0 1-3-3z"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
+  inbox:'<path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 2h6l1-2h5"/>',
+  flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  undo:'<path d="M9 7 4 12l5 5M4 12h11a5 5 0 0 1 0 10h-2"/>',
+  arrowIn:'<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',
+  arrowOut:'<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+};
+const ic=(n,s=18)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]||''}</svg>`;
+const TYPE_ICON={masuk:'inbox',status:'flag',inspeksi:'clip',biaya:'wallet',sparepart:'wrench',dokumen:'doc',booking:'tag',terjual:'check',batal:'undo'};
+
+/* ---------- data ---------- */
+let db;
+function save(){lsSet(STORE,JSON.stringify(db))}
+function log(motor_id,type,title,detail,date,by,extra){
+  db.activities.push(Object.assign({id:uid('a'),seq:db.seq++,motor_id,type,title,detail:detail||'',date:date||today(),by:by||meName()},extra||{}));
+}
+const meName=()=>state.user?state.user.name:'Sistem';
+const motorById=id=>db.motors.find(m=>m.id===id);
+const motorName=m=>m?`${m.brand} ${m.model} ${m.year}`:'–';
+const custById=id=>db.customers.find(c=>c.id===id);
+const itemById=id=>db.inventory.find(i=>i.id===id);
+const costsOf=id=>db.costs.filter(c=>c.motor_id===id);
+const partsOf=id=>db.inv_tx.filter(t=>t.type==='out'&&t.motor_id===id);
+const modalOf=m=>(+m.buy_price||0)+sum(costsOf(m.id),c=>c.amount)+sum(partsOf(m.id),t=>t.qty*t.price);
+const saleOf=id=>db.sales.find(s=>s.motor_id===id&&s.status!=='Batal');
+const priceOf=m=>{const s=saleOf(m.id);return s?+s.price:(+m.target_price||0)};
+const profitOf=m=>priceOf(m)-modalOf(m);
+const calcScore=items=>{let t=0;CHECK.forEach(g=>{const v=g.items.map(([k])=>VAL[items[k]]??1);t+=g.weight*sum(v,x=>x)/v.length});return Math.round(t)};
+const groupScore=(g,items)=>Math.round(100*sum(g.items,([k])=>VAL[items[k]]??1)/g.items.length);
+const hClass=s=>s==null?'none':s>=80?'good':s>=60?'warn':'bad';
+const hLabel=s=>s==null?'Belum diperiksa':s>=80?'Sehat':s>=60?'Perlu perhatian':'Kritis';
+const stockLevel=i=>i.stock<=i.min?'bad':i.stock<=Math.ceil(i.min*1.5)?'warn':'good';
+const stockText={bad:'Di bawah/batas minimum',warn:'Mendekati minimum',good:'Aman'};
+
+/* operations */
+function nextCode(){const n=Math.max(0,...db.motors.map(m=>+String(m.code).replace(/\D/g,'')||0))+1;return 'NX-'+String(n).padStart(3,'0')}
+function opAddMotor(d,by,date){
+  const m={id:uid('m'),code:nextCode(),brand:d.brand.trim(),model:d.model.trim(),year:+d.year||'',plate:(d.plate||'').toUpperCase().trim(),color:d.color||'',
+    frame_no:d.frame_no||'',engine_no:d.engine_no||'',buy_date:d.buy_date||date||today(),buy_price:+d.buy_price||0,source:d.source||'',
+    target_price:+d.target_price||0,condition_note:d.condition_note||'',status:'masuk',health:null};
+  db.motors.push(m);
+  log(m.id,'masuk','Motor masuk',`Dibeli ${rp(m.buy_price)}${m.source?' dari '+m.source:''}`,m.buy_date,by,{status:'masuk'});
+  return m;
+}
+function opStatus(id,st,note,by,date){
+  const m=motorById(id);if(!m||m.status===st)return;
+  m.status=st;log(id,'status','Status: '+stLabel(st),note||'',date,by,{status:st});
+}
+function opInspect(motor_id,items,notes,by,date,inspector){
+  const score=calcScore(items);
+  const ins={id:uid('i'),motor_id,date:date||today(),inspector:inspector||by,items,notes:notes||'',score};
+  db.inspections.push(ins);
+  const m=motorById(motor_id);m.health=score;
+  const perlu=Object.keys(items).filter(k=>items[k]==='perlu').map(itemLabel);
+  const rusak=Object.keys(items).filter(k=>items[k]==='rusak').map(itemLabel);
+  const det=[perlu.length?'Perlu perbaikan: '+perlu.join(', '):'',rusak.length?'Rusak/tidak ada: '+rusak.join(', '):''].filter(Boolean).join('. ')||'Semua item dalam kondisi baik';
+  log(motor_id,'inspeksi',`Inspeksi selesai, Health Score ${score}`,det,ins.date,by);
+  return ins;
+}
+function opCost(d,by){
+  const c={id:uid('c'),motor_id:d.motor_id,category:d.category,item:(d.item||'').trim()||d.category,amount:+d.amount||0,date:d.date||today(),note:d.note||'',by:by||meName()};
+  db.costs.push(c);
+  log(c.motor_id,'biaya',`Biaya ${c.category.toLowerCase()}: ${c.item}`,rp(c.amount)+(c.note?', '+c.note:''),c.date,c.by,{ref:c.id});
+  return c;
+}
+function opItem(d,by,date){
+  const it={id:uid('s'),code:d.code.trim(),name:d.name.trim(),unit:d.unit,price:+d.price||0,stock:0,min:+d.min||0,location:d.location||''};
+  db.inventory.push(it);
+  if(+d.stock>0)opIn(it.id,+d.stock,it.price,'Stok awal',date,by);
+  return it;
+}
+function opIn(item_id,qty,price,supplier,date,by,note){
+  const it=itemById(item_id);qty=+qty;if(!it||!(qty>0))return 'Jumlah harus lebih dari 0.';
+  it.stock+=qty;if(+price>0)it.price=+price;
+  db.inv_tx.push({id:uid('t'),seq:db.seq++,item_id,type:'in',qty,price:+price||it.price,date:date||today(),supplier:supplier||'',motor_id:null,note:note||'',by:by||meName()});
+  return null;
+}
+function opOut(item_id,qty,motor_id,date,by,note){
+  const it=itemById(item_id);qty=+qty;if(!it||!(qty>0))return 'Jumlah harus lebih dari 0.';
+  if(qty>it.stock)return `Stok ${it.name} hanya ${it.stock} ${it.unit}.`;
+  it.stock-=qty;
+  db.inv_tx.push({id:uid('t'),seq:db.seq++,item_id,type:'out',qty,price:it.price,date:date||today(),supplier:'',motor_id:motor_id||null,note:note||'',by:by||meName()});
+  if(motor_id)log(motor_id,'sparepart',`Pakai ${it.name} × ${qty} ${it.unit}`,rp(qty*it.price)+' diambil dari stok gudang',date,by);
+  return null;
+}
+function opDoc(d,by,date){
+  let doc=d.id?db.documents.find(x=>x.id===d.id):null;
+  const isNew=!doc;
+  if(!doc){doc={id:uid('d'),motor_id:d.motor_id};db.documents.push(doc)}
+  Object.assign(doc,{type:d.type,number:d.number||'',status:d.status,expiry:d.expiry||'',note:d.note||''});
+  log(doc.motor_id,'dokumen',`${isNew?'Dokumen dicatat':'Dokumen diperbarui'}: ${doc.type}`,doc.status+(doc.number?', no. '+doc.number:''),date,by);
+  return doc;
+}
+function opCustomer(d){const c={id:uid('k'),name:d.name.trim(),phone:d.phone||'',address:d.address||'',note:d.note||''};db.customers.push(c);return c}
+function opBooking(motor_id,customer_id,price,dp,date,by){
+  const s={id:uid('j'),motor_id,customer_id,price:+price||0,dp:+dp||0,booking_date:date||today(),sale_date:'',status:'Booking'};
+  db.sales.push(s);
+  const m=motorById(motor_id);m.status='booking';
+  log(motor_id,'booking',`Booking oleh ${custById(customer_id).name}`,`DP ${rp(s.dp)}, harga disepakati ${rp(s.price)}`,s.booking_date,by,{status:'booking'});
+  return s;
+}
+function opSell(sale_id,price,payment,date,by){
+  const s=db.sales.find(x=>x.id===sale_id);s.price=+price||s.price;s.sale_date=date||today();s.status=payment;
+  const m=motorById(s.motor_id);m.status='terjual';
+  log(s.motor_id,'terjual',`Terjual ke ${custById(s.customer_id).name}`,`${rp(s.price)}, pembayaran ${payment.toLowerCase()}`,s.sale_date,by,{status:'terjual'});
+}
+function opPaid(sale_id,by){
+  const s=db.sales.find(x=>x.id===sale_id);s.status='Lunas';
+  log(s.motor_id,'terjual','Pembayaran lunas',rp(s.price),today(),by);
+}
+function opCancel(sale_id,by,reason){
+  const s=db.sales.find(x=>x.id===sale_id);s.status='Batal';
+  const m=motorById(s.motor_id);m.status='siap';
+  log(s.motor_id,'batal','Booking dibatalkan',(reason||'')+(s.dp?` DP ${rp(s.dp)}`:''),today(),by,{status:'siap'});
+}
+
+/* ---------- seed (demo data) ---------- */
+function seed(){
+  db={version:1,seq:1,users:[],motors:[],inspections:[],costs:[],inventory:[],inv_tx:[],documents:[],customers:[],sales:[],activities:[]};
+  db.users=[
+    {id:'u1',name:'Alifya Putri Aisyka',username:'admin',email:'admin@nexa.local',password:'admin123',role:'admin',active:true},
+    {id:'u2',name:'Akmal Lutfan Hasibuan',username:'pemilik',email:'pemilik@nexa.local',password:'pemilik123',role:'owner',active:true},
+    {id:'u3',name:'Muhammad Kemal Pasha',username:'operasional',email:'ops@nexa.local',password:'ops123',role:'ops',active:true},
+    {id:'u4',name:'Mulyo Saputra',username:'penjualan',email:'sales@nexa.local',password:'sales123',role:'sales',active:true},
+    {id:'u5',name:'Firmansyah',username:'mekanik',email:'mekanik@nexa.local',password:'mekanik123',role:'ops',active:true}
+  ];
+  const K='Muhammad Kemal Pasha',F='Firmansyah',A='Alifya Putri Aisyka',S='Mulyo Saputra';
+  const items=[
+    ['SP-001','Headlamp LED','pcs',500000,5,2,'Rak A1'],['SP-002','Shockbreaker belakang','pcs',400000,2,2,'Rak A2'],
+    ['SP-003','Velg racing 17 inci','set',1300000,2,1,'Rak B1'],['SP-004','Oli mesin 1 liter','botol',60000,20,10,'Rak C1'],
+    ['SP-005','Oli samping 1 liter','botol',45000,5,5,'Rak C1'],['SP-006','Busi','pcs',25000,23,10,'Rak C2'],
+    ['SP-007','Kampas rem depan','set',55000,7,4,'Rak C2'],['SP-008','Ban luar 80/90-14','pcs',210000,6,4,'Rak D1'],
+    ['SP-009','Spion standar','set',85000,3,3,'Rak A3'],['SP-010','Aki kering 12V','pcs',230000,2,2,'Rak D2'],
+    ['SP-011','Sabun cuci motor','botol',25000,9,3,'Rak E1'],['SP-012','Wax poles motor','botol',65000,5,2,'Rak E1'],
+    ['SP-013','Knalpot standar','pcs',450000,1,1,'Rak B2']
+  ];
+  const IT={};
+  items.forEach(([code,name,unit,price,stock,min,location])=>{IT[code]=opItem({code,name,unit,price,stock,min,location},K,'2026-08-15').id});
+  opIn(IT['SP-010'],2,230000,'CV Mitra Motor','2026-10-10',K,'Pembelian rutin');
+
+  const ins=(o)=>{const it={};CHECK.forEach(g=>g.items.forEach(([k])=>it[k]=o[k]||'baik'));return it};
+  const cust={
+    rizky:opCustomer({name:'Rizky Pratama',phone:'0812-8841-2290',address:'Bekasi Timur'}),
+    dewi:opCustomer({name:'Dewi Anggraini',phone:'0857-1120-4418',address:'Ciputat, Tangerang Selatan'}),
+    bagus:opCustomer({name:'Bagus Santoso',phone:'0813-9902-1187',address:'Cimahi, Bandung'})
+  };
+  const doc=(m,type,status,number,expiry,date)=>opDoc({motor_id:m.id,type,status,number,expiry},K,date);
+
+  // M7 Satria (sold)
+  let m=opAddMotor({brand:'Suzuki',model:'Satria F150',year:2016,plate:'D 3301 XY',color:'Hitam merah',frame_no:'MH8BG41CAGJ402211',engine_no:'G427ID402266',buy_date:'2026-08-20',buy_price:10500000,source:'Perorangan, Bandung',target_price:13000000,condition_note:'Mesin halus, ban belakang tipis'},A);
+  opCost({motor_id:m.id,category:'Operasional',item:'Travel pengambilan luar kota',amount:300000,date:'2026-08-20'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Uang makan pengambilan',amount:70000,date:'2026-08-20'},K);
+  opStatus(m.id,'inspeksi','',F,'2026-08-21');
+  opInspect(m.id,ins({r5:'rusak',r1:'perlu',l3:'perlu'}),'Ban belakang harus diganti, rantai kendor.',F,'2026-08-21',F);
+  doc(m,'STNK','Lengkap','11223344','2027-03-12','2026-08-21');doc(m,'BPKB','Lengkap','N-0098812','', '2026-08-21');
+  opStatus(m.id,'perbaikan','Ganti ban dan servis rantai',K,'2026-08-22');
+  opOut(IT['SP-008'],1,m.id,'2026-08-22',F,'Ban belakang');opOut(IT['SP-004'],1,m.id,'2026-08-22',F);
+  opCost({motor_id:m.id,category:'Perbaikan',item:'Sparepart',amount:320000,date:'2026-08-23',note:'Rantai dan gir'},K);
+  opStatus(m.id,'siap','',K,'2026-09-01');
+  let s=opBooking(m.id,cust.bagus.id,13000000,1500000,'2026-09-25',S);opSell(s.id,13000000,'Lunas','2026-09-28',S);
+
+  // M4 RX-King (booking)
+  m=opAddMotor({brand:'Yamaha',model:'RX-King',year:2002,plate:'B 2287 SFA',color:'Hitam',frame_no:'MH33KA00X2K118823',engine_no:'3KA-118823',buy_date:'2026-08-28',buy_price:18500000,source:'Komunitas RX-King, Tangerang',target_price:24000000,condition_note:'Original, perlu restorasi lampu dan knalpot'},A);
+  opCost({motor_id:m.id,category:'Operasional',item:'Jasa pengambilan kendaraan',amount:300000,date:'2026-08-28'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Bensin pengambilan',amount:100000,date:'2026-08-28'},K);
+  opStatus(m.id,'inspeksi','',F,'2026-08-29');
+  opInspect(m.id,ins({l2:'rusak',m2:'perlu',r3:'perlu',d4:'perlu'}),'Headlamp mati, rembes oli ringan, BPKB masih proses.',F,'2026-08-29',F);
+  doc(m,'STNK','Lengkap','55102291','2026-12-02','2026-08-29');doc(m,'BPKB','Dalam proses','','', '2026-08-29');
+  opStatus(m.id,'perbaikan','Restorasi lampu, knalpot, velg',K,'2026-08-30');
+  opOut(IT['SP-001'],1,m.id,'2026-08-31',F);opOut(IT['SP-005'],2,m.id,'2026-08-31',F);
+  opCost({motor_id:m.id,category:'Perbaikan',item:'Aksesori',amount:2500000,date:'2026-09-03',note:'Knalpot dan velg'},K);
+  opCost({motor_id:m.id,category:'Surat-surat',item:'STNK',amount:1000000,date:'2026-09-10',note:'Perpanjangan dan ganti plat'},A);
+  opCost({motor_id:m.id,category:'Penyimpanan',item:'Sewa gudang',amount:150000,date:'2026-09-30',note:'Porsi bulan September'},A);
+  opStatus(m.id,'siap','',K,'2026-09-25');
+  opBooking(m.id,cust.dewi.id,24000000,2000000,'2026-10-14',S);
+
+  // M1 Beat (sold)
+  m=opAddMotor({brand:'Honda',model:'Beat Street',year:2019,plate:'B 3412 KLM',color:'Hitam doff',frame_no:'MH1JM8118KK441902',engine_no:'JM81E1441960',buy_date:'2026-09-03',buy_price:9500000,source:'Perorangan, Bekasi',target_price:13800000,condition_note:'Spion kiri hilang'},A);
+  opCost({motor_id:m.id,category:'Operasional',item:'Jasa pengambilan kendaraan',amount:300000,date:'2026-09-03'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Uang makan pengambilan',amount:70000,date:'2026-09-03'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Bensin pengambilan',amount:100000,date:'2026-09-03'},K);
+  opStatus(m.id,'inspeksi','',F,'2026-09-04');
+  opInspect(m.id,ins({r4:'rusak',m2:'perlu'}),'Spion kiri tidak ada, ada rembesan di gasket.',F,'2026-09-04',F);
+  doc(m,'STNK','Lengkap','88231190','2027-01-18','2026-09-04');doc(m,'BPKB','Lengkap','P-1187720','', '2026-09-04');doc(m,'Faktur','Tidak ada','','', '2026-09-04');
+  opStatus(m.id,'perbaikan','',K,'2026-09-05');
+  opOut(IT['SP-009'],1,m.id,'2026-09-05',F);opOut(IT['SP-004'],1,m.id,'2026-09-05',F);
+  opCost({motor_id:m.id,category:'Perbaikan',item:'Jasa servis bengkel',amount:150000,date:'2026-09-06',note:'Ganti gasket'},K);
+  opCost({motor_id:m.id,category:'Surat-surat',item:'Pajak tahunan',amount:380000,date:'2026-09-08'},A);
+  opStatus(m.id,'siap','',K,'2026-09-12');
+  s=opBooking(m.id,cust.rizky.id,13800000,1000000,'2026-10-02',S);opSell(s.id,13800000,'Lunas','2026-10-05',S);
+  opCost({motor_id:m.id,category:'Operasional',item:'Bahan bakar pengiriman Jabodetabek',amount:100000,date:'2026-10-05'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Uang makan pengiriman',amount:70000,date:'2026-10-05'},K);
+
+  // M2 NMAX (siap)
+  m=opAddMotor({brand:'Yamaha',model:'NMAX 155',year:2020,plate:'B 6120 TJR',color:'Abu-abu',frame_no:'MH3SG3190LJ220871',engine_no:'G3E4E1220905',buy_date:'2026-09-10',buy_price:21000000,source:'Dealer motor bekas, Depok',target_price:25500000,condition_note:'Body baret di sisi kanan'},A);
+  opCost({motor_id:m.id,category:'Operasional',item:'Jasa pengambilan kendaraan',amount:300000,date:'2026-09-10'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Bensin pengambilan',amount:100000,date:'2026-09-10'},K);
+  opStatus(m.id,'inspeksi','',F,'2026-09-11');
+  opInspect(m.id,ins({l2:'perlu',r3:'perlu'}),'Lampu belakang redup, baret body kanan.',F,'2026-09-11',F);
+  doc(m,'STNK','Lengkap','70921183','2027-06-30','2026-09-11');doc(m,'BPKB','Lengkap','Q-2201991','', '2026-09-11');doc(m,'Faktur','Lengkap','','', '2026-09-11');
+  opStatus(m.id,'perbaikan','',K,'2026-09-12');
+  opCost({motor_id:m.id,category:'Perbaikan',item:'Cat dan perbaikan body',amount:650000,date:'2026-09-15',note:'Cat ulang panel kanan'},K);
+  opCost({motor_id:m.id,category:'Perbaikan',item:'Aksesori',amount:350000,date:'2026-09-16',note:'Lampu belakang LED'},K);
+  opOut(IT['SP-011'],1,m.id,'2026-09-19',F);opOut(IT['SP-012'],1,m.id,'2026-09-19',F);
+  opCost({motor_id:m.id,category:'Surat-surat',item:'STNK',amount:1000000,date:'2026-09-19'},A);
+  opStatus(m.id,'siap','',K,'2026-09-20');
+  opCost({motor_id:m.id,category:'Penyimpanan',item:'Sewa gudang',amount:150000,date:'2026-10-01',note:'Porsi bulan Oktober'},A);
+
+  // M3 Vario (perbaikan)
+  m=opAddMotor({brand:'Honda',model:'Vario 150',year:2018,plate:'F 4471 AB',color:'Putih',frame_no:'MH1KF4114JK301877',engine_no:'KF41E1301902',buy_date:'2026-09-25',buy_price:11000000,source:'Perorangan, Bogor',target_price:14500000,condition_note:'Tarikan berat, rem depan bunyi'},A);
+  opCost({motor_id:m.id,category:'Operasional',item:'Jasa pengambilan kendaraan',amount:300000,date:'2026-09-25'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Uang makan pengambilan',amount:70000,date:'2026-09-25'},K);
+  opCost({motor_id:m.id,category:'Operasional',item:'Bensin pengambilan',amount:100000,date:'2026-09-25'},K);
+  opStatus(m.id,'inspeksi','',F,'2026-09-26');
+  opInspect(m.id,ins({m1:'perlu',m4:'rusak',r1:'rusak',r2:'perlu',l1:'perlu',r3:'perlu'}),'CVT aus, kampas rem depan habis, aki lemah.',F,'2026-09-26',F);
+  doc(m,'STNK','Lengkap','30219987','2026-11-20','2026-09-26');doc(m,'BPKB','Lengkap','R-0081123','', '2026-09-26');
+  opStatus(m.id,'perbaikan','Servis CVT, rem, dan kaki-kaki',K,'2026-09-27');
+  opOut(IT['SP-002'],1,m.id,'2026-09-28',F);opOut(IT['SP-006'],1,m.id,'2026-09-28',F);opOut(IT['SP-007'],1,m.id,'2026-09-28',F);
+  opCost({motor_id:m.id,category:'Perbaikan',item:'Turun mesin',amount:850000,date:'2026-10-03',note:'Ganti seal dan roller CVT'},K);
+
+  // M5 Ninja (inspeksi, belum ada hasil)
+  m=opAddMotor({brand:'Kawasaki',model:'Ninja 250 FI',year:2017,plate:'B 5530 PQR',color:'Hijau',frame_no:'MH4EX250HHT118274',engine_no:'EX250LEA18301',buy_date:'2026-10-15',buy_price:28000000,source:'Perorangan, Surabaya',target_price:33000000,condition_note:'Dikirim via travel, belum dicek'},A);
+  opCost({motor_id:m.id,category:'Operasional',item:'Travel pengambilan luar kota',amount:300000,date:'2026-10-15'},K);
+  opStatus(m.id,'inspeksi','Menunggu mekanik',K,'2026-10-16');
+
+  // M6 Scoopy (baru masuk)
+  m=opAddMotor({brand:'Honda',model:'Scoopy',year:2021,plate:'B 4019 UVW',color:'Krem',frame_no:'MH1JM3115MK770021',engine_no:'JM31E1770051',buy_date:'2026-10-18',buy_price:14200000,source:'Perorangan, Jakarta Timur',target_price:17000000,condition_note:''},A);
+  opCost({motor_id:m.id,category:'Operasional',item:'Bensin pengambilan',amount:100000,date:'2026-10-18'},K);
+
+  db.seeded=today();
+}
+
+/* ---------- state ---------- */
+const state={user:null,path:'dashboard',modal:null,navOpen:false,notifOpen:false,loginError:'',
+  f:{motorQ:'',motorStatus:'all',costMotor:'all',costCat:'all',invQ:'',invTab:'stok',saleTab:'transaksi',report:'motor',reportMonth:'',inspMotor:'',inspDraft:null}};
+try{db=JSON.parse(lsGet(STORE)||'null')}catch(e){db=null}
+if(!db||db.version!==1){seed();save()}
+(function(){const sid=lsGet(SESS);const u=sid&&db.users.find(x=>x.id===sid&&x.active);if(u)state.user=u})();
+const role=()=>state.user?state.user.role:null;
+const can=p=>!!state.user&&(PERM[p]||[]).includes(state.user.role);
+const allowed=page=>{const m=MENU.find(x=>x.key===page);return m&&m.roles.includes(role())};
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg){const t=document.getElementById('toast');t.innerHTML=`<div>${esc(msg)}</div>`;clearTimeout(toastT);toastT=setTimeout(()=>t.innerHTML='',2800)}
+
+/* ---------- routing ---------- */
+const routeFromHash=()=>(location.hash||'').replace(/^#\/?/,'')||'dashboard';
+function go(p){state.path=p;state.navOpen=false;state.notifOpen=false;try{if(routeFromHash()!==p)location.hash='#/'+p}catch(e){}render();window.scrollTo(0,0)}
+window.addEventListener('hashchange',()=>{const r=routeFromHash();if(r!==state.path){state.path=r;state.notifOpen=false;render();window.scrollTo(0,0)}});
+
+/* ---------- notifications ---------- */
+function notifications(){
+  const out=[];
+  if(allowed('inventaris'))db.inventory.forEach(i=>{const l=stockLevel(i);if(l!=='good')out.push({lv:l,text:`Stok ${i.name} tinggal ${i.stock} ${i.unit} (minimum ${i.min})`,to:'inventaris'})});
+  db.motors.forEach(m=>{
+    if(m.status==='inspeksi'&&!db.inspections.some(x=>x.motor_id===m.id))out.push({lv:'warn',text:`${m.code} ${m.brand} ${m.model} menunggu hasil inspeksi`,to:'motor/'+m.id});
+    if(m.status!=='terjual'&&m.health!=null&&m.health<60)out.push({lv:'bad',text:`${m.code} ${m.model}: Health Score ${m.health} (kritis)`,to:'motor/'+m.id});
+  });
+  db.sales.forEach(s=>{const m=motorById(s.motor_id);if(!m)return;
+    if(s.status==='Booking')out.push({lv:'info',text:`${m.model} dibooking ${custById(s.customer_id).name}, menunggu pelunasan`,to:'motor/'+m.id+'/penjualan'});
+    if(s.status==='Belum lunas')out.push({lv:'warn',text:`Pembayaran ${m.model} oleh ${custById(s.customer_id).name} belum lunas`,to:'motor/'+m.id+'/penjualan'});
+  });
+  return out;
+}
+const notifList=list=>list.length?`<ul class="list">${list.map(n=>`<li><i class="lv ${n.lv}"></i><a href="#/${esc(n.to)}" data-act="go" data-to="${esc(n.to)}">${esc(n.text)}</a></li>`).join('')}</ul>`:`<div class="empty">Tidak ada yang perlu ditindaklanjuti.</div>`;
+
+/* ---------- small components ---------- */
+const pill=st=>`<span class="pill st-${st}">${esc(stLabel(st))}</span>`;
+const health=s=>s==null?`<span class="hs none">Belum diperiksa</span>`:`<span class="hs ${hClass(s)}"><i></i>${s}<small>${hLabel(s)}</small></span>`;
+const toneFor={Lengkap:'good','Dalam proses':'warn','Tidak ada':'bad',Lunas:'good','Belum lunas':'warn',Booking:'violet',Batal:'mute'};
+const tonePill=t=>`<span class="pill ${toneFor[t]==='violet'?'st-booking':'tone-'+(toneFor[t]||'mute')}">${esc(t)}</span>`;
+function gauge(score){
+  const L=157.08,cls=hClass(score);
+  return `<svg viewBox="0 0 120 70" class="gauge ${cls}" role="img" aria-label="Asset Health Score ${score??'belum ada'}"><path d="M10 62 A50 50 0 0 1 110 62" class="g-track"/>${score==null?'':`<path d="M10 62 A50 50 0 0 1 110 62" class="g-val" style="stroke-dasharray:${L};stroke-dashoffset:${(L*(1-score/100)).toFixed(2)}"/>`}<text x="60" y="58" text-anchor="middle" class="g-num">${score??'–'}</text></svg>`;
+}
+const emptyBox=(msg,btn)=>`<div class="empty"><p>${msg}</p>${btn||''}</div>`;
+
+/* ---------- pages ---------- */
+function pageDashboard(){
+  const ms=db.motors,c=k=>ms.filter(m=>m.status===k).length;
+  const proses=c('masuk')+c('inspeksi')+c('perbaikan'),tersedia=c('siap')+c('booking'),terjual=c('terjual');
+  const tertanam=sum(ms.filter(m=>m.status!=='terjual'),modalOf);
+  const laba=sum(ms.filter(m=>m.status==='terjual'),profitOf);
+  const nilaiInv=sum(db.inventory,i=>i.stock*i.price);
+  const first=state.user.name.split(' ')[0];
+  const pipe=STATUSES.map(s=>{const n=c(s.key);return n?`<button class="seg-bar st-${s.key}" style="flex:${n}" data-act="filterStatus" data-s="${s.key}" title="Lihat ${esc(s.label.toLowerCase())}"><b>${n}</b><span>${esc(s.label)}</span></button>`:''}).join('');
+  // cost composition
+  const cats=COST_CATS.map(k=>[k,sum(db.costs.filter(x=>x.category===k),x=>x.amount)]);
+  cats.push(['Sparepart dari gudang',sum(db.inv_tx.filter(t=>t.type==='out'&&t.motor_id),t=>t.qty*t.price)]);
+  const cmax=Math.max(1,...cats.map(x=>x[1]));
+  const recent=db.activities.slice().sort((a,b)=>b.date.localeCompare(a.date)||b.seq-a.seq).slice(0,8);
+  const notes=notifications();
+  return {title:'Dashboard',body:`
+  <p class="hello">Halo, <b>${esc(first)}</b>. Ini kondisi usaha per ${fmtDate(today())}.</p>
+  <div class="strip" style="--n:5">
+    <div><div class="v">${ms.length-terjual}</div><div class="l">Motor di tangan (${proses} diproses, ${tersedia} siap/booking)</div></div>
+    <div><div class="v">${terjual}</div><div class="l">Motor terjual</div></div>
+    <div><div class="v money">${rp(tertanam)}</div><div class="l">Modal tertanam di motor belum terjual</div></div>
+    <div><div class="v money ${laba>=0?'pos':'neg'}">${rp(laba)}</div><div class="l">Laba dari motor terjual</div></div>
+    <div><div class="v money">${rp(nilaiInv)}</div><div class="l">Nilai stok sparepart</div></div>
+  </div>
+  <section class="panel">
+    <div class="panel-h"><h2>Posisi kendaraan</h2><a href="#/motor" data-act="go" data-to="motor" class="btn sm ghost">Lihat semua</a></div>
+    <div class="panel-b"><div class="pipe">${pipe||'<p class="muted">Belum ada kendaraan.</p>'}</div></div>
+  </section>
+  <div class="grid-dash">
+    <section class="panel">
+      <div class="panel-h"><h2>Modal dan harga per motor</h2>
+        <div class="legend"><span><i style="background:var(--ink)"></i>Total modal</span><span><i style="background:var(--primary)"></i>Harga terjual</span><span><i style="background:var(--primary);opacity:.4"></i>Harga target</span></div></div>
+      <div class="panel-b">${chartModal()}</div>
+    </section>
+    <section class="panel">
+      <div class="panel-h"><h2>Perlu ditindaklanjuti</h2><span class="pill ${notes.length?'tone-bad':'tone-good'}">${notes.length}</span></div>
+      <div class="panel-b flush">${notifList(notes)}</div>
+    </section>
+  </div>
+  <div class="grid-2">
+    <section class="panel">
+      <div class="panel-h"><h2>Ke mana uang modal pergi</h2><span class="muted small">Di luar harga beli motor</span></div>
+      <div class="panel-b"><div class="hbars">${cats.map(([k,v])=>`<div class="hbar"><span>${esc(k)}</span><b>${rp(v)}</b><div class="tr"><i style="width:${(v/cmax*100).toFixed(1)}%"></i></div></div>`).join('')}</div></div>
+    </section>
+    <section class="panel">
+      <div class="panel-h"><h2>Aktivitas terbaru</h2></div>
+      <div class="panel-b">${timeline(recent,true)}</div>
+    </section>
+  </div>`};
+}
+function chartModal(){
+  const ms=db.motors.slice().sort((a,b)=>a.code.localeCompare(b.code));
+  if(!ms.length)return emptyBox('Belum ada data motor.');
+  const W=640,H=250,pl=46,pb=40,pt=10,pr=6;
+  const max=Math.max(1,...ms.map(m=>Math.max(modalOf(m),priceOf(m))));
+  const step=Math.pow(10,Math.floor(Math.log10(max)));const top=Math.ceil(max/step)*step;
+  const gw=(W-pl-pr)/ms.length,bw=Math.min(24,gw/3.2);
+  const y=v=>pt+(H-pt-pb)*(1-v/top);
+  let g='';
+  for(let i=0;i<=4;i++){const v=top*i/4;g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end">${Math.round(v/1e6)} jt</text>`}
+  ms.forEach((m,i)=>{
+    const cx=pl+gw*i+gw/2,mo=modalOf(m),pr2=priceOf(m),sold=m.status==='terjual';
+    g+=`<g><title>${esc(motorName(m))}: modal ${rp(mo)}, ${sold?'terjual':'target'} ${rp(pr2)}</title>
+      <rect class="b1" x="${cx-bw-1}" y="${y(mo)}" width="${bw}" height="${(H-pb)-y(mo)}" rx="2"/>
+      <rect class="b2 ${sold?'':'est'}" x="${cx+1}" y="${y(pr2)}" width="${bw}" height="${(H-pb)-y(pr2)}" rx="2"/></g>
+      <text x="${cx}" y="${H-pb+16}" text-anchor="middle">${esc(m.model.length>11?m.model.slice(0,10)+'…':m.model)}</text>
+      <text x="${cx}" y="${H-pb+30}" text-anchor="middle">${esc(m.code)}</text>`;
+  });
+  return `<div class="table-wrap"><svg class="chart" viewBox="0 0 ${W} ${H}" style="min-width:520px;width:100%" role="img" aria-label="Grafik modal dan harga per motor">${g}</svg></div>`;
+}
+function timeline(list,showMotor){
+  if(!list.length)return emptyBox('Belum ada aktivitas.');
+  return `<ol class="tl">${list.map(a=>{const m=motorById(a.motor_id);return `<li><span class="ti ty-${a.type}">${ic(TYPE_ICON[a.type]||'flag',16)}</span><div><div class="tt">${esc(a.title)}</div>${a.detail?`<div class="td">${esc(a.detail)}</div>`:''}<div class="tm">${fmtDate(a.date)}, oleh ${esc(a.by)}${showMotor&&m?`, <a href="#/motor/${m.id}" data-act="go" data-to="motor/${m.id}">${esc(m.code)} ${esc(m.model)}</a>`:''}</div></div></li>`}).join('')}</ol>`;
+}
+
+function pageMotorList(){
+  let base=db.motors.slice();
+  const salesOnly=role()==='sales';
+  if(salesOnly)base=base.filter(m=>['siap','booking','terjual'].includes(m.status));
+  const sts=salesOnly?STATUSES.filter(s=>['siap','booking','terjual'].includes(s.key)):STATUSES;
+  const q=state.f.motorQ.trim().toLowerCase();
+  let list=base.filter(m=>!q||[m.code,m.brand,m.model,m.plate,m.year,m.color].join(' ').toLowerCase().includes(q));
+  if(state.f.motorStatus!=='all')list=list.filter(m=>m.status===state.f.motorStatus);
+  list.sort((a,b)=>stIdx(a.status)-stIdx(b.status)||b.buy_date.localeCompare(a.buy_date));
+  const chip=(k,l,n)=>`<button class="chip ${state.f.motorStatus===k?'on':''}" data-act="setF" data-k="motorStatus" data-v="${k}">${esc(l)}<span>${n}</span></button>`;
+  return {title:'Kendaraan',body:`
+  <div class="toolbar">
+    <label class="search grow"><span class="sr">Cari kendaraan</span>${ic('search',16)}<input id="q-motor" type="search" placeholder="Cari merek, tipe, kode, atau nomor polisi" value="${esc(state.f.motorQ)}" data-input="motorQ"></label>
+    ${can('motor.edit')?`<button class="btn primary" data-act="modal" data-type="motor">${ic('plus',16)}Tambah motor</button>`:''}
+  </div>
+  <div class="chips">${chip('all','Semua',base.length)}${sts.map(s=>chip(s.key,s.label,base.filter(m=>m.status===s.key).length)).join('')}</div>
+  <section class="panel"><div class="table-wrap">
+  ${list.length?`<table class="tbl"><thead><tr><th>Motor</th><th>No. polisi</th><th>Status</th><th>Kondisi</th><th class="num">Total modal</th><th class="num">Harga jual/target</th><th class="num">Laba (est.)</th></tr></thead><tbody>
+  ${list.map(m=>{const p=profitOf(m);return `<tr class="click" data-act="go" data-to="motor/${m.id}" tabindex="0"><td><div class="t-main">${esc(motorName(m))}</div><div class="t-sub">${esc(m.code)}, masuk ${fmtDate(m.buy_date)}</div></td><td><span class="plate">${esc(m.plate||'–')}</span></td><td>${pill(m.status)}</td><td>${health(m.health)}</td><td class="num">${rp(modalOf(m))}</td><td class="num">${priceOf(m)?rp(priceOf(m)):'–'}</td><td class="num ${p>=0?'pos':'neg'}">${priceOf(m)?rp(p):'–'}</td></tr>`}).join('')}
+  </tbody></table>`:emptyBox(q||state.f.motorStatus!=='all'?'Tidak ada motor yang cocok dengan pencarian atau filter ini.':'Belum ada motor. Catat motor pertama yang masuk.',can('motor.edit')&&!q?`<button class="btn primary" data-act="modal" data-type="motor">${ic('plus',16)}Tambah motor</button>`:'')}
+  </div></section>`};
+}
+
+function pageMotorDetail(id,tab){
+  const m=motorById(id);
+  if(!m)return {title:'Kendaraan',body:emptyBox('Motor tidak ditemukan. Mungkin data sudah direset.',`<button class="btn" data-act="go" data-to="motor">Kembali ke daftar</button>`)};
+  tab=tab||'timeline';
+  const acts=db.activities.filter(a=>a.motor_id===id).sort((a,b)=>a.date.localeCompare(b.date)||a.seq-b.seq);
+  const ci=stIdx(m.status);
+  const reached={};acts.forEach(a=>{if(a.status&&!reached[a.status])reached[a.status]=a.date});
+  const road=STATUSES.map((s,i)=>{const cls=i<ci?'done':i===ci?'cur':'todo';return `<li class="${cls}"><span class="dot"></span><b>${esc(s.label)}</b><small>${i<=ci&&reached[s.key]?fmtDate(reached[s.key]):'&nbsp;'}</small></li>`}).join('');
+  const costs=costsOf(id),parts=partsOf(id);
+  const byCat=COST_CATS.map(k=>[k,sum(costs.filter(c=>c.category===k),c=>c.amount)]).filter(x=>x[1]>0);
+  const partTot=sum(parts,t=>t.qty*t.price),mod=modalOf(m),price=priceOf(m),sold=m.status==='terjual',p=price-mod;
+  const lastIns=db.inspections.filter(x=>x.motor_id===id).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const tabs=[['timeline','Asset timeline'],['inspeksi','Inspeksi'],['biaya','Biaya'],['sparepart','Sparepart'],['dokumen','Dokumen'],['penjualan','Penjualan']];
+  const tabBody={timeline:()=>timeline(acts,false),inspeksi:()=>tabInspeksi(m),biaya:()=>tabBiaya(m),sparepart:()=>tabSparepart(m),dokumen:()=>tabDokumen(m),penjualan:()=>tabPenjualan(m)}[tab]||(()=>'');
+  return {title:'Detail kendaraan',body:`
+  <div><a href="#/motor" class="btn sm ghost" data-act="go" data-to="motor">${ic('back',16)}Daftar kendaraan</a></div>
+  <div class="d-head">
+    <div class="t"><h2>${esc(motorName(m))}</h2>
+      <div class="meta"><span class="plate">${esc(m.plate||'–')}</span><span>${esc(m.code)}</span><span>${esc(m.color||'')}</span>${pill(m.status)}</div></div>
+    <div class="toolbar">
+      ${can('inspect')&&!sold?`<button class="btn" data-act="go" data-to="inspeksi/baru/${m.id}">${ic('clip',16)}Inspeksi baru</button>`:''}
+      ${can('motor.status')&&!['booking','terjual'].includes(m.status)?`<button class="btn" data-act="modal" data-type="status" data-id="${m.id}">${ic('flag',16)}Ubah status</button>`:''}
+      ${can('motor.edit')?`<button class="btn" data-act="modal" data-type="motor" data-id="${m.id}">${ic('edit',16)}Edit data</button>`:''}
+    </div>
+  </div>
+  <section class="panel"><div class="panel-b"><div class="road-wrap"><ol class="road" aria-label="Tahapan siklus motor">${road}</ol></div></div></section>
+  <div class="grid-3">
+    <section class="panel"><div class="panel-h"><h3>Asset Health Score</h3></div><div class="panel-b gauge-box">
+      ${gauge(m.health)}<div class="g-lbl hs ${hClass(m.health)}">${hLabel(m.health)}</div>
+      ${lastIns?`<div class="g-bars">${CHECK.map(g=>{const s=groupScore(g,lastIns.items);return `<div class="g-bar ${hClass(s)}"><span>${esc(g.label)}</span><b>${s}</b><div class="tr"><i style="width:${s}%"></i></div></div>`}).join('')}</div><p class="small muted">Inspeksi terakhir ${fmtDate(lastIns.date)}</p>`:`<p class="small muted">Skor muncul setelah checklist inspeksi diisi.</p>`}
+    </div></section>
+    <section class="panel"><div class="panel-h"><h3>Identitas kendaraan</h3></div><div class="panel-b"><dl class="kv">
+      <dt>Merek / tipe</dt><dd>${esc(m.brand)} ${esc(m.model)}</dd><dt>Tahun</dt><dd>${esc(m.year)}</dd>
+      <dt>Nomor rangka</dt><dd>${esc(m.frame_no||'–')}</dd><dt>Nomor mesin</dt><dd>${esc(m.engine_no||'–')}</dd>
+      <dt>Tanggal beli</dt><dd>${fmtDate(m.buy_date)}</dd><dt>Asal pembelian</dt><dd>${esc(m.source||'–')}</dd>
+      <dt>Catatan kondisi</dt><dd>${esc(m.condition_note||'–')}</dd></dl></div></section>
+    <section class="panel"><div class="panel-h"><h3>Ringkasan modal</h3></div><div class="panel-b"><dl class="kv">
+      <dt>Harga beli</dt><dd>${rp(m.buy_price)}</dd>
+      ${byCat.map(([k,v])=>`<dt>Biaya ${esc(k.toLowerCase())}</dt><dd>${rp(v)}</dd>`).join('')}
+      <dt>Sparepart dari gudang</dt><dd>${rp(partTot)}</dd>
+      <dt class="tot">Total modal</dt><dd class="tot">${rp(mod)}</dd>
+      <dt>${sold?'Harga terjual':m.status==='booking'?'Harga disepakati':'Harga target'}</dt><dd>${price?rp(price):'–'}</dd>
+      <dt>${sold?'Laba/rugi':'Laba (estimasi)'}</dt><dd class="${p>=0?'pos':'neg'}" style="font-weight:700">${price?rp(p):'–'}</dd></dl></div></section>
+  </div>
+  <section class="panel">
+    <nav class="tabs" aria-label="Bagian detail">${tabs.map(([k,l])=>`<a href="#/motor/${m.id}/${k}" data-act="go" data-to="motor/${m.id}/${k}" ${k===tab?'aria-current="page"':''}>${l}</a>`).join('')}</nav>
+    <div class="panel-b">${tabBody()}</div>
+  </section>`};
+}
+function tabInspeksi(m){
+  const list=db.inspections.filter(x=>x.motor_id===m.id).sort((a,b)=>b.date.localeCompare(a.date));
+  const btn=can('inspect')&&m.status!=='terjual'?`<button class="btn primary" data-act="go" data-to="inspeksi/baru/${m.id}">${ic('clip',16)}Isi checklist inspeksi</button>`:'';
+  if(!list.length)return emptyBox('Motor ini belum pernah diinspeksi.',btn);
+  return `<div class="toolbar" style="margin-bottom:12px"><p class="grow muted">${list.length} kali inspeksi</p>${btn}</div>`+list.map((ins,i)=>`
+    <details ${i===0?'open':''} class="panel" style="margin-bottom:10px"><summary class="panel-h" style="cursor:pointer;border-bottom:0"><span><b>${fmtDate(ins.date)}</b> <span class="muted">oleh ${esc(ins.inspector)}</span></span>${health(ins.score)}</summary>
+    <div class="panel-b" style="border-top:1px solid var(--line)"><div class="grid-2">${CHECK.map(g=>`<div><h3 style="margin-bottom:6px">${esc(g.label)} <span class="muted small">${groupScore(g,ins.items)}</span></h3>${g.items.map(([k,l])=>{const v=ins.items[k]||'baik';return `<div class="toolbar" style="justify-content:space-between;padding:3px 0"><span>${esc(l)}</span><span class="pill tone-${v==='baik'?'good':v==='perlu'?'warn':'bad'}">${esc(vLabel(g,v))}</span></div>`}).join('')}</div>`).join('')}</div>
+    ${ins.notes?`<p style="margin-top:12px"><b>Catatan:</b> ${esc(ins.notes)}</p>`:''}</div></details>`).join('');
+}
+function tabBiaya(m){
+  const list=costsOf(m.id).sort((a,b)=>b.date.localeCompare(a.date));
+  const btn=can('cost')?`<button class="btn primary" data-act="modal" data-type="cost" data-motor="${m.id}">${ic('plus',16)}Catat biaya</button>`:'';
+  if(!list.length)return emptyBox('Belum ada biaya untuk motor ini. Catat juga biaya kecil seperti bensin dan uang makan.',btn);
+  return `<div class="toolbar" style="margin-bottom:12px"><p class="grow muted">Total biaya di luar harga beli dan sparepart: <b style="color:var(--ink)">${rp(sum(list,c=>c.amount))}</b></p>${btn}</div>${costTable(list,false)}`;
+}
+function costTable(list,showMotor){
+  return `<div class="table-wrap"><table class="tbl"><thead><tr><th>Tanggal</th>${showMotor?'<th>Motor</th>':''}<th>Kategori</th><th>Rincian</th><th>Dicatat oleh</th><th class="num">Nominal</th>${can('cost')?'<th></th>':''}</tr></thead><tbody>
+  ${list.map(c=>{const m=motorById(c.motor_id);return `<tr><td>${fmtDate(c.date)}</td>${showMotor?`<td><a href="#/motor/${c.motor_id}/biaya" data-act="go" data-to="motor/${c.motor_id}/biaya">${esc(m?m.code+' '+m.model:'–')}</a></td>`:''}<td>${esc(c.category)}</td><td><div class="t-main">${esc(c.item)}</div>${c.note?`<div class="t-sub">${esc(c.note)}</div>`:''}</td><td class="muted">${esc(c.by)}</td><td class="num">${rp(c.amount)}</td>${can('cost')?`<td><div class="row-acts"><button class="icon-btn" title="Hapus biaya" aria-label="Hapus biaya" data-act="delCost" data-id="${c.id}">${ic('trash',16)}</button></div></td>`:''}</tr>`}).join('')}
+  </tbody><tfoot><tr><td colspan="${showMotor?5:4}">Total</td><td class="num">${rp(sum(list,c=>c.amount))}</td>${can('cost')?'<td></td>':''}</tr></tfoot></table></div>`;
+}
+function tabSparepart(m){
+  const list=partsOf(m.id).sort((a,b)=>b.date.localeCompare(a.date));
+  const btn=can('inv')&&m.status!=='terjual'?`<button class="btn primary" data-act="modal" data-type="out" data-motor="${m.id}">${ic('wrench',16)}Pakai sparepart</button>`:'';
+  if(!list.length)return emptyBox('Belum ada sparepart dari gudang yang dipakai untuk motor ini.',btn);
+  return `<div class="toolbar" style="margin-bottom:12px"><p class="grow muted">Sparepart diambil dari stok gudang dan otomatis masuk ke modal motor.</p>${btn}</div>
+  <div class="table-wrap"><table class="tbl"><thead><tr><th>Tanggal</th><th>Barang</th><th class="num">Jumlah</th><th class="num">Harga satuan</th><th class="num">Total</th><th>Oleh</th></tr></thead><tbody>
+  ${list.map(t=>{const it=itemById(t.item_id)||{};return `<tr><td>${fmtDate(t.date)}</td><td><div class="t-main">${esc(it.name)}</div><div class="t-sub">${esc(it.code)}${t.note?', '+esc(t.note):''}</div></td><td class="num">${t.qty} ${esc(it.unit)}</td><td class="num">${rp(t.price)}</td><td class="num">${rp(t.qty*t.price)}</td><td class="muted">${esc(t.by)}</td></tr>`}).join('')}
+  </tbody><tfoot><tr><td colspan="4">Total</td><td class="num">${rp(sum(list,t=>t.qty*t.price))}</td><td></td></tr></tfoot></table></div>`;
+}
+function tabDokumen(m){
+  const list=db.documents.filter(d=>d.motor_id===m.id);
+  const btn=can('doc')?`<button class="btn primary" data-act="modal" data-type="doc" data-motor="${m.id}">${ic('plus',16)}Tambah dokumen</button>`:'';
+  if(!list.length)return emptyBox('Belum ada dokumen tercatat. Catat STNK, BPKB, dan faktur.',btn);
+  return `<div class="toolbar" style="margin-bottom:12px"><p class="grow muted">${list.filter(d=>d.status==='Lengkap').length} dari ${list.length} dokumen lengkap</p>${btn}</div>
+  <div class="table-wrap"><table class="tbl"><thead><tr><th>Dokumen</th><th>Nomor</th><th>Status</th><th>Berlaku sampai</th><th>Catatan</th>${can('doc')?'<th></th>':''}</tr></thead><tbody>
+  ${list.map(d=>`<tr><td class="t-main">${esc(d.type)}</td><td>${esc(d.number||'–')}</td><td>${tonePill(d.status)}</td><td>${d.expiry?fmtDate(d.expiry):'–'}</td><td class="muted">${esc(d.note||'')}</td>${can('doc')?`<td><div class="row-acts"><button class="icon-btn" aria-label="Edit dokumen" title="Edit" data-act="modal" data-type="doc" data-id="${d.id}" data-motor="${m.id}">${ic('edit',16)}</button><button class="icon-btn" aria-label="Hapus dokumen" title="Hapus" data-act="delDoc" data-id="${d.id}">${ic('trash',16)}</button></div></td>`:''}</tr>`).join('')}
+  </tbody></table></div>`;
+}
+function tabPenjualan(m){
+  const s=saleOf(m.id);
+  const hist=db.sales.filter(x=>x.motor_id===m.id&&x.status==='Batal');
+  let out='';
+  if(s){
+    const c=custById(s.customer_id)||{};
+    out=`<div class="grid-2"><dl class="kv">
+      <dt>Customer</dt><dd>${esc(c.name)}</dd><dt>Telepon</dt><dd>${esc(c.phone||'–')}</dd><dt>Alamat</dt><dd>${esc(c.address||'–')}</dd>
+      <dt>Tanggal booking</dt><dd>${fmtDate(s.booking_date)}</dd><dt>Tanggal terjual</dt><dd>${s.sale_date?fmtDate(s.sale_date):'–'}</dd></dl>
+      <dl class="kv"><dt>Harga jual</dt><dd>${rp(s.price)}</dd><dt>DP diterima</dt><dd>${rp(s.dp)}</dd><dt>Sisa pembayaran</dt><dd>${rp(s.status==='Lunas'?0:s.price-s.dp)}</dd>
+      <dt>Status pembayaran</dt><dd>${tonePill(s.status)}</dd><dt class="tot">Laba/rugi</dt><dd class="tot ${s.price-modalOf(m)>=0?'pos':'neg'}">${rp(s.price-modalOf(m))}</dd></dl></div>
+      ${can('sale')?`<div class="form-acts">${s.status==='Booking'?`<button class="btn danger" data-act="cancelSale" data-id="${s.id}">${ic('undo',16)}Batalkan booking</button><button class="btn primary" data-act="modal" data-type="sell" data-id="${s.id}">${ic('check',16)}Selesaikan penjualan</button>`:''}${s.status==='Belum lunas'?`<button class="btn primary" data-act="paid" data-id="${s.id}">${ic('check',16)}Tandai lunas</button>`:''}</div>`:''}`;
+  }else if(m.status==='siap'){
+    out=emptyBox('Motor siap dijual dan belum ada booking.',can('sale')?`<button class="btn primary" data-act="modal" data-type="booking" data-motor="${m.id}">${ic('tag',16)}Catat booking atau penjualan</button>`:'');
+  }else{
+    out=emptyBox('Motor belum siap dijual. Penjualan bisa dicatat setelah status menjadi Siap dijual.');
+  }
+  if(hist.length)out+=`<p class="small muted" style="margin-top:14px">${hist.length} booking sebelumnya dibatalkan.</p>`;
+  return out;
+}
+
+/* inspection */
+function pageInspeksi(parts){
+  if(parts[1]==='baru')return pageInspeksiForm(parts[2]);
+  const list=db.inspections.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const waiting=db.motors.filter(m=>['masuk','inspeksi'].includes(m.status)&&!db.inspections.some(x=>x.motor_id===m.id));
+  return {title:'Inspeksi',body:`
+  <div class="toolbar"><p class="grow muted">Checklist inspeksi menghitung Asset Health Score secara otomatis.</p><button class="btn primary" data-act="go" data-to="inspeksi/baru">${ic('clip',16)}Inspeksi baru</button></div>
+  ${waiting.length?`<section class="panel"><div class="panel-h"><h2>Menunggu inspeksi</h2><span class="pill tone-warn">${waiting.length}</span></div><div class="panel-b flush"><ul class="list">${waiting.map(m=>`<li style="align-items:center"><span style="flex:1"><b>${esc(motorName(m))}</b> <span class="muted">${esc(m.code)}, ${esc(m.plate)}, masuk ${fmtDate(m.buy_date)}</span></span><button class="btn sm" data-act="go" data-to="inspeksi/baru/${m.id}">Mulai inspeksi</button></li>`).join('')}</ul></div></section>`:''}
+  <section class="panel"><div class="panel-h"><h2>Riwayat inspeksi</h2></div><div class="table-wrap">
+  ${list.length?`<table class="tbl"><thead><tr><th>Tanggal</th><th>Motor</th><th>Pemeriksa</th><th>Temuan</th><th>Health Score</th></tr></thead><tbody>
+  ${list.map(i=>{const m=motorById(i.motor_id);const bad=Object.values(i.items).filter(v=>v!=='baik').length;return `<tr class="click" data-act="go" data-to="motor/${i.motor_id}/inspeksi"><td>${fmtDate(i.date)}</td><td><div class="t-main">${esc(motorName(m))}</div><div class="t-sub">${esc(m?m.code:'')}</div></td><td>${esc(i.inspector)}</td><td>${bad?bad+' item perlu tindakan':'Semua baik'}</td><td>${health(i.score)}</td></tr>`}).join('')}</tbody></table>`:emptyBox('Belum ada inspeksi.')}
+  </div></section>`};
+}
+function pageInspeksiForm(mid){
+  const choices=db.motors.filter(m=>m.status!=='terjual');
+  const sel=mid&&motorById(mid)?mid:'';
+  const d=state.f.inspDraft&&state.f.inspDraft.motor===sel?state.f.inspDraft.items:{};
+  return {title:'Inspeksi baru',body:`
+  <div><a href="#/inspeksi" class="btn sm ghost" data-act="go" data-to="${sel?'motor/'+sel+'/inspeksi':'inspeksi'}">${ic('back',16)}Kembali</a></div>
+  <form data-form="inspect" class="insp" id="insp-form">
+    <div class="panel">
+      <div class="panel-b fgrid" style="border-bottom:1px solid var(--line)">
+        <label class="field full">Motor yang diperiksa<select name="motor_id" required data-change="inspMotor"><option value="">Pilih motor</option>${opts(choices.map(m=>[m.id,`${m.code}, ${motorName(m)}, ${m.plate} (${stLabel(m.status)})`]),sel)}</select></label>
+        <label class="field">Tanggal inspeksi<input type="date" name="date" value="${today()}" required></label>
+        <label class="field">Pemeriksa / mekanik<input name="inspector" value="${esc(state.user.name)}" required></label>
+      </div>
+      ${CHECK.map(g=>`<div class="cl-group"><h3>${esc(g.label)} <small>bobot ${g.weight}%</small></h3>${g.items.map(([k,l])=>`<div class="cl-item"><span id="lbl-${k}">${esc(l)}</span><div class="seg" role="radiogroup" aria-labelledby="lbl-${k}">${['baik','perlu','rusak'].map(v=>`<label><input type="radio" name="${k}" value="${v}" ${(d[k]||'baik')===v?'checked':''}><span data-v="${v}">${esc(vLabel(g,v))}</span></label>`).join('')}</div></div>`).join('')}</div>`).join('')}
+      <div class="panel-b" style="border-top:1px solid var(--line)"><label class="field">Catatan pemeriksa<textarea name="notes" placeholder="Contoh: rembes oli di gasket, kampas rem depan tinggal 1 mm"></textarea></label></div>
+    </div>
+    <aside class="panel insp-side"><div class="panel-h"><h3>Asset Health Score</h3></div><div class="panel-b gauge-box" id="insp-score">${scorePreview(d)}</div>
+      <div class="panel-b" style="border-top:1px solid var(--line)"><label class="check" style="margin-bottom:12px"><input type="checkbox" name="to_repair" checked> Pindahkan status ke Dalam perbaikan jika ada temuan</label><button class="btn primary block">${ic('check',16)}Simpan hasil inspeksi</button></div></aside>
+  </form>`};
+}
+function scorePreview(items){
+  const full={};CHECK.forEach(g=>g.items.forEach(([k])=>full[k]=items[k]||'baik'));
+  const s=calcScore(full);
+  return `${gauge(s)}<div class="g-lbl hs ${hClass(s)}">${hLabel(s)}</div><div class="g-bars">${CHECK.map(g=>{const v=groupScore(g,full);return `<div class="g-bar ${hClass(v)}"><span>${esc(g.label)}</span><b>${v}</b><div class="tr"><i style="width:${v}%"></i></div></div>`}).join('')}</div>`;
+}
+function readInspItems(form){const it={};CHECK.forEach(g=>g.items.forEach(([k])=>{const r=form.querySelector(`input[name="${k}"]:checked`);it[k]=r?r.value:'baik'}));return it}
+
+/* costs */
+function pageBiaya(){
+  let list=db.costs.slice();
+  if(state.f.costMotor!=='all')list=list.filter(c=>c.motor_id===state.f.costMotor);
+  if(state.f.costCat!=='all')list=list.filter(c=>c.category===state.f.costCat);
+  list.sort((a,b)=>b.date.localeCompare(a.date));
+  const base=state.f.costMotor==='all'?db.costs:db.costs.filter(c=>c.motor_id===state.f.costMotor);
+  return {title:'Biaya',body:`
+  <div class="strip" style="--n:${COST_CATS.length}">${COST_CATS.map(k=>`<div><div class="v money">${rp(sum(base.filter(c=>c.category===k),c=>c.amount))}</div><div class="l">${esc(k)}</div></div>`).join('')}</div>
+  <div class="toolbar">
+    <label class="field" style="min-width:260px"><span class="sr">Filter motor</span><select data-change="costMotor"><option value="all">Semua motor</option>${opts(db.motors.map(m=>[m.id,`${m.code}, ${motorName(m)}`]),state.f.costMotor)}</select></label>
+    <div class="chips grow">${['all',...COST_CATS].map(k=>`<button class="chip ${state.f.costCat===k?'on':''}" data-act="setF" data-k="costCat" data-v="${esc(k)}">${k==='all'?'Semua kategori':esc(k)}</button>`).join('')}</div>
+    ${can('cost')?`<button class="btn primary" data-act="modal" data-type="cost">${ic('plus',16)}Catat biaya</button>`:''}
+  </div>
+  <section class="panel">${list.length?costTable(list,true):emptyBox('Belum ada biaya yang cocok dengan filter ini.')}</section>`};
+}
+
+/* inventory */
+function pageInventaris(){
+  const tab=state.f.invTab;
+  const q=state.f.invQ.trim().toLowerCase();
+  const items=db.inventory.filter(i=>!q||(i.code+' '+i.name+' '+i.location).toLowerCase().includes(q)).sort((a,b)=>({bad:0,warn:1,good:2}[stockLevel(a)]-{bad:0,warn:1,good:2}[stockLevel(b)])||a.code.localeCompare(b.code));
+  const low=db.inventory.filter(i=>stockLevel(i)==='bad').length,near=db.inventory.filter(i=>stockLevel(i)==='warn').length;
+  const tx=db.inv_tx.slice().sort((a,b)=>b.date.localeCompare(a.date)||b.seq-a.seq);
+  return {title:'Inventaris & sparepart',body:`
+  <div class="strip" style="--n:4">
+    <div><div class="v">${db.inventory.length}</div><div class="l">Jenis barang</div></div>
+    <div><div class="v money">${rp(sum(db.inventory,i=>i.stock*i.price))}</div><div class="l">Nilai inventaris</div></div>
+    <div><div class="v ${low?'neg':''}">${low}</div><div class="l">Di bawah atau di batas minimum</div></div>
+    <div><div class="v" style="${near?'color:var(--warn)':''}">${near}</div><div class="l">Mendekati minimum</div></div>
+  </div>
+  <div class="toolbar">
+    <div class="chips grow"><button class="chip ${tab==='stok'?'on':''}" data-act="setF" data-k="invTab" data-v="stok">Stok barang</button><button class="chip ${tab==='kartu'?'on':''}" data-act="setF" data-k="invTab" data-v="kartu">Kartu stok (masuk/keluar)</button></div>
+    ${can('inv')?`<button class="btn" data-act="modal" data-type="in">${ic('arrowIn',16)}Barang masuk</button><button class="btn" data-act="modal" data-type="out">${ic('arrowOut',16)}Barang keluar</button><button class="btn primary" data-act="modal" data-type="item">${ic('plus',16)}Barang baru</button>`:''}
+  </div>
+  ${tab==='stok'?`
+  <label class="search"><span class="sr">Cari barang</span>${ic('search',16)}<input id="q-inv" type="search" placeholder="Cari kode, nama barang, atau lokasi rak" value="${esc(state.f.invQ)}" data-input="invQ"></label>
+  <section class="panel"><div class="table-wrap">${items.length?`<table class="tbl"><thead><tr><th>Barang</th><th>Lokasi</th><th class="num">Stok</th><th class="num">Minimum</th><th>Keterangan</th><th class="num">Harga satuan</th><th class="num">Nilai</th>${can('inv')?'<th></th>':''}</tr></thead><tbody>
+  ${items.map(i=>{const l=stockLevel(i);return `<tr class="${l!=='good'?'low-'+l:''}"><td><div class="t-main">${esc(i.name)}</div><div class="t-sub">${esc(i.code)}</div></td><td>${esc(i.location||'–')}</td><td class="num"><b>${i.stock}</b> ${esc(i.unit)}</td><td class="num">${i.min}</td><td><span class="stock-ind ${l}"><i></i>${stockText[l]}</span></td><td class="num">${rp(i.price)}/${esc(i.unit)}</td><td class="num">${rp(i.stock*i.price)}</td>${can('inv')?`<td><div class="row-acts"><button class="icon-btn" title="Barang masuk" aria-label="Barang masuk ${esc(i.name)}" data-act="modal" data-type="in" data-item="${i.id}">${ic('arrowIn',16)}</button><button class="icon-btn" title="Edit barang" aria-label="Edit ${esc(i.name)}" data-act="modal" data-type="item" data-id="${i.id}">${ic('edit',16)}</button></div></td>`:''}</tr>`}).join('')}
+  </tbody></table>`:emptyBox('Barang tidak ditemukan.')}</div></section>`:`
+  <section class="panel"><div class="table-wrap">${tx.length?`<table class="tbl"><thead><tr><th>Tanggal</th><th>Barang</th><th>Jenis</th><th class="num">Jumlah</th><th>Supplier / dipakai untuk</th><th class="num">Nilai</th><th>Oleh</th></tr></thead><tbody>
+  ${tx.map(t=>{const i=itemById(t.item_id)||{};const m=t.motor_id&&motorById(t.motor_id);return `<tr><td>${fmtDate(t.date)}</td><td><div class="t-main">${esc(i.name)}</div><div class="t-sub">${esc(i.code)}</div></td><td>${t.type==='in'?'<span class="pill tone-good">Masuk</span>':'<span class="pill tone-warn">Keluar</span>'}</td><td class="num">${t.type==='in'?'+':'−'}${t.qty} ${esc(i.unit)}</td><td>${t.type==='in'?esc(t.supplier||'–'):m?`<a href="#/motor/${m.id}/sparepart" data-act="go" data-to="motor/${m.id}/sparepart">${esc(m.code)} ${esc(m.model)}</a>`:esc(t.note||'Pemakaian umum')}</td><td class="num">${rp(t.qty*t.price)}</td><td class="muted">${esc(t.by)}</td></tr>`}).join('')}
+  </tbody></table>`:emptyBox('Belum ada transaksi.')}</div></section>`}`};
+}
+
+/* sales */
+function pagePenjualan(){
+  const tab=state.f.saleTab;
+  const sales=db.sales.slice().sort((a,b)=>(b.sale_date||b.booking_date).localeCompare(a.sale_date||a.booking_date));
+  const done=sales.filter(s=>s.status==='Lunas'||s.status==='Belum lunas');
+  const ready=db.motors.filter(m=>m.status==='siap');
+  return {title:'Penjualan',body:`
+  <div class="strip" style="--n:4">
+    <div><div class="v">${ready.length}</div><div class="l">Motor siap dijual</div></div>
+    <div><div class="v">${sales.filter(s=>s.status==='Booking').length}</div><div class="l">Booking aktif</div></div>
+    <div><div class="v money">${rp(sum(done,s=>s.price))}</div><div class="l">Total penjualan</div></div>
+    <div><div class="v money">${rp(sum(done,s=>s.price-modalOf(motorById(s.motor_id))))}</div><div class="l">Total laba</div></div>
+  </div>
+  <div class="toolbar"><div class="chips grow"><button class="chip ${tab==='transaksi'?'on':''}" data-act="setF" data-k="saleTab" data-v="transaksi">Transaksi</button><button class="chip ${tab==='siap'?'on':''}" data-act="setF" data-k="saleTab" data-v="siap">Siap dijual<span>${ready.length}</span></button><button class="chip ${tab==='customer'?'on':''}" data-act="setF" data-k="saleTab" data-v="customer">Customer<span>${db.customers.length}</span></button></div>
+  ${can('sale')?(tab==='customer'?`<button class="btn primary" data-act="modal" data-type="customer">${ic('plus',16)}Customer baru</button>`:`<button class="btn primary" data-act="modal" data-type="booking" ${ready.length?'':'disabled'}>${ic('tag',16)}Catat booking/penjualan</button>`):''}</div>
+  <section class="panel"><div class="table-wrap">${
+    tab==='transaksi'?(sales.length?`<table class="tbl"><thead><tr><th>Tanggal</th><th>Motor</th><th>Customer</th><th class="num">Harga</th><th class="num">DP</th><th>Status</th><th class="num">Laba</th></tr></thead><tbody>
+    ${sales.map(s=>{const m=motorById(s.motor_id)||{},c=custById(s.customer_id)||{};const pf=s.price-modalOf(m);return `<tr class="click" data-act="go" data-to="motor/${m.id}/penjualan"><td>${fmtDate(s.sale_date||s.booking_date)}</td><td><div class="t-main">${esc(motorName(m))}</div><div class="t-sub">${esc(m.code)}</div></td><td>${esc(c.name)}</td><td class="num">${rp(s.price)}</td><td class="num">${rp(s.dp)}</td><td>${tonePill(s.status)}</td><td class="num ${s.status==='Batal'?'muted':pf>=0?'pos':'neg'}">${s.status==='Batal'?'–':rp(pf)}</td></tr>`}).join('')}</tbody></table>`:emptyBox('Belum ada transaksi penjualan.'))
+    :tab==='siap'?(ready.length?`<table class="tbl"><thead><tr><th>Motor</th><th>No. polisi</th><th>Kondisi</th><th class="num">Total modal</th><th class="num">Harga target</th><th class="num">Laba (est.)</th>${can('sale')?'<th></th>':''}</tr></thead><tbody>
+    ${ready.map(m=>`<tr><td><a href="#/motor/${m.id}" data-act="go" data-to="motor/${m.id}" class="t-main">${esc(motorName(m))}</a><div class="t-sub">${esc(m.code)}</div></td><td><span class="plate">${esc(m.plate)}</span></td><td>${health(m.health)}</td><td class="num">${rp(modalOf(m))}</td><td class="num">${rp(m.target_price)}</td><td class="num ${profitOf(m)>=0?'pos':'neg'}">${rp(profitOf(m))}</td>${can('sale')?`<td><div class="row-acts"><button class="btn sm" data-act="modal" data-type="booking" data-motor="${m.id}">Catat booking</button></div></td>`:''}</tr>`).join('')}</tbody></table>`:emptyBox('Belum ada motor berstatus Siap dijual.'))
+    :(db.customers.length?`<table class="tbl"><thead><tr><th>Nama</th><th>Telepon</th><th>Alamat</th><th>Transaksi</th></tr></thead><tbody>
+    ${db.customers.map(c=>{const n=db.sales.filter(s=>s.customer_id===c.id&&s.status!=='Batal');return `<tr><td class="t-main">${esc(c.name)}</td><td>${esc(c.phone||'–')}</td><td class="muted">${esc(c.address||'–')}</td><td>${n.length?n.map(s=>{const m=motorById(s.motor_id);return `${esc(m?m.model:'')} (${esc(s.status)})`}).join(', '):'–'}</td></tr>`}).join('')}</tbody></table>`:emptyBox('Belum ada customer.'))
+  }</div></section>`};
+}
+
+/* reports */
+const REPORTS={motor:'Biaya & keuntungan per motor',stok:'Stok gudang & nilai inventaris',pemakaian:'Penggunaan sparepart bulanan',penjualan:'Rekap penjualan'};
+function usageMonths(){const s=new Set(db.inv_tx.filter(t=>t.type==='out').map(t=>t.date.slice(0,7)));s.add(today().slice(0,7));return [...s].sort().reverse()}
+function buildReport(kind){
+  if(kind==='motor'){
+    const cols=[['Kode','t'],['Motor','t'],['No. polisi','t'],['Status','t'],['Harga beli','m'],...COST_CATS.map(k=>[k,'m']),['Sparepart','m'],['Total modal','m'],['Harga jual/target','m'],['Laba/rugi','m']];
+    const rows=db.motors.slice().sort((a,b)=>a.code.localeCompare(b.code)).map(m=>{const cs=costsOf(m.id);return [m.code,motorName(m),m.plate,stLabel(m.status),+m.buy_price,...COST_CATS.map(k=>sum(cs.filter(c=>c.category===k),c=>c.amount)),sum(partsOf(m.id),t=>t.qty*t.price),modalOf(m),priceOf(m),priceOf(m)?profitOf(m):0]});
+    const tot=['Total','','','',...cols.slice(4).map((_,i)=>sum(rows,r=>r[4+i]))];
+    return {title:REPORTS.motor,cols,rows,tot};
+  }
+  if(kind==='stok'){
+    const cols=[['Kode','t'],['Barang','t'],['Satuan','t'],['Lokasi','t'],['Stok','n'],['Minimum','n'],['Harga satuan','m'],['Nilai','m'],['Keterangan','t']];
+    const rows=db.inventory.slice().sort((a,b)=>a.code.localeCompare(b.code)).map(i=>[i.code,i.name,i.unit,i.location,i.stock,i.min,i.price,i.stock*i.price,stockText[stockLevel(i)]]);
+    return {title:REPORTS.stok,cols,rows,tot:['Total','','','',sum(rows,r=>r[4]),'','',sum(rows,r=>r[7]),'']};
+  }
+  if(kind==='pemakaian'){
+    const ym=state.f.reportMonth||usageMonths()[0];
+    const cols=[['Tanggal','t'],['Kode','t'],['Barang','t'],['Jumlah','n'],['Satuan','t'],['Harga satuan','m'],['Total','m'],['Dipakai untuk','t'],['Oleh','t']];
+    const rows=db.inv_tx.filter(t=>t.type==='out'&&t.date.startsWith(ym)).sort((a,b)=>a.date.localeCompare(b.date)).map(t=>{const i=itemById(t.item_id)||{},m=motorById(t.motor_id);return [t.date,i.code,i.name,t.qty,i.unit,t.price,t.qty*t.price,m?m.code+' '+motorName(m):(t.note||'Pemakaian umum'),t.by]});
+    return {title:REPORTS.pemakaian+' – '+monthLabel(ym),cols,rows,tot:['Total','','',sum(rows,r=>r[3]),'','',sum(rows,r=>r[6]),'','']};
+  }
+  const cols=[['Tanggal','t'],['Motor','t'],['Customer','t'],['Status','t'],['Harga jual','m'],['DP','m'],['Total modal','m'],['Laba/rugi','m']];
+  const rows=db.sales.filter(s=>s.status!=='Batal').sort((a,b)=>(a.sale_date||a.booking_date).localeCompare(b.sale_date||b.booking_date)).map(s=>{const m=motorById(s.motor_id);return [s.sale_date||s.booking_date,m.code+' '+motorName(m),(custById(s.customer_id)||{}).name,s.status,s.price,s.dp,modalOf(m),s.price-modalOf(m)]});
+  return {title:REPORTS.penjualan,cols,rows,tot:['Total','','','',sum(rows,r=>r[4]),sum(rows,r=>r[5]),sum(rows,r=>r[6]),sum(rows,r=>r[7])]};
+}
+const cellFmt=(v,t)=>t==='m'?(v===''?'':rp(v)):t==='n'?(v===''?'':String(v)):(/^\d{4}-\d{2}-\d{2}$/.test(String(v))?fmtDate(v):esc(v));
+function pageLaporan(){
+  const k=state.f.report,r=buildReport(k);
+  const months=usageMonths();
+  return {title:'Laporan',body:`
+  <div class="chips">${Object.entries(REPORTS).map(([key,l])=>`<button class="chip ${k===key?'on':''}" data-act="setF" data-k="report" data-v="${key}">${esc(l)}</button>`).join('')}</div>
+  <section class="panel">
+    <div class="panel-h"><div><h2>${esc(r.title)}</h2><p class="small muted">Per ${fmtDate(today())}, ${r.rows.length} baris</p></div>
+      <div class="report-acts">
+        ${k==='pemakaian'?`<label class="field"><span class="sr">Bulan</span><select data-change="reportMonth">${opts(months.map(m=>[m,monthLabel(m)]),state.f.reportMonth||months[0])}</select></label>`:''}
+        <button class="btn" data-act="export" data-fmt="xlsx">${ic('down',16)}Unduh Excel</button>
+        <button class="btn" data-act="export" data-fmt="pdf">${ic('down',16)}Unduh PDF</button>
+      </div></div>
+    <div class="table-wrap">${r.rows.length?`<table class="tbl nowrap"><thead><tr>${r.cols.map(([h,t])=>`<th class="${t!=='t'?'num':''}">${esc(h)}</th>`).join('')}</tr></thead><tbody>
+    ${r.rows.map(row=>`<tr>${row.map((v,i)=>`<td class="${r.cols[i][1]!=='t'?'num':''}">${cellFmt(v,r.cols[i][1])}</td>`).join('')}</tr>`).join('')}</tbody>
+    <tfoot><tr>${r.tot.map((v,i)=>`<td class="${r.cols[i][1]!=='t'?'num':''}">${cellFmt(v,r.cols[i][1])}</td>`).join('')}</tr></tfoot></table>`:emptyBox('Tidak ada data untuk laporan ini.')}</div>
+  </section>`};
+}
+async function exportReport(fmt){
+  const r=buildReport(state.f.report);
+  const slug=r.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const fname=`nexa-${slug}-${today()}`;
+  let data,filename;
+  try{
+    if(fmt==='xlsx'){
+      if(window.XLSX){
+        const aoa=[[r.title],['Dibuat '+today()+' oleh '+state.user.name],[],r.cols.map(c=>c[0]),...r.rows,r.tot];
+        const ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=r.cols.map(c=>({wch:c[1]==='t'?22:16}));
+        const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Laporan');
+        data=new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})]);filename=fname+'.xlsx';
+      }else{
+        const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+        data=[r.cols.map(c=>q(c[0])).join(';'),...r.rows.map(x=>x.map(q).join(';')),r.tot.map(q).join(';')].join('\r\n');filename=fname+'.csv';
+      }
+    }else{
+      if(!window.jspdf){toast('Pustaka PDF belum termuat. Coba lagi sebentar lagi.');return}
+      const clean=s=>String(s).replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/[–—]/g,'-').replace(/−/g,'-').replace(/×/g,'x');
+      const doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+      doc.setFontSize(15);doc.text(clean('NEXA – '+r.title),14,15);
+      doc.setFontSize(9);doc.text(clean('Dibuat '+fmtDate(today())+' oleh '+state.user.name),14,21);
+      const fmt2=(v,t)=>clean(t==='m'?(v===''?'':rp(v)):t==='n'?String(v):(/^\d{4}-\d{2}-\d{2}$/.test(String(v))?fmtDate(v):v));
+      const body=r.rows.map(row=>row.map((v,i)=>fmt2(v,r.cols[i][1])));
+      const foot=[r.tot.map((v,i)=>fmt2(v,r.cols[i][1]))];
+      if(typeof doc.autoTable==='function'){
+        const colStyles={};r.cols.forEach((c,i)=>{if(c[1]!=='t')colStyles[i]={halign:'right'}});
+        doc.autoTable({head:[r.cols.map(c=>clean(c[0]))],body,foot,startY:26,styles:{fontSize:7.5,cellPadding:1.6},headStyles:{fillColor:[28,77,179]},footStyles:{fillColor:[232,236,240],textColor:20},columnStyles:colStyles});
+      }else{
+        let y=30;doc.setFontSize(8);[r.cols.map(c=>c[0]),...body,...foot].forEach(row=>{doc.text(clean(row.join('  |  ')),14,y);y+=5;if(y>195){doc.addPage();y=15}});
+      }
+      data=doc.output('blob');filename=fname+'.pdf';
+    }
+  }catch(e){toast('Laporan gagal dibuat: '+(e.message||e));return}
+  let dl=null;
+  try{dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){dl=null}
+  if(!dl){toast('Unduhan tidak tersedia di tampilan ini.');return}
+  try{await dl.save({filename,data});toast('Laporan disimpan: '+filename)}
+  catch(e){if(e&&e.code==='declined')return;if(e&&e.code==='rate_limited'){toast('Masih ada unduhan yang menunggu konfirmasi.');return}toast('Unduhan tidak tersedia di tampilan ini.')}
+}
+
+/* users */
+function pagePengguna(){
+  return {title:'Pengguna & hak akses',body:`
+  <div class="toolbar"><p class="grow muted">Setiap role hanya melihat menu sesuai tanggung jawabnya.</p><button class="btn primary" data-act="modal" data-type="user">${ic('plus',16)}Pengguna baru</button></div>
+  <section class="panel"><div class="table-wrap"><table class="tbl"><thead><tr><th>Nama</th><th>Username</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>
+  ${db.users.map(u=>`<tr><td class="t-main">${esc(u.name)}${u.id===state.user.id?' <span class="muted small">(Anda)</span>':''}</td><td>${esc(u.username)}</td><td class="muted">${esc(u.email||'–')}</td><td>${esc(ROLES[u.role])}</td><td>${u.active?'<span class="pill tone-good">Aktif</span>':'<span class="pill tone-mute">Nonaktif</span>'}</td><td><div class="row-acts"><button class="btn sm" data-act="modal" data-type="user" data-id="${u.id}">${ic('edit',14)}Edit</button>${u.id!==state.user.id?`<button class="btn sm" data-act="toggleUser" data-id="${u.id}">${u.active?'Nonaktifkan':'Aktifkan'}</button>`:''}</div></td></tr>`).join('')}
+  </tbody></table></div></section>
+  <section class="panel"><div class="panel-h"><h2>Pembagian hak akses</h2></div><div class="table-wrap"><table class="tbl"><thead><tr><th>Menu</th>${Object.values(ROLES).map(r=>`<th>${esc(r)}</th>`).join('')}</tr></thead><tbody>
+  ${MENU.map(m=>`<tr><td class="t-main">${esc(m.label)}</td>${Object.keys(ROLES).map(r=>`<td>${m.roles.includes(r)?`<span class="hs good">${ic('check',16)}</span>`:'<span class="muted">–</span>'}</td>`).join('')}</tr>`).join('')}
+  </tbody></table></div></section>`};
+}
+
+/* ---------- modals ---------- */
+function modalView(){
+  const M=state.modal;let title='',body='',wide=false;
+  const err=M.error?`<p class="err full">${esc(M.error)}</p>`:'';
+  const acts=(label)=>`<div class="form-acts full"><button type="button" class="btn" data-act="closeModal">Batal</button><button class="btn primary">${label}</button></div>`;
+  const motorSel=(name,sel,filter,req=true)=>`<select name="${name}" ${req?'required':''}><option value="">Pilih motor</option>${opts(db.motors.filter(filter||(()=>true)).map(m=>[m.id,`${m.code}, ${motorName(m)}, ${m.plate}`]),sel)}</select>`;
+  switch(M.type){
+    case 'motor':{const m=M.id?motorById(M.id):{};title=M.id?'Edit data motor':'Tambah motor masuk';wide=true;
+      body=`<form data-form="motor" class="fgrid">
+        <label class="field">Merek<input name="brand" required value="${esc(m.brand)}" placeholder="Honda" list="dl-brand"></label>
+        <label class="field">Tipe<input name="model" required value="${esc(m.model)}" placeholder="Vario 150"></label>
+        <label class="field">Tahun<input name="year" type="number" min="1970" max="2030" required value="${esc(m.year)}"></label>
+        <label class="field">Nomor polisi<input name="plate" required value="${esc(m.plate)}" placeholder="B 1234 XYZ"></label>
+        <label class="field">Warna<input name="color" value="${esc(m.color)}"></label>
+        <label class="field">Asal pembelian<input name="source" value="${esc(m.source)}" placeholder="Perorangan, Bekasi"></label>
+        <label class="field">Nomor rangka<input name="frame_no" value="${esc(m.frame_no)}"></label>
+        <label class="field">Nomor mesin<input name="engine_no" value="${esc(m.engine_no)}"></label>
+        <label class="field">Tanggal beli<input name="buy_date" type="date" required value="${esc(m.buy_date||today())}"></label>
+        <label class="field">Harga beli (Rp)<input name="buy_price" type="number" min="0" step="any" inputmode="numeric" required value="${esc(m.buy_price)}"></label>
+        <label class="field">Harga jual target (Rp)<input name="target_price" type="number" min="0" step="any" inputmode="numeric" value="${esc(m.target_price||'')}"></label>
+        <label class="field full">Catatan kondisi awal<textarea name="condition_note">${esc(m.condition_note)}</textarea></label>
+        ${err}${acts(M.id?'Simpan perubahan':'Simpan motor')}</form><datalist id="dl-brand">${opts(['Honda','Yamaha','Suzuki','Kawasaki','Vespa','TVS'])}</datalist>`;break}
+    case 'status':{const m=motorById(M.id);title='Ubah status motor';
+      body=`<form data-form="status" class="fgrid"><p class="full muted">${esc(motorName(m))}, sekarang ${esc(stLabel(m.status))}. Status Booking dan Terjual diatur lewat menu Penjualan.</p>
+        <label class="field">Status baru<select name="status">${opts(STATUSES.filter(s=>['masuk','inspeksi','perbaikan','siap'].includes(s.key)).map(s=>[s.key,s.label]),m.status)}</select></label>
+        <label class="field">Tanggal<input type="date" name="date" value="${today()}"></label>
+        <label class="field full">Keterangan<input name="note" placeholder="Opsional"></label>${err}${acts('Simpan status')}</form>`;break}
+    case 'cost':{title='Catat biaya';const cat=M.cat||'Operasional';
+      body=`<form data-form="cost" class="fgrid">
+        <label class="field full">Motor${motorSel('motor_id',M.motor,null)}</label>
+        <label class="field">Kategori<select name="category" data-change="costCatForm">${opts(COST_CATS,cat)}</select></label>
+        <label class="field">Tanggal<input type="date" name="date" value="${today()}" required></label>
+        <label class="field full">Rincian biaya<input name="item" required list="dl-cost-${COST_CATS.indexOf(cat)}" placeholder="Pilih atau ketik rincian"></label>
+        <label class="field">Nominal (Rp)<input name="amount" type="number" min="1" step="any" inputmode="numeric" required></label>
+        <label class="field">Keterangan<input name="note" placeholder="Contoh: kirim ke luar kota"></label>
+        <p class="hint full">Biaya kecil seperti bensin dan uang makan juga dihitung sebagai modal motor.</p>
+        ${err}${acts('Simpan biaya')}</form>${COST_CATS.map((c,i)=>`<datalist id="dl-cost-${i}">${opts(COST_ITEMS[c])}</datalist>`).join('')}`;break}
+    case 'item':{const it=M.id?itemById(M.id):{};title=M.id?'Edit barang':'Barang baru';
+      body=`<form data-form="item" class="fgrid">
+        <label class="field">Kode<input name="code" required value="${esc(it.code||'SP-'+String(db.inventory.length+1).padStart(3,'0'))}"></label>
+        <label class="field">Nama barang<input name="name" required value="${esc(it.name)}"></label>
+        <label class="field">Satuan<select name="unit">${opts(UNITS,it.unit||'pcs')}</select></label>
+        <label class="field">Harga satuan (Rp)<input name="price" type="number" min="0" step="any" required value="${esc(it.price)}"></label>
+        ${M.id?'':`<label class="field">Stok awal<input name="stock" type="number" min="0" value="0"></label>`}
+        <label class="field">Stok minimum<input name="min" type="number" min="0" required value="${esc(it.min??2)}"></label>
+        <label class="field">Lokasi penyimpanan<input name="location" value="${esc(it.location)}" placeholder="Rak A1"></label>
+        ${err}${acts(M.id?'Simpan perubahan':'Simpan barang')}</form>`;break}
+    case 'in':{title='Barang masuk dari supplier';const it=M.item?itemById(M.item):null;
+      body=`<form data-form="in" class="fgrid">
+        <label class="field full">Barang<select name="item_id" required><option value="">Pilih barang</option>${opts(db.inventory.map(i=>[i.id,`${i.code}, ${i.name} (stok ${i.stock} ${i.unit})`]),M.item)}</select></label>
+        <label class="field">Jumlah<input name="qty" type="number" min="1" required></label>
+        <label class="field">Harga satuan (Rp)<input name="price" type="number" min="0" step="any" value="${esc(it?it.price:'')}" placeholder="Kosongkan jika sama"></label>
+        <label class="field">Supplier<input name="supplier" required placeholder="Nama toko atau supplier"></label>
+        <label class="field">Tanggal<input name="date" type="date" value="${today()}" required></label>
+        ${err}${acts('Simpan barang masuk')}</form>`;break}
+    case 'out':{title='Barang keluar / pakai sparepart';
+      body=`<form data-form="out" class="fgrid">
+        <label class="field full">Barang<select name="item_id" required><option value="">Pilih barang</option>${opts(db.inventory.filter(i=>i.stock>0).map(i=>[i.id,`${i.code}, ${i.name} (stok ${i.stock} ${i.unit}, ${rp(i.price)})`]),M.item)}</select></label>
+        <label class="field">Jumlah<input name="qty" type="number" min="1" value="1" required></label>
+        <label class="field">Tanggal<input name="date" type="date" value="${today()}" required></label>
+        <label class="field full">Dipakai untuk motor<select name="motor_id"><option value="">Pemakaian umum (tanpa motor)</option>${opts(db.motors.filter(m=>m.status!=='terjual').map(m=>[m.id,`${m.code}, ${motorName(m)}`]),M.motor)}</select></label>
+        <label class="field full">Keterangan<input name="note" placeholder="Opsional"></label>
+        <p class="hint full">Nilai sparepart otomatis ditambahkan ke modal motor dan muncul di Asset Timeline.</p>
+        ${err}${acts('Simpan barang keluar')}</form>`;break}
+    case 'doc':{const d=M.id?db.documents.find(x=>x.id===M.id):{};title=M.id?'Edit dokumen':'Tambah dokumen';
+      body=`<form data-form="doc" class="fgrid">
+        <label class="field">Jenis dokumen<select name="type">${opts(DOC_TYPES,d.type)}</select></label>
+        <label class="field">Status<select name="status">${opts(DOC_STATUS,d.status)}</select></label>
+        <label class="field">Nomor dokumen<input name="number" value="${esc(d.number)}"></label>
+        <label class="field">Berlaku sampai<input name="expiry" type="date" value="${esc(d.expiry)}"></label>
+        <label class="field full">Catatan<input name="note" value="${esc(d.note)}"></label>
+        ${err}${acts('Simpan dokumen')}</form>`;break}
+    case 'customer':{title='Customer baru';
+      body=`<form data-form="customer" class="fgrid"><label class="field">Nama<input name="name" required></label><label class="field">Telepon<input name="phone" type="tel"></label><label class="field full">Alamat<input name="address"></label>${err}${acts('Simpan customer')}</form>`;break}
+    case 'booking':{title='Catat booking atau penjualan';const m=M.motor?motorById(M.motor):null;
+      body=`<form data-form="booking" class="fgrid">
+        <label class="field full">Motor<select name="motor_id" required data-change="bookMotor"><option value="">Pilih motor siap jual</option>${opts(db.motors.filter(x=>x.status==='siap').map(x=>[x.id,`${x.code}, ${motorName(x)}, target ${rp(x.target_price)}`]),M.motor)}</select></label>
+        <label class="field full">Customer<select name="customer_id" data-change="bookCust"><option value="__new">+ Customer baru</option>${opts(db.customers.map(c=>[c.id,`${c.name}, ${c.phone}`]),M.cust||'__new')}</select></label>
+        <div class="full fgrid" id="new-cust" ${M.cust&&M.cust!=='__new'?'hidden':''}><label class="field">Nama customer<input name="c_name"></label><label class="field">Telepon<input name="c_phone" type="tel"></label><label class="field full">Alamat<input name="c_address"></label></div>
+        <label class="field">Harga jual disepakati (Rp)<input name="price" type="number" min="1" step="any" required value="${esc(m?m.target_price:'')}"></label>
+        <label class="field">DP (Rp)<input name="dp" type="number" min="0" step="any" value="0"></label>
+        <label class="field">Tanggal<input name="date" type="date" value="${today()}" required></label>
+        <label class="field">Jenis transaksi<select name="mode"><option value="booking">Booking dulu (bayar DP)</option><option value="lunas">Langsung terjual, lunas</option><option value="belum">Langsung terjual, belum lunas</option></select></label>
+        ${err}${acts('Simpan transaksi')}</form>`;break}
+    case 'sell':{const s=db.sales.find(x=>x.id===M.id);const m=motorById(s.motor_id);title='Selesaikan penjualan';
+      body=`<form data-form="sell" class="fgrid"><p class="full muted">${esc(motorName(m))} ke ${esc(custById(s.customer_id).name)}. DP diterima ${rp(s.dp)}.</p>
+        <label class="field">Harga jual final (Rp)<input name="price" type="number" min="1" step="any" required value="${s.price}"></label>
+        <label class="field">Tanggal terjual<input name="date" type="date" value="${today()}" required></label>
+        <label class="field full">Status pembayaran<select name="payment">${opts(['Lunas','Belum lunas'])}</select></label>${err}${acts('Tandai terjual')}</form>`;break}
+    case 'user':{const u=M.id?db.users.find(x=>x.id===M.id):{active:true};title=M.id?'Edit pengguna':'Pengguna baru';
+      body=`<form data-form="user" class="fgrid">
+        <label class="field full">Nama lengkap<input name="name" required value="${esc(u.name)}"></label>
+        <label class="field">Username<input name="username" required value="${esc(u.username)}" autocomplete="off"></label>
+        <label class="field">Email<input name="email" type="email" value="${esc(u.email)}"></label>
+        <label class="field">Password<input name="password" type="text" ${M.id?'placeholder="Kosongkan jika tidak diubah"':'required'} autocomplete="new-password"></label>
+        <label class="field">Role<select name="role" ${M.id===state.user.id?'disabled':''}>${opts(Object.entries(ROLES),u.role||'ops')}</select></label>
+        ${err}${acts(M.id?'Simpan perubahan':'Simpan pengguna')}</form>`;break}
+    case 'confirm':{title=M.title;body=`<div class="fgrid"><p class="full">${esc(M.text)}</p><div class="form-acts full"><button class="btn" data-act="closeModal">Batal</button><button class="btn primary" data-act="confirmYes">${esc(M.yes||'Ya, lanjutkan')}</button></div></div>`;break}
+  }
+  return `<div class="overlay" data-act="closeModalBg"><div class="modal ${wide?'wide':''}" role="dialog" aria-modal="true" aria-labelledby="mdl-t"><div class="modal-h"><h2 id="mdl-t">${esc(title)}</h2><button class="icon-btn" data-act="closeModal" aria-label="Tutup">${ic('x')}</button></div><div class="modal-b">${body}</div></div></div>`;
+}
+function modalError(msg){state.modal.error=msg;render()}
+function commit(msg,next){save();state.modal=null;if(msg)toast(msg);if(next)go(next);else render()}
+
+const FORMS={
+  login(d){
+    const id=(d.username||'').trim().toLowerCase();
+    const u=db.users.find(x=>(x.username.toLowerCase()===id||(x.email||'').toLowerCase()===id)&&x.password===d.password);
+    if(!u){state.loginError='Username/email atau password salah.';render();return}
+    if(!u.active){state.loginError='Akun ini dinonaktifkan. Hubungi administrator.';render();return}
+    state.user=u;state.loginError='';lsSet(SESS,u.id);state.path='dashboard';try{location.hash='#/dashboard'}catch(e){}render();
+  },
+  motor(d){
+    const M=state.modal;
+    if(M.id){const m=motorById(M.id);Object.assign(m,{brand:d.brand.trim(),model:d.model.trim(),year:+d.year,plate:d.plate.toUpperCase().trim(),color:d.color,source:d.source,frame_no:d.frame_no,engine_no:d.engine_no,buy_date:d.buy_date,buy_price:+d.buy_price,target_price:+d.target_price||0,condition_note:d.condition_note});commit('Data motor disimpan.')}
+    else{const m=opAddMotor(d,meName());commit('Motor dicatat sebagai baru masuk.','motor/'+m.id)}
+  },
+  status(d){opStatus(state.modal.id,d.status,d.note,meName(),d.date);commit('Status diperbarui.')},
+  cost(d){if(!(+d.amount>0))return modalError('Nominal harus lebih dari 0.');opCost(d,meName());commit('Biaya dicatat dan ditambahkan ke modal motor.')},
+  item(d){
+    const M=state.modal;
+    if(db.inventory.some(i=>i.code.toLowerCase()===d.code.trim().toLowerCase()&&i.id!==M.id))return modalError('Kode barang sudah dipakai.');
+    if(M.id){const it=itemById(M.id);Object.assign(it,{code:d.code.trim(),name:d.name.trim(),unit:d.unit,price:+d.price||0,min:+d.min||0,location:d.location});commit('Barang disimpan.')}
+    else{opItem(d,meName(),today());commit('Barang ditambahkan ke inventaris.')}
+  },
+  in(d){const e=opIn(d.item_id,d.qty,d.price,d.supplier,d.date,meName());if(e)return modalError(e);commit('Stok bertambah.')},
+  out(d){const e=opOut(d.item_id,d.qty,d.motor_id||null,d.date,meName(),d.note);if(e)return modalError(e);const it=itemById(d.item_id);commit(stockLevel(it)==='bad'?`Tercatat. Stok ${it.name} kini di batas minimum.`:'Barang keluar dicatat.')},
+  doc(d){opDoc(Object.assign({},d,{id:state.modal.id,motor_id:state.modal.motor}),meName());commit('Dokumen disimpan.')},
+  customer(d){opCustomer(d);commit('Customer ditambahkan.')},
+  booking(d){
+    let cid=d.customer_id;
+    if(cid==='__new'){if(!(d.c_name||'').trim())return modalError('Isi nama customer baru.');cid=opCustomer({name:d.c_name,phone:d.c_phone,address:d.c_address}).id}
+    if(+d.dp>+d.price)return modalError('DP tidak boleh lebih besar dari harga jual.');
+    const s=opBooking(d.motor_id,cid,d.price,d.dp,d.date,meName());
+    if(d.mode!=='booking')opSell(s.id,d.price,d.mode==='lunas'?'Lunas':'Belum lunas',d.date,meName());
+    commit(d.mode==='booking'?'Booking dicatat.':'Penjualan dicatat.','motor/'+d.motor_id+'/penjualan');
+  },
+  sell(d){opSell(state.modal.id,d.price,d.payment,d.date,meName());commit('Motor ditandai terjual.')},
+  user(d){
+    const M=state.modal;const un=d.username.trim();
+    if(db.users.some(u=>u.username.toLowerCase()===un.toLowerCase()&&u.id!==M.id))return modalError('Username sudah dipakai.');
+    if(M.id){const u=db.users.find(x=>x.id===M.id);Object.assign(u,{name:d.name.trim(),username:un,email:d.email});if(d.role&&u.id!==state.user.id)u.role=d.role;if(d.password)u.password=d.password;if(u.id===state.user.id)state.user=u;commit('Pengguna disimpan.')}
+    else{db.users.push({id:uid('u'),name:d.name.trim(),username:un,email:d.email,password:d.password,role:d.role,active:true});commit('Pengguna ditambahkan.')}
+  },
+  inspect(d,f){
+    if(!d.motor_id){toast('Pilih motor yang diperiksa.');return}
+    const items=readInspItems(f);
+    const m=motorById(d.motor_id);
+    if(m.status==='masuk')opStatus(m.id,'inspeksi','',meName(),d.date);
+    const ins=opInspect(m.id,items,d.notes,meName(),d.date,d.inspector);
+    if(d.to_repair&&['masuk','inspeksi'].includes(m.status)&&Object.values(items).some(v=>v!=='baik'))opStatus(m.id,'perbaikan','Tindak lanjut hasil inspeksi',meName(),d.date);
+    state.f.inspDraft=null;
+    commit(`Inspeksi disimpan. Health Score ${ins.score}.`,'motor/'+m.id+'/inspeksi');
+  }
+};
+const CHANGES={
+  costMotor:el=>{state.f.costMotor=el.value;render()},
+  reportMonth:el=>{state.f.reportMonth=el.value;render()},
+  costCatForm:el=>{const inp=el.form.querySelector('[name=item]');inp.setAttribute('list','dl-cost-'+COST_CATS.indexOf(el.value));inp.value=''},
+  bookCust:el=>{const b=document.getElementById('new-cust');if(b)b.hidden=el.value!=='__new'},
+  bookMotor:el=>{const m=motorById(el.value);const p=el.form.querySelector('[name=price]');if(m&&p)p.value=m.target_price||''},
+  inspMotor:el=>{const f=el.form;state.f.inspDraft={motor:el.value,items:readInspItems(f)};go('inspeksi/baru/'+el.value)}
+};
+const ACTIONS={
+  go:el=>go(el.dataset.to),
+  toggleNav:()=>{state.navOpen=!state.navOpen;render()},
+  closeNav:()=>{state.navOpen=false;render()},
+  toggleNotif:()=>{state.notifOpen=!state.notifOpen;render()},
+  logout:()=>{state.user=null;lsDel(SESS);state.modal=null;state.notifOpen=false;state.f.inspDraft=null;render()},
+  fillLogin:el=>{const f=document.querySelector('form[data-form=login]');f.username.value=el.dataset.u;f.password.value=el.dataset.p;f.querySelector('button').focus()},
+  setF:el=>{state.f[el.dataset.k]=el.dataset.v;render()},
+  filterStatus:el=>{state.f.motorStatus=el.dataset.s;state.f.motorQ='';go('motor')},
+  modal:el=>{state.modal=Object.assign({},el.dataset,{type:el.dataset.type});state.notifOpen=false;render();const first=document.querySelector('.modal input:not([type=hidden]):not([disabled]),.modal select');if(first)first.focus()},
+  closeModal:()=>{state.modal=null;render()},
+  closeModalBg:(el,e)=>{if(e.target===el){state.modal=null;render()}},
+  delCost:el=>{const c=db.costs.find(x=>x.id===el.dataset.id);state.modal={type:'confirm',title:'Hapus biaya?',text:`${c.item} sebesar ${rp(c.amount)} akan dihapus dan modal motor berkurang. Catatan di timeline tetap disimpan.`,yes:'Hapus biaya',run:()=>{db.costs=db.costs.filter(x=>x.id!==c.id);log(c.motor_id,'biaya','Biaya dihapus: '+c.item,rp(c.amount),today(),meName());commit('Biaya dihapus.')}};render()},
+  delDoc:el=>{const d=db.documents.find(x=>x.id===el.dataset.id);state.modal={type:'confirm',title:'Hapus dokumen?',text:`Data ${d.type} untuk motor ini akan dihapus.`,yes:'Hapus dokumen',run:()=>{db.documents=db.documents.filter(x=>x.id!==d.id);commit('Dokumen dihapus.')}};render()},
+  cancelSale:el=>{state.modal={type:'confirm',title:'Batalkan booking?',text:'Motor akan kembali berstatus Siap dijual.',yes:'Batalkan booking',run:()=>{opCancel(el.dataset.id,meName(),'Dibatalkan customer.');commit('Booking dibatalkan.')}};render()},
+  paid:el=>{opPaid(el.dataset.id,meName());save();toast('Pembayaran ditandai lunas.');render()},
+  toggleUser:el=>{const u=db.users.find(x=>x.id===el.dataset.id);u.active=!u.active;save();toast(u.active?'Pengguna diaktifkan.':'Pengguna dinonaktifkan.');render()},
+  confirmYes:()=>{const r=state.modal&&state.modal.run;if(r)r()},
+  export:el=>exportReport(el.dataset.fmt),
+  resetDemo:()=>{state.modal={type:'confirm',title:'Reset data demo?',text:'Semua data yang Anda masukkan di browser ini akan dihapus dan diganti data contoh awal.',yes:'Reset data',run:()=>{seed();save();state.modal=null;state.f.inspDraft=null;const u=state.user&&db.users.find(x=>x.id===state.user.id);state.user=u||null;if(!u)lsDel(SESS);toast('Data demo dipulihkan.');go('dashboard')}};render()}
+};
+
+/* ---------- render ---------- */
+function loginView(){
+  return `<div class="login">
+  <section class="login-brand">
+    <div class="wordmark">NEXA</div>
+    <p class="tag">Next-generation Asset Management</p>
+    <p class="lede">Catat setiap motor dari dibeli, diperiksa, diperbaiki, sampai terjual, lengkap dengan semua biayanya, termasuk yang kecil-kecil.</p>
+    <ol class="mini-road">${STATUSES.map(s=>`<li>${esc(s.label)}</li>`).join('')}</ol>
+  </section>
+  <section class="login-form">
+    <form data-form="login">
+      <h1>Masuk ke NEXA</h1>
+      <label class="field">Username atau email<input id="lg-user" name="username" required autocomplete="username"></label>
+      <label class="field">Password<input type="password" name="password" required autocomplete="current-password"></label>
+      ${state.loginError?`<p class="err">${esc(state.loginError)}</p>`:''}
+      <button class="btn primary block">Masuk</button>
+    </form>
+    <div class="demo"><p>Akun demo, pilih untuk mengisi otomatis:</p>
+      <div class="demo-list">${db.users.filter(u=>u.active).slice(0,4).map(u=>`<button type="button" class="demo-acc" data-act="fillLogin" data-u="${esc(u.username)}" data-p="${esc(u.password)}"><b>${esc(ROLES[u.role])}</b><span>${esc(u.username)} / ${esc(u.password)}</span></button>`).join('')}</div></div>
+    <p class="credit">Prototype NEXA, Kelompok B, Teknik Informatika, Fakultas Teknik Universitas Muhammadiyah Jakarta, 2026.</p>
+  </section></div>`;
+}
+function render(){
+  const a=document.activeElement;const fs=a&&a.id&&/^(INPUT|TEXTAREA)$/.test(a.tagName)?{id:a.id,s:a.selectionStart,e:a.selectionEnd}:null;
+  if(state.user){const u=db.users.find(x=>x.id===state.user.id&&x.active);state.user=u||null;if(!u)lsDel(SESS)}
+  if(!state.user){app.innerHTML=loginView();document.title='Masuk – NEXA';return}
+  const parts=state.path.split('/');let page=parts[0];
+  if(!allowed(page)){page='dashboard';parts.length=0;parts.push('dashboard')}
+  const P={dashboard:pageDashboard,motor:()=>parts[1]?pageMotorDetail(parts[1],parts[2]):pageMotorList(),inspeksi:()=>pageInspeksi(parts),biaya:pageBiaya,inventaris:pageInventaris,penjualan:pagePenjualan,laporan:pageLaporan,pengguna:pagePengguna}[page];
+  const v=P();
+  const notes=notifications();
+  const initials=state.user.name.split(' ').map(x=>x[0]).slice(0,2).join('');
+  app.innerHTML=`<div class="shell ${state.navOpen?'nav-open':''}">
+    <aside class="side" aria-label="Navigasi utama">
+      <div class="brand"><b>NEXA</b><span>Manajemen aset<br>jual beli motor</span></div>
+      <ul class="nav">${MENU.filter(m=>m.roles.includes(role())).map(m=>`<li><a href="#/${m.key}" data-act="go" data-to="${m.key}" ${page===m.key?'aria-current="page"':''}>${ic(m.icon)}${esc(m.label)}</a></li>`).join('')}
+      <li><a href="#" data-act="logout">${ic('logout')}Keluar</a></li></ul>
+      <div class="side-foot">Prototype NEXA, Kelompok B.<br>Data tersimpan di browser ini.${role()==='admin'?'<br><button data-act="resetDemo">Reset data demo</button>':''}</div>
+    </aside>
+    <div class="scrim" data-act="closeNav"></div>
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn only-m" data-act="toggleNav" aria-label="Buka menu">${ic('menu',20)}</button>
+        <h1>${esc(v.title)}</h1>
+        <div style="position:relative"><button class="icon-btn" data-act="toggleNotif" aria-label="Notifikasi, ${notes.length} item" aria-expanded="${state.notifOpen}">${ic('bell',20)}${notes.length?`<span class="badge-dot">${notes.length}</span>`:''}</button>
+          ${state.notifOpen?`<div class="pop"><h3>Notifikasi</h3>${notifList(notes)}</div>`:''}</div>
+        <div class="who"><div class="av" aria-hidden="true">${esc(initials)}</div><div class="nm">${esc(state.user.name)}<small>${esc(ROLES[state.user.role])}</small></div></div>
+      </header>
+      <main class="content" id="main">${v.body}</main>
+    </div></div>${state.modal?modalView():''}`;
+  document.title=v.title+' – NEXA';
+  if(fs){const el=document.getElementById(fs.id);if(el){el.focus();try{el.setSelectionRange(fs.s,fs.e)}catch(e){}}}
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const fn=ACTIONS[el.dataset.act];if(!fn)return;
+  if(el.tagName==='A'||el.dataset.act==='go')e.preventDefault();
+  if(state.notifOpen&&el.dataset.act!=='toggleNotif'&&!el.closest('.pop'))state.notifOpen=false;
+  fn(el,e);
+});
+document.addEventListener('click',e=>{if(state.notifOpen&&!e.target.closest('[data-act]')&&!e.target.closest('.pop')){state.notifOpen=false;render()}});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){if(state.modal){state.modal=null;render()}else if(state.notifOpen||state.navOpen){state.notifOpen=false;state.navOpen=false;render()}}
+  if(e.key==='Enter'&&e.target.matches('tr[data-act]')){e.preventDefault();ACTIONS.go(e.target)}
+});
+document.addEventListener('submit',e=>{const f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();const fn=FORMS[f.dataset.form];if(fn)fn(Object.fromEntries(new FormData(f)),f)});
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset&&el.dataset.change&&CHANGES[el.dataset.change])return CHANGES[el.dataset.change](el);
+  if(el.type==='radio'&&el.form&&el.form.id==='insp-form'){const box=document.getElementById('insp-score');if(box)box.innerHTML=scorePreview(readInspItems(el.form))}
+});
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.input;if(k){state.f[k]=e.target.value;render()}});
+
+state.path=routeFromHash();
+render();
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+/* Tema NEXA di atas Bootstrap 5. Warna mengikuti referensi/prototype-nexa.html */
+:root {
+  --nx-bg: #e8ecf0;
+  --nx-ink: #17202c;
+  --nx-line: #d2d9e1;
+  --nx-side: #152030;
+  --nx-side-ink: #b9c5d3;
+  --nx-side-act: #23324a;
+  --nx-primary: #1c4db3;
+  --nx-primary-soft: #e0e8f8;
+  --nx-good: #17784a; --nx-good-soft: #dbf0e3;
+  --nx-warn: #9a6200; --nx-warn-soft: #faeac6;
+  --nx-bad: #b3302a; --nx-bad-soft: #f7dfdc;
+  --nx-violet: #6a3fa6; --nx-violet-soft: #ece3f8;
+  --nx-mute: #586374; --nx-mute-soft: #f2f4f7;
+  --nx-cond: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --bs-body-font-family: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --bs-body-bg: var(--nx-bg);
+  --bs-body-color: var(--nx-ink);
+  --bs-primary: var(--nx-primary);
+  --bs-primary-rgb: 28, 77, 179;
+  --bs-border-color: var(--nx-line);
+}
+body { font-variant-numeric: tabular-nums; }
+h1, h2, h3, .h1, .h2, .h3, .h4, .h5 { font-family: var(--nx-cond); font-weight: 600; }
+.btn-primary { --bs-btn-bg: var(--nx-primary); --bs-btn-border-color: var(--nx-primary); --bs-btn-hover-bg: #173f94; --bs-btn-hover-border-color: #173f94; }
+.btn-reset { background: none; border: 0; text-align: left; width: 100%; }
+
+/* layout */
+.nx-shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; }
+.nx-side { background: var(--nx-side); color: var(--nx-side-ink); position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 22px 12px 16px; overflow-y: auto; z-index: 30; }
+.nx-brand { display: flex; align-items: baseline; gap: 8px; padding: 0 10px 22px; color: #fff; }
+.nx-brand b { font: 800 30px/1 var(--nx-cond); letter-spacing: .04em; }
+.nx-brand span { font-size: 12px; line-height: 1.25; color: var(--nx-side-ink); }
+.nx-nav-link { display: flex; align-items: center; gap: 11px; padding: 9px 10px; border-radius: 8px; color: var(--nx-side-ink); text-decoration: none; font-weight: 500; }
+.nx-nav-link:hover { color: #fff; background: var(--nx-side-act); }
+.nx-nav-link.active { color: #fff; background: var(--nx-side-act); box-shadow: inset 3px 0 0 #6e9bff; }
+.nx-stage { font-size: 11px; font-weight: 700; color: #8a97a8; border: 1px solid #33476a; border-radius: 5px; padding: 0 5px; }
+.nx-side-foot { margin-top: auto; padding: 16px 10px 0; font-size: 12px; border-top: 1px solid rgba(255, 255, 255, .08); }
+.nx-main { min-width: 0; display: flex; flex-direction: column; }
+.nx-topbar { position: sticky; top: 0; z-index: 20; background: var(--nx-bg); display: flex; align-items: center; gap: 12px; padding: 14px 28px; border-bottom: 1px solid var(--nx-line); }
+.nx-title { font-size: 24px; margin: 0; flex: 1; }
+.nx-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--nx-primary-soft); color: var(--nx-primary); display: grid; place-items: center; font: 700 14px var(--nx-cond); }
+.nx-content { padding: 24px 28px 48px; display: grid; gap: 20px; align-content: start; max-width: 1320px; width: 100%; }
+.nx-scrim { display: none; }
+@media (max-width: 991.98px) {
+  .nx-shell { grid-template-columns: minmax(0, 1fr); }
+  .nx-side { position: fixed; left: 0; top: 0; bottom: 0; height: auto; width: 264px; transform: translateX(-102%); transition: transform .2s ease; }
+  .nav-open .nx-side { transform: none; }
+  .nav-open .nx-scrim { display: block; position: fixed; inset: 0; background: rgba(10, 15, 22, .45); z-index: 25; }
+  .nx-topbar { padding: 10px 14px; }
+  .nx-content { padding: 16px 14px 40px; }
+}
+
+/* kartu & ringkasan */
+.nx-card { border-color: var(--nx-line); border-radius: 12px; }
+.nx-card > .card-header { background: #fff; padding: 14px 18px; border-color: var(--nx-line); }
+.nx-hello { font-size: 17px; color: var(--nx-mute); margin: 0; }
+.nx-hello b { color: var(--nx-ink); font-weight: 600; }
+.nx-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: #fff; border: 1px solid var(--nx-line); border-radius: 12px; }
+.nx-strip > div { padding: 16px 18px; border-left: 1px solid var(--nx-line); min-width: 0; }
+.nx-strip > div:first-child { border-left: 0; }
+.nx-strip .v { font: 700 30px/1.1 var(--nx-cond); }
+.nx-strip .v.money { font-size: 22px; overflow-wrap: anywhere; }
+.nx-strip .l { font-size: 13px; color: var(--nx-mute); margin-top: 4px; }
+@media (max-width: 991.98px) {
+  .nx-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nx-strip > div { border-left: 0; border-top: 1px solid var(--nx-line); }
+  .nx-strip > div:nth-child(-n+2) { border-top: 0; }
+}
+
+/* status */
+.nx-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.st-masuk { background: var(--nx-mute-soft); color: var(--nx-mute); box-shadow: inset 0 0 0 1px var(--nx-line); }
+.st-inspeksi { background: var(--nx-primary-soft); color: var(--nx-primary); }
+.st-perbaikan { background: var(--nx-warn-soft); color: var(--nx-warn); }
+.st-siap { background: var(--nx-good-soft); color: var(--nx-good); }
+.st-booking { background: var(--nx-violet-soft); color: var(--nx-violet); }
+.st-terjual { background: var(--nx-ink); color: #fff; }
+.nx-pipe { display: flex; gap: 3px; border-radius: 10px; overflow: hidden; min-height: 64px; }
+.nx-seg { padding: 10px 12px; min-width: 90px; display: flex; flex-direction: column; justify-content: center; }
+.nx-seg b { font: 700 24px/1 var(--nx-cond); }
+.nx-seg span { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 640px) { .nx-pipe { flex-wrap: wrap; } .nx-seg { flex: 1 1 30% !important; } }
+
+/* timeline */
+.nx-tl { list-style: none; margin: 0; padding: 0; }
+.nx-tl li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; position: relative; padding-bottom: 18px; }
+.nx-tl li::before { content: ""; position: absolute; left: 16px; top: 34px; bottom: 0; width: 2px; background: var(--nx-line); }
+.nx-tl li:last-child::before { display: none; }
+.nx-tl .ti { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; }
+.ty-masuk, .ty-dokumen { background: var(--nx-mute-soft); color: var(--nx-mute); box-shadow: inset 0 0 0 1px var(--nx-line); }
+.ty-status, .ty-inspeksi { background: var(--nx-primary-soft); color: var(--nx-primary); }
+.ty-biaya, .ty-sparepart { background: var(--nx-warn-soft); color: var(--nx-warn); }
+.ty-booking { background: var(--nx-violet-soft); color: var(--nx-violet); }
+.ty-terjual { background: var(--nx-good-soft); color: var(--nx-good); }
+.ty-batal { background: var(--nx-bad-soft); color: var(--nx-bad); }
+
+/* login */
+.nx-login { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); min-height: 100vh; }
+.nx-login-brand { background: var(--nx-side); color: var(--nx-side-ink); padding: 56px clamp(28px, 6vw, 80px); display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+.nx-wordmark { font: 800 clamp(84px, 13vw, 168px)/.82 var(--nx-cond); color: #fff; }
+.nx-tag { font: 600 22px/1.2 var(--nx-cond); color: #8fb0ff; margin: 0; }
+.nx-lede { max-width: 44ch; font-size: 16.5px; margin: 0; }
+.nx-mini-road { list-style: none; margin: 10px 0 0; padding: 0; max-width: 340px; }
+.nx-mini-road li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: center; position: relative; padding: 5px 0; color: #fff; font-weight: 500; }
+.nx-mini-road li::before { content: ""; width: 12px; height: 12px; border-radius: 50%; border: 3px solid #6e9bff; justify-self: center; background: var(--nx-side); position: relative; z-index: 1; }
+.nx-mini-road li::after { content: ""; position: absolute; left: 10px; top: 50%; height: 100%; width: 2px; background: #33476a; }
+.nx-mini-road li:last-child::after { display: none; }
+.nx-mini-road li:last-child::before { background: #6e9bff; }
+.nx-login-form { display: flex; flex-direction: column; justify-content: center; gap: 22px; padding: 40px clamp(20px, 5vw, 72px); max-width: 560px; width: 100%; margin: 0 auto; }
+.nx-login-form .card { border-color: var(--nx-line); border-radius: 14px; }
+.nx-demo { display: block; width: 100%; text-align: left; border: 1px dashed var(--nx-line); background: transparent; border-radius: 10px; padding: 9px 12px; }
+.nx-demo:hover { border: 1px solid var(--nx-primary); }
+.nx-demo b { display: block; font-size: 14px; }
+.nx-demo span { font-size: 12.5px; color: var(--nx-mute); }
+@media (max-width: 860px) { .nx-login { grid-template-columns: minmax(0, 1fr); } .nx-login-brand { padding: 40px 22px 30px; } }

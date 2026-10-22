@@ -1,0 +1,17 @@
+# dependensi
+backend/vendor/
+frontend/node_modules/
+frontend/dist/
+# file framework CI4 hasil setup (tidak perlu di-commit kecuali tim sepakat)
+_ci4/
+# database lokal & log
+backend/writable/*.db
+backend/writable/logs/*
+backend/writable/cache/*
+backend/writable/session/*
+!backend/writable/**/index.html
+!backend/writable/**/.htaccess
+
+# Alat portable hasil MULAI-NEXA.bat
+tools/runtime/
+.setup-selesai
