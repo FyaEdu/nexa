@@ -24,7 +24,7 @@ export function clearAuth() {
   localStorage.removeItem(KEY)
 }
 
-/** Cek hak akses aksi, mis. can('motor.edit'). Daftar kunci di backend Config/Nexa.php */
+/** Cek hak akses aksi, mis. can('motor.edit'). Daftar kunci di backend application/config/nexa.php */
 export const can = (permission) => auth.permissions.includes(permission)
 
 /** Cek role untuk akses halaman. roles kosong = semua role boleh. */

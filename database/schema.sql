@@ -1,7 +1,7 @@
 -- =====================================================================
 -- NEXA - Next-generation Asset Management
--- Skema database SQLite. Ini cerminan dari migration CodeIgniter 4:
---   backend/app/Database/Migrations/2026-10-20-000001_CreateNexaTables.php
+-- Skema database SQLite. Isinya sama dengan migration CodeIgniter 3:
+--   backend/application/migrations/20261020000001_create_nexa_tables.php
 -- Kalau mengubah struktur tabel, ubah migration DAN file ini.
 -- =====================================================================
 

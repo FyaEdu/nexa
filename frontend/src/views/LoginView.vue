@@ -11,7 +11,7 @@ const password = ref('')
 const error = ref('')
 const loading = ref(false)
 
-// Akun dari data dummy (backend/app/Database/Seeds/data/dummy.json)
+// Akun dari data dummy (backend/application/database/dummy.json)
 const demo = [
   { role: 'Administrator', u: 'admin', p: 'admin123' },
   { role: 'Pemilik Usaha', u: 'pemilik', p: 'pemilik123' },

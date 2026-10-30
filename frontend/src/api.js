@@ -21,14 +21,19 @@ export async function request(path, { method = 'GET', body, raw = false } = {}) 
   try {
     res = await fetch('/api' + path, { method, headers, body: body !== undefined ? JSON.stringify(body) : undefined })
   } catch {
-    throw new ApiError('Tidak bisa terhubung ke server. Pastikan backend berjalan (php spark serve).', 0)
+    throw new ApiError('Tidak bisa terhubung ke server. Pastikan backend berjalan (start.bat atau docker-start.bat).', 0)
   }
 
   if (!res.ok) {
     let data = null
     try { data = await res.json() } catch { /* bukan JSON */ }
     const fields = data?.messages && typeof data.messages === 'object' ? data.messages : null
-    const message = fields ? Object.values(fields).join(' ') : (data?.message || `Permintaan gagal (kode ${res.status}).`)
+    let message = fields ? Object.values(fields).join(' ') : data?.message
+    if (!message) {
+      message = res.status >= 500 && !data
+        ? 'Server backend belum siap atau sedang error. Cek terminal backend (Docker: docker compose logs backend).'
+        : `Permintaan gagal (kode ${res.status}).`
+    }
     if (res.status === 401 && auth.token) onUnauthorized()
     throw new ApiError(message, res.status, fields)
   }
@@ -57,4 +62,9 @@ export async function download(path, fallbackName = 'nexa-laporan') {
   a.click()
   a.remove()
   setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
+
+/** Ubah error API menjadi { fields: {field: pesan}, message } untuk ditampilkan di form */
+export function formErrors(e) {
+  return { fields: e?.fields && !e.fields.error ? e.fields : {}, message: e?.fields && !e.fields.error ? '' : (e?.message || 'Terjadi kesalahan.') }
 }

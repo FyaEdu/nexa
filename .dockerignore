@@ -1,0 +1,5 @@
+frontend/node_modules
+backend/vendor
+backend/writable/*.db
+_ci3
+*.zip

@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { auth, logout } from '@/stores/auth'
-import { MENU, ROLES } from '@/utils/constants'
+import { MENU, ROLES, DONE_STAGE } from '@/utils/constants'
 
 const route = useRoute()
 const router = useRouter()
@@ -24,10 +24,10 @@ async function doLogout() {
     <aside class="nx-side" aria-label="Navigasi utama">
       <div class="nx-brand"><b>NEXA</b><span>Manajemen aset<br />jual beli motor</span></div>
       <nav class="nav flex-column gap-1">
-        <router-link v-for="m in menu" :key="m.key" :to="m.path" class="nx-nav-link" active-class="active">
+        <router-link v-for="m in menu" :key="m.key" :to="m.path" class="nx-nav-link" :class="{ active: route.meta.menu === m.key }" active-class="active">
           <i class="bi" :class="m.icon" aria-hidden="true"></i>
           <span class="flex-grow-1">{{ m.label }}</span>
-          <small v-if="m.stage > 1" class="nx-stage" :title="`Dikerjakan di Tahap ${m.stage}`">T{{ m.stage }}</small>
+          <small v-if="m.stage > DONE_STAGE" class="nx-stage" :title="`Dikerjakan di Tahap ${m.stage}`">T{{ m.stage }}</small>
         </router-link>
         <button type="button" class="nx-nav-link btn-reset" @click="doLogout">
           <i class="bi bi-box-arrow-left" aria-hidden="true"></i><span>Keluar</span>

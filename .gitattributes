@@ -1,0 +1,3 @@
+# Skrip shell harus LF supaya bisa jalan di container Linux
+*.sh   text eol=lf
+*.bat  text eol=crlf

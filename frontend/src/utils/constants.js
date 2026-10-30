@@ -1,4 +1,4 @@
-// Konstanta bisnis NEXA. Harus sama dengan backend/app/Config/Nexa.php.
+// Konstanta bisnis NEXA. Harus sama dengan backend/application/config/nexa.php.
 
 export const ROLES = {
   admin: 'Administrator',
@@ -25,6 +25,9 @@ export const STAGES = {
   4: 'Inventaris dan sparepart',
   5: 'Penjualan, laporan, pengguna, dan dashboard lengkap'
 }
+
+// Tahap terakhir yang sudah selesai. Menu dengan stage di atas angka ini masih placeholder.
+export const DONE_STAGE = 4
 
 // Menu utama. "stage" = tahap pengerjaan (lihat PANDUAN-TAHAP.md).
 // "todo" ditampilkan di halaman placeholder sampai tahapnya selesai.
@@ -59,3 +62,33 @@ export const MENU = [
     todo: ['Tambah, edit, nonaktifkan pengguna', 'Atur role / hak akses']
   }
 ]
+
+// Checklist inspeksi. Harus sama dengan $config['checklist'] di backend/application/config/nexa.php
+export const CHECKLIST = [
+  { key: 'mesin', label: 'Kondisi mesin', weight: 35, items: [['m1', 'Suara mesin'], ['m2', 'Kebocoran oli'], ['m3', 'Sistem pengapian'], ['m4', 'Performa tarikan']] },
+  { key: 'listrik', label: 'Sistem kelistrikan', weight: 20, items: [['l1', 'Aki'], ['l2', 'Lampu depan/belakang'], ['l3', 'Lampu sein'], ['l4', 'Klakson'], ['l5', 'Starter']] },
+  { key: 'rem', label: 'Pengereman & body', weight: 30, items: [['r1', 'Ketebalan kampas rem'], ['r2', 'Fungsi rem depan/belakang'], ['r3', 'Kondisi fisik body'], ['r4', 'Ketersediaan spion'], ['r5', 'Keausan ban']] },
+  { key: 'dok', label: 'Kelengkapan dokumen', weight: 15, items: [['d1', 'Nomor rangka sesuai'], ['d2', 'Nomor mesin sesuai'], ['d3', 'STNK'], ['d4', 'BPKB']], labels: { baik: 'Sesuai', perlu: 'Bermasalah', rusak: 'Tidak ada' } }
+]
+export const RESULT_LABELS = { baik: 'Baik', perlu: 'Perlu perbaikan', rusak: 'Rusak' }
+
+export const MANUAL_STATUSES = ['masuk', 'inspeksi', 'perbaikan', 'siap']
+export const DOC_TYPES = ['STNK', 'BPKB', 'Faktur', 'Kuitansi pembelian', 'KTP pemilik lama', 'Lainnya']
+export const DOC_STATUSES = ['Lengkap', 'Dalam proses', 'Tidak ada']
+export const UNITS = ['pcs', 'set', 'botol', 'liter', 'meter', 'pasang']
+
+// Contoh rincian biaya per kategori (dari wawancara, Lampiran B) untuk saran isian
+export const COST_SUGGESTIONS = {
+  Operasional: ['Jasa pengambilan kendaraan', 'Uang makan pengambilan', 'Bensin pengambilan', 'Travel pengambilan luar kota', 'Bahan bakar pengiriman Jabodetabek', 'Uang makan pengiriman', 'Travel pengiriman luar kota'],
+  Perbaikan: ['Aksesori', 'Sparepart', 'Bahan pendukung', 'Jasa servis bengkel', 'Turun mesin', 'Cat dan perbaikan body'],
+  'Surat-surat': ['Pajak tahunan', 'STNK', 'BPKB', 'Balik nama', 'Cek fisik'],
+  Penyimpanan: ['Sewa gudang', 'Sewa tempat parkir'],
+  Lainnya: ['Biaya lain-lain']
+}
+
+// Ikon Bootstrap Icons per jenis aktivitas timeline
+export const ACTIVITY_ICONS = {
+  masuk: 'bi-box-arrow-in-down', status: 'bi-flag', edit: 'bi-pencil', inspeksi: 'bi-clipboard-check',
+  biaya: 'bi-wallet2', sparepart: 'bi-wrench', dokumen: 'bi-file-text', booking: 'bi-tag',
+  terjual: 'bi-check-lg', batal: 'bi-arrow-counterclockwise'
+}

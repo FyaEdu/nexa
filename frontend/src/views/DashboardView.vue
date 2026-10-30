@@ -4,6 +4,7 @@ import { api } from '@/api'
 import { auth } from '@/stores/auth'
 import { STATUSES } from '@/utils/constants'
 import { rupiah, tanggal, today } from '@/utils/format'
+import ActivityTimeline from '@/components/ActivityTimeline.vue'
 
 const data = ref(null)
 const error = ref('')
@@ -22,7 +23,6 @@ const segments = computed(() =>
 )
 const diTangan = computed(() => (data.value ? data.value.total_motor - (data.value.status_counts.terjual || 0) : 0))
 
-const ICON = { masuk: 'bi-box-arrow-in-down', status: 'bi-flag', inspeksi: 'bi-clipboard-check', biaya: 'bi-wallet2', sparepart: 'bi-wrench', dokumen: 'bi-file-text', booking: 'bi-tag', terjual: 'bi-check-lg', batal: 'bi-arrow-counterclockwise' }
 </script>
 
 <template>
@@ -44,9 +44,9 @@ const ICON = { masuk: 'bi-box-arrow-in-down', status: 'bi-flag', inspeksi: 'bi-c
       <div class="card-header"><h2 class="h5 mb-0">Posisi kendaraan</h2></div>
       <div class="card-body">
         <div class="nx-pipe">
-          <div v-for="s in segments" :key="s.key" class="nx-seg" :class="`st-${s.key}`" :style="{ flex: s.n }">
+          <router-link v-for="s in segments" :key="s.key" :to="{ path: '/kendaraan', query: { status: s.key } }" class="nx-seg" :class="`st-${s.key}`" :style="{ flex: s.n }" :title="`Lihat motor ${s.label.toLowerCase()}`">
             <b>{{ s.n }}</b><span>{{ s.label }}</span>
-          </div>
+          </router-link>
         </div>
       </div>
     </section>
@@ -56,16 +56,7 @@ const ICON = { masuk: 'bi-box-arrow-in-down', status: 'bi-flag', inspeksi: 'bi-c
         <section class="card nx-card h-100">
           <div class="card-header"><h2 class="h5 mb-0">Aktivitas terbaru</h2></div>
           <div class="card-body">
-            <ol class="nx-tl">
-              <li v-for="a in data.recent" :key="a.id">
-                <span class="ti" :class="`ty-${a.type}`"><i class="bi" :class="ICON[a.type] || 'bi-flag'"></i></span>
-                <div>
-                  <div class="fw-semibold">{{ a.title }}</div>
-                  <div v-if="a.detail" class="small text-body-secondary">{{ a.detail }}</div>
-                  <div class="small text-body-secondary">{{ tanggal(a.activity_date) }}, oleh {{ a.created_by_name || 'Sistem' }}, {{ a.motor_code }} {{ a.model }}</div>
-                </div>
-              </li>
-            </ol>
+            <ActivityTimeline :items="data.recent" show-motor />
           </div>
         </section>
       </div>
@@ -73,8 +64,8 @@ const ICON = { masuk: 'bi-box-arrow-in-down', status: 'bi-flag', inspeksi: 'bi-c
         <section class="card nx-card h-100">
           <div class="card-header"><h2 class="h5 mb-0">Status pengembangan</h2></div>
           <div class="card-body small">
-            <p>Tahap 1 selesai: database dan data dummy, login dengan 4 role, layout, dan ringkasan dashboard ini.</p>
-            <p class="mb-0 text-body-secondary">Grafik modal vs harga jual, komposisi biaya, dan notifikasi ditambahkan di Tahap 5. Menu bertanda T2–T5 di samping masih placeholder.</p>
+            <p>Tahap 1–4 selesai: login dan hak akses, data kendaraan dengan Asset Timeline, inspeksi dengan Health Score, pencatatan biaya, serta inventaris dan sparepart.</p>
+            <p class="mb-0 text-body-secondary">Tahap 5 berisi penjualan, laporan PDF/Excel, manajemen pengguna, grafik dashboard, dan notifikasi. Menu bertanda T5 di samping masih placeholder.</p>
           </div>
         </section>
       </div>

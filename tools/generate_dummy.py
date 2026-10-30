@@ -1,7 +1,7 @@
 """Generator data dummy NEXA.
 
 Menghasilkan dua file dari satu sumber data:
-  backend/app/Database/Seeds/data/dummy.json  -> dibaca oleh DummyDataSeeder (php spark db:seed)
+  backend/application/database/dummy.json    -> dibaca oleh: php index.php tools seed
   database/nexa_dump.sql                      -> skema + data, untuk dibuka di DB Browser for SQLite
 
 Jalankan dari folder root proyek:  python tools/generate_dummy.py
@@ -30,7 +30,7 @@ def nid(t):
 
 STATUS_LABEL = {'masuk': 'Baru masuk', 'inspeksi': 'Sedang diperiksa', 'perbaikan': 'Dalam perbaikan',
                 'siap': 'Siap dijual', 'booking': 'Booking', 'terjual': 'Terjual'}
-# Harus sama dengan app/Config/Nexa.php ($checklist)
+# Harus sama dengan application/config/nexa.php ($checklist)
 CHECK = [
     ('mesin', 'Kondisi mesin', 35, [('m1', 'Suara mesin'), ('m2', 'Kebocoran oli'), ('m3', 'Sistem pengapian'), ('m4', 'Performa tarikan')]),
     ('listrik', 'Sistem kelistrikan', 20, [('l1', 'Aki'), ('l2', 'Lampu depan/belakang'), ('l3', 'Lampu sein'), ('l4', 'Klakson'), ('l5', 'Starter')]),
@@ -250,9 +250,9 @@ m = motor(dict(brand='Honda', model='Scoopy', year=2021, plate='B 4019 UVW', col
 cost(m, 'Operasional', 'Bensin pengambilan', 100000, '2026-10-18', K)
 
 # ---------------- tulis JSON untuk seeder ----------------
-out = {'_info': 'Data dummy NEXA, dibuat oleh tools/generate_dummy.py. Password user ditulis polos dan di-hash oleh DummyDataSeeder.',
+out = {'_info': 'Data dummy NEXA, dibuat oleh tools/generate_dummy.py. Password user ditulis polos dan di-hash saat seed (php index.php tools seed).',
        'order': TABLES, 'tables': T}
-with open(os.path.join(ROOT, 'backend/app/Database/Seeds/data/dummy.json'), 'w', encoding='utf-8') as f:
+with open(os.path.join(ROOT, 'backend/application/database/dummy.json'), 'w', encoding='utf-8') as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
 
 # ---------------- tulis SQL dump + verifikasi ----------------
@@ -272,7 +272,7 @@ def q(v):
 
 lines = ['-- NEXA: skema + data dummy (SQLite)',
          '-- Untuk melihat data tanpa menjalankan aplikasi: DB Browser for SQLite > File > Import > Database from SQL file.',
-         '-- Aplikasi sendiri membuat database lewat: php spark migrate && php spark db:seed DatabaseSeeder',
+         '-- Aplikasi sendiri membuat database lewat: php index.php tools migrate && php index.php tools seed',
          'PRAGMA foreign_keys=OFF;', 'BEGIN TRANSACTION;', SCHEMA.strip()]
 for t in TABLES:
     for r in T[t]:

@@ -1,12 +1,12 @@
 -- NEXA: skema + data dummy (SQLite)
 -- Untuk melihat data tanpa menjalankan aplikasi: DB Browser for SQLite > File > Import > Database from SQL file.
--- Aplikasi sendiri membuat database lewat: php spark migrate && php spark db:seed DatabaseSeeder
+-- Aplikasi sendiri membuat database lewat: php index.php tools migrate && php index.php tools seed
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 -- =====================================================================
 -- NEXA - Next-generation Asset Management
--- Skema database SQLite. Ini cerminan dari migration CodeIgniter 4:
---   backend/app/Database/Migrations/2026-10-20-000001_CreateNexaTables.php
+-- Skema database SQLite. Isinya sama dengan migration CodeIgniter 3:
+--   backend/application/migrations/20261020000001_create_nexa_tables.php
 -- Kalau mengubah struktur tabel, ubah migration DAN file ini.
 -- =====================================================================
 
@@ -201,11 +201,11 @@ INSERT INTO roles (id,code,name) VALUES (1,'admin','Administrator');
 INSERT INTO roles (id,code,name) VALUES (2,'owner','Pemilik Usaha');
 INSERT INTO roles (id,code,name) VALUES (3,'ops','Staff Operasional');
 INSERT INTO roles (id,code,name) VALUES (4,'sales','Staff Penjualan');
-INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (1,1,'Alifya Putri Aisyka','admin','admin@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$CLzke4qsI0Ee20sr7h2zqOQJ1MgYE6qVO2Jt966cjb8g6l5iQOjW2');
-INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (2,2,'Akmal Lutfan Hasibuan','pemilik','pemilik@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$Ifxjb72Pox0cIcSrTLx/1edcQZY9f7VUIp5LxczgIf0QMKfiGuqbu');
-INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (3,3,'Muhammad Kemal Pasha','operasional','ops@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$fBuMFmY4glybxl7yMLb1leeCLGTxE2RdgmwKgH6X.tcRiCZgkjYSm');
-INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (4,4,'Mulyo Saputra','penjualan','sales@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$dDt/yJKXcas33xj0EcS9GOjPBFoEskQs5RHa6uMk/lWD.h1apgfuO');
-INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (5,3,'Firmansyah','mekanik','mekanik@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$xiLK0LROJOQTBrRF/EHR1OOT2ivDPn52Mg7FZGilNP9w5hvna833m');
+INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (1,1,'Alifya Putri Aisyka','admin','admin@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$XZyK2Hp8kgwIDJxNQOCZXeDADaMPhKgWtqgY50JgRAyU1PWdUQi0a');
+INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (2,2,'Akmal Lutfan Hasibuan','pemilik','pemilik@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$3AEdYn3iFgrkK4D87k0QfOdO7aZr3hxlD.tMO2vkVfj.dz7CJhlDS');
+INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (3,3,'Muhammad Kemal Pasha','operasional','ops@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$ta9bpeTHKXzHYZPPSe/Cxe3VhuvHNLNm7gS3LItbQElW5yt3kii6q');
+INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (4,4,'Mulyo Saputra','penjualan','sales@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$VxnIiMpgmspjgRBkh8.4wOofDvIYjyrJTm8gbVZbLcVvg89WdV60e');
+INSERT INTO users (id,role_id,name,username,email,is_active,created_at,updated_at,password_hash) VALUES (5,3,'Firmansyah','mekanik','mekanik@nexa.local',1,'2026-08-01 08:00:00','2026-08-01 08:00:00','$2y$12$8ZRlzA9hOwxRTjwrDFR7Y.ntEpKpo/Zs/c/vKIyw0mF5EDuq5p2Fy');
 INSERT INTO cost_categories (id,name,description) VALUES (1,'Operasional','Pengambilan, pengiriman, bahan bakar, transportasi');
 INSERT INTO cost_categories (id,name,description) VALUES (2,'Perbaikan','Aksesori, sparepart dari luar gudang, bahan pendukung, jasa bengkel');
 INSERT INTO cost_categories (id,name,description) VALUES (3,'Surat-surat','Pajak, STNK, BPKB, balik nama');

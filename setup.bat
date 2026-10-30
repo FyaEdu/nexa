@@ -1,35 +1,33 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-set "PATH=%SystemRoot%\System32;%SystemRoot%;%PATH%"
-if exist "%~dp0tools\runtime\php\php.exe" set "PATH=%~dp0tools\runtime\php;%~dp0tools\runtime;%~dp0tools\runtime\node;%PATH%"
 echo ==============================================
-echo  Setup NEXA - CodeIgniter 4 + Vue 3 + SQLite
+echo  Setup NEXA - CodeIgniter 3 + Vue 3 + SQLite
 echo ==============================================
 
-where php >nul 2>nul || (echo [!] PHP tidak ditemukan. Pasang PHP 8.1+ atau XAMPP lalu tambahkan folder php ke PATH. & goto fail)
+where php >nul 2>nul || (echo [!] PHP tidak ditemukan. Pasang XAMPP dengan PHP 7.3 lalu tambahkan folder php ke PATH. Atau pakai docker-start.bat. & goto fail)
 where composer >nul 2>nul || (echo [!] Composer tidak ditemukan. Unduh di https://getcomposer.org & goto fail)
 where npm >nul 2>nul || (echo [!] Node.js tidak ditemukan. Unduh versi LTS di https://nodejs.org & goto fail)
-php -r "exit(extension_loaded('sqlite3')?0:1);" || (echo [!] Ekstensi PHP sqlite3 belum aktif. Ini PHP yang terpakai: & where php & php --ini & goto fail)
-php -r "exit(extension_loaded('intl')?0:1);" || (echo [!] Ekstensi PHP intl belum aktif. Ini PHP yang terpakai: & where php & php --ini & goto fail)
+php -r "exit(version_compare(PHP_VERSION, '7.3.0', '>=') && version_compare(PHP_VERSION, '7.5.0', '<') ? 0 : 1);" || echo [peringatan] Versi PHP Anda bukan 7.3/7.4. CodeIgniter 3 bisa menampilkan peringatan di PHP 8. Disarankan PHP 7.3.
+php -m | findstr /i /x "sqlite3" >nul || (echo [!] Ekstensi PHP sqlite3 belum aktif. Buka php.ini, hapus titik koma di depan extension=sqlite3 & goto fail)
 
-if exist "backend\vendor\codeigniter4" goto ci_ready
-echo [1/4] Mengunduh CodeIgniter 4 lewat Composer...
-if exist "_ci4" rmdir /s /q "_ci4"
-call composer create-project codeigniter4/appstarter _ci4 --no-interaction || goto fail
+if exist "backend\system\core\CodeIgniter.php" goto ci_ready
+echo [1/4] Mengunduh CodeIgniter 3.1.13 lewat Composer...
+if exist "_ci3" rmdir /s /q "_ci3"
+call composer create-project codeigniter/framework _ci3 3.1.13 --no-dev --no-interaction || goto fail
 rem Salin file framework yang belum ada. File NEXA di backend tidak ditimpa.
-robocopy "_ci4" "backend" /E /XC /XN /XO /NFL /NDL /NJH /NJS /NP >nul
-rmdir /s /q "_ci4"
+robocopy "_ci3" "backend" /E /XC /XN /XO /NFL /NDL /NJH /NJS /NP >nul
+rmdir /s /q "_ci3"
 goto ci_done
 :ci_ready
-echo [1/4] CodeIgniter 4 sudah terpasang, dilewati.
+echo [1/4] CodeIgniter 3 sudah terpasang, dilewati.
 :ci_done
 
 cd backend
 echo [2/4] Membuat tabel database SQLite...
-php spark migrate || goto fail
+php index.php tools migrate || goto fail
 echo [3/4] Mengisi data dummy...
-php spark db:seed DatabaseSeeder || goto fail
+php index.php tools seed || goto fail
 cd ..
 
 echo [4/4] Memasang paket frontend (npm install)...

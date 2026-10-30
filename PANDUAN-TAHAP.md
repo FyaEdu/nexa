@@ -4,13 +4,15 @@ Pengembangan NEXA dibagi menjadi 5 tahap agar beban kerja tidak menumpuk dan set
 
 ## Ringkasan
 
-| Tahap | Isi | Usulan PJ (Bab 4.2) | Usulan minggu | Status |
-| --- | --- | --- | --- | --- |
-| 1 | Fondasi: database + data dummy, login 4 role, layout, dashboard dasar | Mulyo (database), Alifya (backend), Firmansyah (layout) | M3 | **Selesai, tinggal direview** |
-| 2 | Data kendaraan, dokumen, Asset Timeline | Backend: Alifya. Frontend: Firmansyah. Validasi: Akmal | M4 | Belum |
-| 3 | Inspeksi + Asset Health Score, pencatatan biaya | Backend: Mulyo. Frontend: Firmansyah. Validasi checklist: Akmal | M5–M6 | Belum |
-| 4 | Inventaris & sparepart, stok minimum | Backend: Alifya. Frontend: Firmansyah. Validasi & uji: Kemal | M6–M7 | Belum |
-| 5 | Penjualan, laporan PDF/Excel, manajemen pengguna, dashboard lengkap, UAT | Backend: Alifya & Mulyo. Frontend: Firmansyah. Uji & user manual: Kemal. UAT: Akmal | M8–M10 | Belum |
+| Tahap | Isi | Usulan PJ (Bab 4.2) | Minggu | Perkiraan tanggal | Status |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Fondasi: database + data dummy, login 4 role, layout, dashboard dasar | Mulyo (database), Alifya (backend), Firmansyah (layout) | M3 | 7–13 Okt | **Kode selesai, perlu diuji tim** |
+| 2 | Data kendaraan, dokumen, Asset Timeline | Backend: Alifya. Frontend: Firmansyah. Validasi: Akmal | M4 | 14–20 Okt | **Kode selesai, perlu diuji tim** |
+| 3 | Inspeksi + Asset Health Score, pencatatan biaya | Backend: Mulyo. Frontend: Firmansyah. Validasi checklist: Akmal | M5–M6 | 21 Okt–3 Nov | **Kode selesai, perlu diuji tim** |
+| 4 | Inventaris & sparepart, stok minimum | Backend: Alifya. Frontend: Firmansyah. Validasi & uji: Kemal | M6–M7 | 28 Okt–10 Nov | **Kode selesai, perlu diuji tim** |
+| 5 | Penjualan, laporan PDF/Excel, manajemen pengguna, dashboard lengkap, UAT | Backend: Alifya & Mulyo. Frontend: Firmansyah. Uji & user manual: Kemal. UAT: Akmal | M8–M10 | 11 Nov–1 Des | Belum |
+
+Perkiraan tanggal memakai rapat pertama tim (23 September 2026, log kegiatan) sebagai awal M1. Kalau dosen menetapkan tanggal mulai lain, geser tabel ini. Dengan patokan ini, **14 November 2026 jatuh di M8**, yaitu minggu Mid-Project Review. Saat itu Tahap 1–4 harus sudah berjalan dan teruji, dan Tahap 5 baru dimulai.
 
 Mid-Project Review di minggu ke-8 (Bab 3.1) idealnya dilakukan setelah Tahap 4 selesai, sehingga semua fungsi inti sudah berjalan dan Tahap 5 menjadi finalisasi.
 
@@ -24,30 +26,53 @@ Tampilan akhir setiap halaman sudah ada di `referensi/prototype-nexa.html`. Buka
 
 1. Buat branch per tahap dari `main`, misalnya `tahap-2-kendaraan`.
 2. Commit kecil dan sering, dengan pesan yang jelas, misalnya `tahap2: endpoint daftar motor`.
-3. Sebelum merge ke `main`: jalankan `php spark migrate:refresh && php spark db:seed DatabaseSeeder`, lalu jalankan semua uji di bagian tahap Anda.
+3. Sebelum merge ke `main`: jalankan `php index.php tools reset` di folder `backend` (Docker: `docker-reset-data.bat`), lalu jalankan semua uji di bagian tahap Anda.
 4. Setelah merge, isi tabel **Catatan serah terima** di bagian bawah dokumen ini.
 
-### Backend (CodeIgniter 4)
+### Docker atau lokal
 
-- **Controller API** dibuat di `app/Controllers/Api/` dan wajib extends `BaseApiController`.
+Anggota tim boleh memakai Docker atau PHP lokal (lihat README). Ada dua hal yang perlu diingat.
+
+**Perintah CLI CodeIgniter dan `composer`.** Kalau memakai Docker, jalankan lewat container, contohnya:
+
+```bash
+docker compose exec backend php index.php tools migrate
+docker compose exec backend composer require dompdf/dompdf
+```
+
+**Paket baru.** Kalau menambah paket composer atau npm, commit `composer.json` + `composer.lock` atau `package.json` + `package-lock.json`. Paket akan terpasang otomatis:
+- Pengguna Docker: container backend menjalankan `composer install` setiap start. Untuk paket npm, jalankan `docker compose restart frontend`.
+- Pengguna lokal: jalankan `composer install` atau `npm install` sendiri.
+
+### Backend (CodeIgniter 3, PHP 7.3)
+
+- **Sintaks PHP 7.3.** Jangan memakai fitur PHP 7.4/8 seperti typed property (`private int $x`), arrow function (`fn() =>`), `match`, nullsafe `?->`, `str_contains()`, atau `catch (Exception)` tanpa variabel. Penulisan `array()` dan `[]` sama-sama boleh.
+- **Nama file dan class** mengikuti aturan CodeIgniter 3:
+  - Controller: huruf awal kapital, contohnya `application/controllers/api/Motors.php` berisi `class Motors`.
+  - Model: diakhiri `_model`, contohnya `application/models/Motor_model.php` berisi `class Motor_model`, dipanggil lewat `$this->load->model('motor_model')` lalu `$this->motor_model->...`.
+  - Library: contohnya `application/libraries/Health_score.php`, dipanggil lewat `$this->load->library('health_score')`.
+
+- **Controller API** dibuat di `application/controllers/api/` dan wajib extends `Api_Controller` (didefinisikan di `application/core/MY_Controller.php`).
 - **Cek login dan hak akses** di awal setiap method:
   ```php
-  if ($deny = $this->guard('motor.edit')) {
-      return $deny;
+  if ( ! $this->guard('motor.edit')) {
+      return;   // respons 401/403 sudah dikirim
   }
   ```
-  Kunci hak akses (`motor.edit`, `cost.view`, dll.) didaftarkan di `app/Config/Nexa.php`. Kalau menambah kunci baru, tambahkan juga di sana.
+  Kunci hak akses (`motor.edit`, `cost.view`, dll.) didaftarkan di `application/config/nexa.php`. Kalau menambah kunci baru, tambahkan juga di sana.
 - **Format respons.**
-  - Sukses memakai `$this->respond($data)` atau `$this->respondCreated($data)`.
-  - Error validasi memakai `$this->failValidationErrors(['field' => 'pesan'])`.
-  - Data tidak ditemukan memakai `$this->failNotFound('pesan')`.
+  - Sukses memakai `$this->respond($data)`, atau `$this->respond($data, 201)` untuk data baru.
+  - Error validasi memakai `$this->fail('', 422, array('field' => 'pesan'))`.
+  - Data tidak ditemukan memakai `$this->fail('pesan', 404)`.
+  - Setelah `fail()`, langsung `return;`. Body request dibaca dengan `$this->input_data()`.
   - Pesan error ditulis dalam bahasa Indonesia yang jelas untuk pengguna, karena frontend menampilkannya apa adanya.
-- **Asset Timeline wajib diisi.** Setiap aksi yang mengubah data motor harus memanggil `(new AssetActivityModel())->log(...)`. Aksi itu termasuk motor masuk, ubah status, inspeksi, biaya, sparepart, dokumen, booking, dan terjual. Kalau aksinya mengubah status motor, isi argumen `$status`.
+- **Asset Timeline wajib diisi.** Setiap aksi yang mengubah data motor harus memanggil `$this->asset_activity_model->log(...)` (muat dulu dengan `$this->load->model('asset_activity_model')`). Aksi itu termasuk motor masuk, ubah status, inspeksi, biaya, sparepart, dokumen, booking, dan terjual. Kalau aksinya mengubah status motor, isi argumen `$status`.
 - **Uang** disimpan sebagai bilangan bulat rupiah, bukan desimal.
 - **Tanggal** disimpan dengan format `YYYY-MM-DD`.
-- **Total modal motor** dihitung dari harga beli ditambah jumlah `motor_costs.amount` dan jumlah `sparepart_usage.total`. Gunakan `MotorModel::MODAL_SQL` supaya rumusnya sama di semua tempat.
-- **Transaksi database.** Proses yang mengubah lebih dari satu tabel dibungkus `$this->db->transStart()` dan `transComplete()`. Contohnya barang keluar, yang mengurangi stok, mencatat kartu stok, mencatat pemakaian sparepart, dan mengisi timeline.
-- **Route** tinggal dibuka komentarnya di `app/Config/Routes.php`. Kalau menambah route baru, ikuti pola yang sama.
+- **Total modal motor** dihitung dari harga beli ditambah jumlah `motor_costs.amount` dan jumlah `sparepart_usage.total`. Gunakan `Motor_model::MODAL_SQL` supaya rumusnya sama di semua tempat.
+- **Transaksi database.** Proses yang mengubah lebih dari satu tabel dibungkus `$this->db->trans_start()` dan `$this->db->trans_complete()`, lalu dicek dengan `$this->db->trans_status()`. Contohnya barang keluar, yang mengurangi stok, mencatat kartu stok, mencatat pemakaian sparepart, dan mengisi timeline.
+- **Route** tinggal dibuka komentarnya di `application/config/routes.php`, contohnya `$route['api/motors']['get'] = 'api/motors/index';`. Kalau menambah route baru, ikuti pola yang sama.
+- **Selalu daftarkan route dengan method HTTP-nya.** CodeIgniter 3 tetap bisa memanggil controller langsung lewat URL. Untuk aksi yang mengubah data, cek juga `$this->input->method() === 'post'` (atau `put`/`delete`).
 
 ### Frontend (Vue 3)
 
@@ -61,26 +86,28 @@ Tampilan akhir setiap halaman sudah ada di `referensi/prototype-nexa.html`. Buka
 
 ### Kalau struktur database berubah
 
-1. Buat migration baru di `app/Database/Migrations`. Jangan mengedit migration lama yang sudah dipakai tim.
+1. Buat migration baru di `application/migrations`, misalnya `20261101000001_tambah_kolom_x.php` berisi `class Migration_Tambah_kolom_x extends CI_Migration`. Naikkan `migration_version` di `application/config/migration.php` ke angka itu. Jangan mengedit migration lama yang sudah dipakai tim.
 2. Perbarui `database/schema.sql`.
 3. Kalau data dummy ikut berubah, edit `tools/generate_dummy.py`, lalu jalankan `python tools/generate_dummy.py`.
-4. Beri tahu tim di grup WhatsApp, karena semua orang perlu menjalankan `php spark migrate`.
+4. Beri tahu tim di grup WhatsApp, karena semua orang perlu menjalankan `php index.php tools migrate`.
 
 ---
 
-## Tahap 1 — Fondasi (SELESAI)
+## Tahap 1 — Fondasi (KODE SELESAI)
 
 ### Yang sudah dibuat
 
 **Database**
-- Migration seluruh 15 tabel sesuai ERD: roles, users, api_tokens, motors, inspections, inspection_items, cost_categories, motor_costs, inventory_items, inventory_transactions, sparepart_usage, vehicle_documents, customers, sales, asset_activities.
+- Migration seluruh 15 tabel sesuai ERD (`application/migrations`): roles, users, api_tokens, motors, inspections, inspection_items, cost_categories, motor_costs, inventory_items, inventory_transactions, sparepart_usage, vehicle_documents, customers, sales, asset_activities.
 - Data dummy lengkap untuk semua tabel, jadi Tahap 2–5 tidak perlu membuat data dummy lagi.
 
 **Backend**
 - Login berbasis token. Token berlaku 12 jam dan disimpan dalam bentuk hash.
-- Pengecekan role di `BaseApiController`.
+- Pengecekan role di `Api_Controller` (`application/core/MY_Controller.php`).
+- Perintah CLI `php index.php tools migrate | seed | reset`.
+- `server.php` untuk menjalankan backend dengan `php -S` tanpa Apache.
 - Endpoint yang sudah jalan: `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`, `GET /api/meta`, `GET /api/dashboard`.
-- `Config/Nexa.php` berisi status lifecycle, hak akses, dan checklist inspeksi.
+- `application/config/nexa.php` berisi status lifecycle, hak akses, dan checklist inspeksi.
 
 **Frontend**
 - Halaman login dengan tombol isi otomatis untuk akun dummy.
@@ -110,16 +137,27 @@ Tampilan akhir setiap halaman sudah ada di `referensi/prototype-nexa.html`. Buka
 
 ---
 
-## Tahap 2 — Data kendaraan, dokumen, Asset Timeline
+## Catatan untuk Tahap 2–4
+
+Kode Tahap 2–4 sudah ditulis mengikuti rincian di bawah. Tugas tim untuk tahap-tahap ini sekarang adalah:
+
+1. **Menjalankan uji.** Jalankan setiap tabel uji dan centang hasilnya di Catatan serah terima.
+2. **Validasi.** Akmal mengecek checklist inspeksi dan alur status bersama pemilik usaha. Kemal mengecek alur gudang.
+3. **Perbaikan.** Bug dari hasil uji dicatat dan diperbaiki oleh PJ backend/frontend masing-masing.
+
+Daftar file dan endpoint di bawah tetap berguna sebagai peta kode.
+
+## Tahap 2 — Data kendaraan, dokumen, Asset Timeline (KODE SELESAI)
 
 **Tujuan:** pengguna bisa mencatat motor masuk, melihat daftar dan detail motor lengkap dengan riwayatnya, mengubah status, dan mencatat dokumen.
 
 ### Backend
 
 File yang dibuat:
-- `Controllers/Api/MotorController.php`
-- `Controllers/Api/DocumentController.php`
-- `Models/VehicleDocumentModel.php`
+- `application/controllers/api/Motors.php`
+- `application/controllers/api/Documents.php`
+- `application/models/Vehicle_document_model.php`
+- Tambahan method di `application/models/Motor_model.php`
 
 | Method | Endpoint | Hak akses | Keterangan |
 | --- | --- | --- | --- |
@@ -168,13 +206,13 @@ File yang dibuat:
 
 ---
 
-## Tahap 3 — Inspeksi, Asset Health Score, biaya
+## Tahap 3 — Inspeksi, Asset Health Score, biaya (KODE SELESAI)
 
 **Tujuan:** mekanik mengisi checklist inspeksi dan skornya terhitung otomatis. Staff juga bisa mencatat semua biaya, termasuk yang kecil, dan biaya itu langsung menambah modal motor.
 
 ### Rumus Asset Health Score
 
-Rumus ini sudah ada di `Config/Nexa.php` dan sudah dipakai untuk membuat data dummy.
+Rumus ini sudah ada di `application/config/nexa.php` dan sudah dipakai untuk membuat data dummy.
 
 1. **Nilai item:** baik = 1, perlu perbaikan = 0,5, rusak = 0.
 2. **Nilai grup:** rata-rata nilai item di grup itu.
@@ -182,15 +220,15 @@ Rumus ini sudah ada di `Config/Nexa.php` dan sudah dipakai untuk membuat data du
 4. **Skor akhir:** jumlah dari (bobot grup × nilai grup), dibulatkan, dengan rentang 0–100.
 5. **Label skor:** 80 ke atas Sehat (hijau), 60–79 Perlu perhatian (kuning), di bawah 60 Kritis (merah).
 
-Contoh dari data dummy: NX-005 Vario mendapat skor 73. Buat class `Libraries/HealthScore.php` dengan method `calculate(array $items): int` supaya rumus ini bisa diuji sendiri.
+Contoh dari data dummy: NX-005 Vario mendapat skor 73. Buat library `application/libraries/Health_score.php` dengan method `calculate($items)` yang mengembalikan integer, supaya rumus ini bisa diuji sendiri.
 
 ### Backend
 
 File yang dibuat:
-- `Controllers/Api/InspectionController.php`
-- `Controllers/Api/CostController.php`
-- `Libraries/HealthScore.php`
-- `Models/InspectionModel.php`, `InspectionItemModel.php`, `MotorCostModel.php`, `CostCategoryModel.php`
+- `application/controllers/api/Inspections.php`
+- `application/controllers/api/Costs.php`
+- `application/libraries/Health_score.php`
+- `application/models/Inspection_model.php`, `Motor_cost_model.php`
 
 | Method | Endpoint | Hak akses | Keterangan |
 | --- | --- | --- | --- |
@@ -252,7 +290,7 @@ Detail motor (`GET /api/motors/{id}`) ditambah dua bagian:
 
 ---
 
-## Tahap 4 — Inventaris dan sparepart
+## Tahap 4 — Inventaris dan sparepart (KODE SELESAI)
 
 **Tujuan:** stok sparepart tercatat rapi, ada peringatan stok minimum, dan setiap sparepart yang dipakai untuk motor otomatis masuk ke modal motor tersebut.
 
@@ -277,8 +315,8 @@ Detail motor (`GET /api/motors/{id}`) ditambah dua bagian:
 ### Backend
 
 File yang dibuat:
-- `Controllers/Api/InventoryController.php`
-- `Models/InventoryItemModel.php`, `InventoryTransactionModel.php`, `SparepartUsageModel.php`
+- `application/controllers/api/Inventory.php`
+- `application/models/Inventory_model.php` (barang, kartu stok, dan pemakaian sparepart)
 
 | Method | Endpoint | Hak akses | Keterangan |
 | --- | --- | --- | --- |
@@ -322,11 +360,33 @@ Detail motor ditambah bagian `parts` (sparepart yang dipakai).
 
 ### Persiapan
 
-Jalankan di folder `backend`:
+Pasang pustaka laporan.
+
+Lokal, di folder `backend`:
 
 ```bash
 composer require phpoffice/phpspreadsheet dompdf/dompdf
 ```
+
+Docker:
+
+```bash
+docker compose exec backend composer require phpoffice/phpspreadsheet dompdf/dompdf
+```
+
+Composer otomatis memilih versi yang cocok dengan PHP 7.3 (PhpSpreadsheet 1.2x dan Dompdf 2.x). Pustakanya sudah dimuat otomatis oleh `Api_Controller` lewat `vendor/autoload.php`, jadi tinggal dipakai, misalnya `new \PhpOffice\PhpSpreadsheet\Spreadsheet()`. Image Docker sudah memuat ekstensi `zip` dan `gd` yang dibutuhkan PhpSpreadsheet. Pengguna XAMPP perlu mengaktifkan `extension=zip` dan `extension=gd` di `php.ini`.
+
+### Yang sudah disiapkan dari Tahap 2–4
+
+- `Motor_model::sale_for()` membaca transaksi penjualan aktif. Tab Penjualan di detail motor sudah menampilkannya, tapi masih tanpa tombol aksi. Tambahkan tombolnya di `MotorDetailView.vue` (bagian `tab === 'penjualan'`).
+- **Komponen siap pakai:**
+  - `BaseModal`, `FormField`, `TonePill` (sudah mengenali Lunas, Belum lunas, Booking, Batal),
+  - `confirmDialog()` dan `toast()` dari `@/utils/feedback`.
+- **Pola form** bisa disalin dari `components/forms/CostForm.vue`.
+- **Data dummy** sudah berisi 3 customer dan 3 transaksi.
+- **Setelah Tahap 5 selesai,**
+  - naikkan `DONE_STAGE` di `frontend/src/utils/constants.js` menjadi 5,
+  - tambahkan route view-nya di `frontend/src/router.js`.
 
 ### Aturan bisnis penjualan
 
@@ -349,10 +409,10 @@ composer require phpoffice/phpspreadsheet dompdf/dompdf
 ### Backend
 
 File yang dibuat:
-- `CustomerController`, `SaleController`, `ReportController`, `UserController`, `NotificationController`
-- `Libraries/ReportBuilder.php`
-- Model untuk customers dan sales
-- `Views/reports/pdf.php` (template PDF)
+- Controller di `application/controllers/api/`: `Customers.php`, `Sales.php`, `Reports.php`, `Users.php`, `Notifications.php`
+- `application/libraries/Report_builder.php`
+- `application/models/Sale_model.php`, `Customer_model.php`
+- `application/views/reports/pdf.php` (template PDF)
 
 | Method | Endpoint | Hak akses | Keterangan |
 | --- | --- | --- | --- |
@@ -470,8 +530,8 @@ Isi tabel ini setiap kali sebuah tahap selesai di-merge. Tuliskan juga hal yang 
 
 | Tahap | Tanggal selesai | Dikerjakan oleh | Uji lolos | Catatan untuk tahap berikutnya |
 | --- | --- | --- | --- | --- |
-| 1 | 20 Okt 2026 | (draf awal, perlu review tim) | Lihat tabel uji Tahap 1 | Kode ditulis tanpa dijalankan di lingkungan PHP. Jalankan `setup.bat` dan uji 1–8 dulu, lalu catat perbaikannya di sini. |
-| 2 | | | | |
-| 3 | | | | |
-| 4 | | | | |
+| 1 | 20 Okt 2026 | (draf awal, perlu review tim) | Lihat tabel uji Tahap 1 | Backend sudah direvisi ke CodeIgniter 3 + PHP 7.3. Kode ditulis tanpa dijalankan di lingkungan PHP. Jalankan `setup.bat` atau `docker-start.bat`, uji 1–8, lalu catat perbaikannya di sini. Setup Docker ditambahkan untuk PC tanpa PHP. |
+| 2 | (kode ditulis 26 Okt 2026) | (draf awal, perlu review tim) | Lihat tabel uji Tahap 2 | Isi setelah diuji. Edit data motor juga dicatat di timeline (tipe `edit`). |
+| 3 | (kode ditulis 26 Okt 2026) | (draf awal, perlu review tim) | Lihat tabel uji Tahap 3 | Isi setelah diuji. Rumus skor sama di backend (`Health_score.php`) dan frontend (`utils/health.js`). |
+| 4 | (kode ditulis 26 Okt 2026) | (draf awal, perlu review tim) | Lihat tabel uji Tahap 4 | Isi setelah diuji. Barang keluar dicek ulang di database supaya stok tidak bisa minus. |
 | 5 | | | | |
