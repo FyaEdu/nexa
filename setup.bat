@@ -9,12 +9,13 @@ where php >nul 2>nul || (echo [!] PHP tidak ditemukan. Pasang XAMPP dengan PHP 7
 where composer >nul 2>nul || (echo [!] Composer tidak ditemukan. Unduh di https://getcomposer.org & goto fail)
 where npm >nul 2>nul || (echo [!] Node.js tidak ditemukan. Unduh versi LTS di https://nodejs.org & goto fail)
 php -r "exit(version_compare(PHP_VERSION, '7.3.0', '>=') && version_compare(PHP_VERSION, '7.5.0', '<') ? 0 : 1);" || echo [peringatan] Versi PHP Anda bukan 7.3/7.4. CodeIgniter 3 bisa menampilkan peringatan di PHP 8. Disarankan PHP 7.3.
-php -m | findstr /i /x "sqlite3" >nul || (echo [!] Ekstensi PHP sqlite3 belum aktif. Buka php.ini, hapus titik koma di depan extension=sqlite3 & goto fail)
+php -r "exit(extension_loaded('sqlite3') && extension_loaded('pdo_sqlite') ? 0 : 1);" || (echo [!] Ekstensi PHP sqlite3 / pdo_sqlite belum aktif di PHP yang dipakai. Buka php.ini milik PHP itu, hapus titik koma di depan extension=sqlite3 dan extension=pdo_sqlite & goto fail)
 
 if exist "backend\system\core\CodeIgniter.php" goto ci_ready
 echo [1/4] Mengunduh CodeIgniter 3.1.13 lewat Composer...
 if exist "_ci3" rmdir /s /q "_ci3"
-call composer create-project codeigniter/framework _ci3 3.1.13 --no-dev --no-interaction || goto fail
+call composer create-project codeigniter/framework _ci3 3.1.13 --no-dev --no-interaction --no-scripts || goto fail
+rem --no-scripts: skrip bawaan CI3 memanggil "sed" (tidak ada di Windows) dan hanya menambal paket testing.
 rem Salin file framework yang belum ada. File NEXA di backend tidak ditimpa.
 robocopy "_ci3" "backend" /E /XC /XN /XO /NFL /NDL /NJH /NJS /NP >nul
 rmdir /s /q "_ci3"
