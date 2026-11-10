@@ -17,7 +17,7 @@ Ada dua cara menjalankan aplikasi. Pilih salah satu.
 | Cara | Cocok untuk | Yang perlu dipasang |
 | --- | --- | --- |
 | **A. Docker** | PC yang tidak punya PHP, atau ingin lingkungan yang sama persis di semua anggota | Docker Desktop saja |
-| **B. Langsung (lokal)** | PC yang sudah ada XAMPP dengan PHP 7.3 | PHP 7.3, Composer, Node.js |
+| **B. Langsung (lokal)** | PC yang sudah ada XAMPP atau WAMP dengan PHP 7.3 | PHP 7.3, Composer, Node.js |
 
 Keduanya memakai folder kode yang sama, jadi anggota tim boleh memakai cara berbeda.
 
@@ -60,6 +60,28 @@ Catatan:
 3. **Composer** dari https://getcomposer.org
 4. **Node.js versi LTS** dari https://nodejs.org (sudah termasuk npm).
 
+### Khusus WAMP (Windows)
+
+Aplikasi ini memakai server bawaan PHP (`php -S`) dan SQLite, jadi **Apache dan MySQL WAMP tidak perlu dinyalakan**. Yang dipakai hanya `php.exe` dari WAMP.
+
+1. **Pastikan PHP 7.3 terpasang di WAMP.** Folder PHP-nya biasanya `C:\wamp64\bin\php\php7.3.x`. Lewat menu WAMP (*PHP > Version*) bisa dipasang atau dipilih, tapi untuk proyek ini yang penting hanya foldernya ada.
+2. **Aktifkan `sqlite3` dan `pdo_sqlite` di `php.ini` milik folder itu**, yaitu `C:\wamp64\bin\php\php7.3.x\php.ini` (bukan `phpForApache.ini`, karena itu hanya dipakai Apache). Hapus titik koma di depan `extension=sqlite3` dan `extension=pdo_sqlite`.
+3. **Pasang Composer dan Node.js** (lihat daftar di atas).
+4. **Buka Command Prompt** (jangan klik dua kali `setup.bat`) lalu arahkan PATH ke PHP 7.3 hanya untuk jendela itu:
+   ```
+   set PATH=C:\wamp64\bin\php\php7.3.x;%PATH%
+   php -v
+   php -m | findstr /i sqlite
+   ```
+   `php -v` harus menampilkan 7.3.x, dan `php -m` harus menampilkan `pdo_sqlite` dan `sqlite3`. Ganti `7.3.x` sesuai nama folder Anda, misalnya `7.3.33`.
+5. **Dari jendela yang sama**, masuk ke folder proyek lalu jalankan:
+   ```
+   cd /d C:\lokasi\nexa
+   setup.bat
+   start.bat
+   ```
+   PATH di langkah 4 hilang saat jendela ditutup, jadi ulangi langkah 4 setiap kali membuka Command Prompt baru. Kalau mau permanen, tambahkan folder PHP 7.3 ke *Environment Variables > Path* lewat pengaturan Windows, lalu `setup.bat` dan `start.bat` boleh diklik dua kali.
+
 ### Menjalankan pertama kali
 
 **Windows:** klik dua kali `setup.bat`, tunggu selesai, lalu klik dua kali `start.bat`.
@@ -80,7 +102,7 @@ Browser akan membuka http://localhost:5173. Masuk dengan salah satu akun berikut
 
 ```bash
 # 1. Pasang CodeIgniter 3, lalu salin ke folder backend tanpa menimpa file NEXA
-composer create-project codeigniter/framework _ci3 3.1.13 --no-dev
+composer create-project codeigniter/framework _ci3 3.1.13 --no-dev --no-scripts
 #    Windows:  robocopy _ci3 backend /E /XC /XN /XO
 #    mac/linux: cp -Rn _ci3/. backend/
 #    lalu hapus folder _ci3
@@ -156,6 +178,8 @@ nexa/
 | Gejala | Penyebab dan solusi |
 | --- | --- |
 | `Class 'SQLite3' not found` atau `Unable to connect to your database server` | Ekstensi sqlite3 belum aktif di `php.ini`. |
+| `setup.bat` berhenti dengan pesan `sed is not recognized` | Skrip bawaan CodeIgniter 3 memanggil `sed` yang tidak ada di Windows. `setup.bat` versi terbaru sudah memakai `--no-scripts`. Kalau memakai langkah manual, tambahkan `--no-scripts` pada perintah `composer create-project`. |
+| `setup.bat` bilang `PHP tidak ditemukan` padahal sudah di-`set PATH` | `setup.bat` dibuka dengan klik dua kali sehingga memakai jendela baru tanpa PATH tadi. Jalankan `setup.bat` dari Command Prompt yang sama dengan tempat `set PATH` diketik. |
 | Muncul pesan `Deprecated` / `A PHP Error was encountered` di respons API | Versi PHP terlalu baru untuk CodeIgniter 3. Pakai PHP 7.3 (XAMPP 7.3) atau Docker. |
 | Halaman login menampilkan "Tidak bisa terhubung ke server" | Backend belum jalan. Jalankan `start.bat`, atau `php -S localhost:8080 server.php` di folder `backend`. |
 | Login selalu gagal | Data dummy belum diisi. Jalankan `php index.php tools seed` di folder `backend`. |

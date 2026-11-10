@@ -13,7 +13,7 @@ php -m | grep -qix sqlite3 || { echo "[!] Ekstensi PHP sqlite3 belum aktif."; ex
 if [ ! -f backend/system/core/CodeIgniter.php ]; then
   echo "[1/4] Mengunduh CodeIgniter 3.1.13..."
   rm -rf _ci3
-  composer create-project codeigniter/framework _ci3 3.1.13 --no-dev --no-interaction
+  composer create-project codeigniter/framework _ci3 3.1.13 --no-dev --no-interaction --no-scripts
   cp -Rn _ci3/. backend/ 2>/dev/null || true
   rm -rf _ci3
 else
